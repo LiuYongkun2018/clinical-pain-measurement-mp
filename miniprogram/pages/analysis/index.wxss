@@ -1,0 +1,21 @@
+/* pages/analysis/index.wxss */
+.container {
+  width: 100%;
+  background: #f8f9fa;
+  padding: 0;
+  padding-top: 128rpx;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* 确保scroll-view可以正常工作 */
+scroll-view.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 98rpx; /* 留出tabBar空间 */
+}
+.cognitive-step-container {
+  width: 100%;
+}

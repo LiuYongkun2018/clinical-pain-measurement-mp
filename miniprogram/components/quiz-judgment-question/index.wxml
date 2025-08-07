@@ -1,0 +1,70 @@
+<!--components/quiz-judgment-question/index.wxml-->
+<view class="quiz-container">
+  <!-- 题目进度 -->
+  <view class="quiz-progress">
+    <text class="progress-text">第 {{currentQuestionIndex + 1}} 题 / 共 {{questions.length}} 题</text>
+  </view>
+
+  <!-- 当前题目 -->
+  <view class="question-card" wx:if="{{questions[currentQuestionIndex]}}">
+    <!-- 题目文本 -->
+    <view class="question-text">
+      {{questions[currentQuestionIndex].text}}
+    </view>
+
+    <!-- 选项区域 -->
+    <view class="options-container">
+      <view 
+        wx:for="{{optionKeys}}" 
+        wx:key="*this"
+        class="option-item {{questions[currentQuestionIndex].userAnswer === item ? 'selected' : ''}}"
+        data-option="{{item}}"
+        bindtap="selectAnswer"
+      >
+        <view class="option-label">{{item}}</view>
+        <text class="option-text">{{questions[currentQuestionIndex].options[item]}}</text>
+      </view>
+    </view>
+
+    <!-- 答案解释区域 -->
+    <view class="explanation-container" wx:if="{{questions[currentQuestionIndex].userAnswer && questions[currentQuestionIndex].explanation}}">
+      <view class="explanation-title">答案解释：</view>
+      <view class="explanation-text">{{questions[currentQuestionIndex].explanation}}</view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="button-container">
+      <button 
+        class="nav-button prev-button" 
+        wx:if="{{currentQuestionIndex > 0}}"
+        bindtap="prevQuestion"
+      >
+        上一题
+      </button>
+      
+      <button 
+        class="nav-button reset-button" 
+        wx:if="{{questions[currentQuestionIndex].userAnswer}}"
+        bindtap="resetAnswer"
+      >
+        重新选择
+      </button>
+      
+      <button 
+        class="nav-button next-button" 
+        wx:if="{{currentQuestionIndex < questions.length - 1 && questions[currentQuestionIndex].userAnswer}}"
+        bindtap="nextQuestion"
+      >
+        下一题
+      </button>
+      
+      <button 
+        class="nav-button finish-button" 
+        wx:if="{{currentQuestionIndex === questions.length - 1 && questions[currentQuestionIndex].userAnswer}}"
+        bindtap="nextQuestion"
+      >
+        完成测试
+      </button>
+    </view>
+  </view>
+</view>

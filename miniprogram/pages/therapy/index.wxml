@@ -1,0 +1,12 @@
+<navigation-bar 
+  title="疼痛测量" 
+  background="#ffffff" 
+  color="#333333"
+  back="{{false}}"
+  home-button="{{false}}"
+></navigation-bar>
+
+<view class="container">
+  <!-- 使用判断题组件 -->
+  <quiz-judgment-question class="quiz-question"></quiz-judgment-question>
+</view>

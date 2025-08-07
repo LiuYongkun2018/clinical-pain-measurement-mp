@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "quiz-judgment-question": "../../components/quiz-judgment-question/index"
+  }
+}

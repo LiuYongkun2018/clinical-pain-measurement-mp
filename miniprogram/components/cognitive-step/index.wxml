@@ -1,0 +1,60 @@
+<!--components/cognitive-step/index.wxml-->
+<view class="cognitive-step-container">
+  <!-- 进度条 -->
+  <view class="progress-container">
+    <view class="progress-label">学习进度</view>
+    <view class="progress-wrapper">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{currentProgress}}%">
+        </view>
+      </view>
+      <view class="progress-text">{{currentProgress}}%</view>
+    </view>
+  </view>
+  <!-- 学习内容 -->
+  <view
+    wx:for="{{displayedItems}}"
+    wx:key="{{index}}"
+    class="content-item {{item.type}}-item {{index === displayedItems.length - 1 ? 'active' : 'completed'}}"
+    data-step-index="{{item.stepIndex}}"
+    data-sub-index="{{item.subIndex}}"
+    bindtap="onItemClick">
+    <view class="item-indicator">
+      <view class="indicator-dot {{item.type === 'title' ? 'title-dot' : 'sub-dot'}}">
+      </view>
+      <view wx:if="{{index < displayedItems.length - 1}}" class="indicator-line">
+      </view>
+    </view>
+    <view class="item-content">
+      <view class="item-text {{item.type === 'title' ? 'title-text' : 'sub-text'}}">
+        {{item.content}}
+      </view>
+      <!-- 点击提示 -->
+      <view wx:if="{{index === displayedItems.length - 1 && currentProgress < 100}}" class="click-hint">
+        <text class="hint-text">点击继续</text>
+        <view class="hint-arrow">→</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 完成弹窗 -->
+<view wx:if="{{showCompletionModal}}" class="modal-overlay" bindtap="hideCompletionModal">
+  <view class="modal-container" catchtap="preventClose">
+    <view class="modal-content">
+      <view class="modal-icon">🎉</view>
+      <view class="modal-title">恭喜完成！</view>
+      <view class="modal-text">您已完成所有认知学习内容</view>
+      <view class="modal-progress">
+        <view class="modal-progress-text">学习进度：{{currentProgress}}%</view>
+        <view class="modal-progress-bar">
+          <view class="modal-progress-fill" style="width: {{currentProgress}}%"></view>
+        </view>
+      </view>
+      <view class="modal-buttons">
+        <button class="modal-btn secondary" bindtap="hideCompletionModal">查看内容</button>
+        <button class="modal-btn primary" bindtap="confirmCompletion">继续学习</button>
+      </view>
+    </view>
+  </view>
+</view>

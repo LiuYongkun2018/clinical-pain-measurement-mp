@@ -1,0 +1,15 @@
+<navigation-bar 
+  title="了解疼痛" 
+  background="#ffffff" 
+  color="#333333"
+  back="{{false}}"
+  home-button="{{false}}"
+></navigation-bar>
+
+<scroll-view scroll-y="{{true}}" class="container">
+  <cognitive-step 
+    class="cognitive-step-container"
+    steps="{{steps}}" 
+    bind:completed="onLearningCompleted"
+  ></cognitive-step>
+</scroll-view>
