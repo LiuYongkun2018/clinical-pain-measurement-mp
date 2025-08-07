@@ -1,0 +1,58 @@
+<!--pages/promotion/index.wxml-->
+<!-- pages/promo/promo.wxml -->
+<!-- <video 
+  src="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/shuitingmen.mp4" 
+  controls 
+  autoplay
+  style="width: 100%; height: 400rpx;"
+></video> -->
+
+<!-- <image src="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/锁屏.png" mode="aspectFit" class="cloud-image"></image> -->
+
+<view class="container">
+  <view class="form-header">
+    <text class="form-title">患者信息录入</text>
+    <text class="form-subtitle">请填写完整的患者信息</text>
+  </view>
+  
+  <form bindsubmit="submitForm" class="form-container">
+    <view class="form-item">
+      <text class="label">病例ID</text>
+      <input 
+        name="paintsId" 
+        placeholder="请输入病例ID" 
+        class="form-input"
+        maxlength="20"
+      />
+    </view>
+    
+    <view class="form-item">
+      <text class="label">患者姓名</text>
+      <input 
+        name="paintName" 
+        placeholder="请输入患者姓名" 
+        class="form-input"
+        maxlength="10"
+      />
+    </view>
+    
+    <view class="form-item">
+      <text class="label">疼痛描述</text>
+      <textarea 
+        name="painLevelDescriptions" 
+        placeholder="请详细描述疼痛情况，包括疼痛部位、程度、性质等" 
+        class="form-textarea"
+        maxlength="500"
+        show-count
+      ></textarea>
+    </view>
+    
+    <button 
+      form-type="submit" 
+      class="submit-btn {{isSubmitting ? 'submitting' : ''}}"
+      disabled="{{isSubmitting}}"
+    >
+      <text class="btn-text">{{isSubmitting ? '提交中...' : '提交信息'}}</text>
+    </button>
+  </form>
+</view>
