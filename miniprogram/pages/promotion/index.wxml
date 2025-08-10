@@ -9,7 +9,7 @@
 
 <!-- <image src="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/锁屏.png" mode="aspectFit" class="cloud-image"></image> -->
 
-<view class="container">
+<view class="container" style="padding-left: 16rpx; padding-right: 16rpx;">
   <view class="form-header">
     <text class="form-title">患者信息录入</text>
     <text class="form-subtitle">请填写完整的患者信息</text>
@@ -23,6 +23,7 @@
         placeholder="请输入病例ID" 
         class="form-input"
         maxlength="20"
+        style="width: 100%;"
       />
     </view>
     
@@ -33,6 +34,7 @@
         placeholder="请输入患者姓名" 
         class="form-input"
         maxlength="10"
+        style="width: 100%;"
       />
     </view>
     
@@ -44,6 +46,7 @@
         class="form-textarea"
         maxlength="500"
         show-count
+        style="width: 100%;"
       ></textarea>
     </view>
     
@@ -51,6 +54,7 @@
       form-type="submit" 
       class="submit-btn {{isSubmitting ? 'submitting' : ''}}"
       disabled="{{isSubmitting}}"
+      style="width: 100%;"
     >
       <text class="btn-text">{{isSubmitting ? '提交中...' : '提交信息'}}</text>
     </button>

@@ -2,9 +2,12 @@
 
 .container {
   padding: 40rpx 30rpx;
+  padding-left: 16rpx;
+  padding-right: 16rpx;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   box-sizing: border-box;
+  width: 100vw;
 }
 
 .form-header {
@@ -32,10 +35,14 @@
   border-radius: 24rpx;
   padding: 60rpx 40rpx;
   box-shadow: 0 20rpx 40rpx rgba(0,0,0,0.1);
+  width: 100%;
+  margin: 0 16rpx;
+  box-sizing: border-box;
 }
 
 .form-item {
   margin-bottom: 40rpx;
+  width: 100%;
 }
 
 .label {
