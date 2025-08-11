@@ -13,6 +13,10 @@
         "text": "信息收集"
       },
       {
+        "pagePath": "pages/therapy/index",
+        "text": "测验"
+      },
+      {
         "pagePath": "pages/example/index",
         "text": "分析"
       },
@@ -23,10 +27,6 @@
       {
         "pagePath": "pages/analysis/index",
         "text": "分析"
-      },
-      {
-        "pagePath": "pages/therapy/index",
-        "text": "疼痛测量"
       }
     ]
   },

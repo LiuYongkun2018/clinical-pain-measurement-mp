@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "测验",
   "usingComponents": {
     "quiz-judgment-question": "../../components/quiz-judgment-question/index"
   }
