@@ -1,13 +1,16 @@
 {
   "pages": [
-    "pages/index/index",
+    "pages/guide/index",
     "pages/example/index",
-    "pages/analysis/index",
     "pages/therapy/index",
     "pages/promotion/index"
   ],
   "tabBar": {
     "list": [
+      {
+        "pagePath": "pages/guide/index",
+        "text": "疼痛指南"
+      },
       {
         "pagePath": "pages/promotion/index",
         "text": "信息收集"
@@ -18,14 +21,6 @@
       },
       {
         "pagePath": "pages/example/index",
-        "text": "分析"
-      },
-      {
-        "pagePath": "pages/index/index",
-        "text": "指南"
-      },
-      {
-        "pagePath": "pages/analysis/index",
         "text": "分析"
       }
     ]
