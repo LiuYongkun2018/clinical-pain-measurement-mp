@@ -1,4 +1,5 @@
 {
+   "navigationBarTitleText": "疼痛指南",
   "usingComponents": {
     "cognitive-step": "../../components/cognitive-step/index"
   }
