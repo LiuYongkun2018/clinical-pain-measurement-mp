@@ -1,8 +1,6 @@
-
-<scroll-view scroll-y="{{true}}" class="container">
-  <cognitive-step 
-    class="cognitive-step-container"
-    steps="{{steps}}" 
-    bind:completed="onLearningCompleted"
-  ></cognitive-step>
-</scroll-view>
+<cognitive-step
+  class="cognitive-step-container"
+  steps="{{steps}}"
+  bind:completed="onLearningCompleted"
+>
+</cognitive-step>
