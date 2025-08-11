@@ -1,6 +1,91 @@
-<cognitive-step
-  class="cognitive-step-container"
-  steps="{{steps}}"
-  bind:completed="onLearningCompleted"
->
-</cognitive-step>
+<view class="container">
+  <view class="form-header">
+    <text class="form-title">临床疼痛测量指南</text>
+    <text class="form-subtitle">专业的疼痛评估标准与操作指导</text>
+  </view>
+  
+  <view class="guide-container">
+    <view class="guide-section">
+      <view class="section-header">
+        <text class="section-icon">📊</text>
+        <text class="section-title">疼痛评估量表</text>
+      </view>
+      <view class="content-grid">
+        <view class="content-card">
+          <text class="card-title">数字评分法 (NRS)</text>
+          <text class="card-desc">0-10分制，操作简单，适用范围广</text>
+        </view>
+        <view class="content-card">
+          <text class="card-title">视觉模拟评分法 (VAS)</text>
+          <text class="card-desc">连续性评分，更精确反映疼痛程度</text>
+        </view>
+        <view class="content-card">
+          <text class="card-title">面部表情评分法</text>
+          <text class="card-desc">适用于儿童及表达困难患者</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="guide-section">
+      <view class="section-header">
+        <text class="section-icon">🎯</text>
+        <text class="section-title">评估流程</text>
+      </view>
+      <view class="process-steps">
+        <view class="step-item">
+          <view class="step-number">1</view>
+          <view class="step-content">
+            <text class="step-title">患者准备</text>
+            <text class="step-desc">确保患者处于安静、舒适的环境</text>
+          </view>
+        </view>
+        <view class="step-item">
+          <view class="step-number">2</view>
+          <view class="step-content">
+            <text class="step-title">量表选择</text>
+            <text class="step-desc">根据患者年龄和认知能力选择合适量表</text>
+          </view>
+        </view>
+        <view class="step-item">
+          <view class="step-number">3</view>
+          <view class="step-content">
+            <text class="step-title">疼痛评估</text>
+            <text class="step-desc">指导患者准确描述当前疼痛程度</text>
+          </view>
+        </view>
+        <view class="step-item">
+          <view class="step-number">4</view>
+          <view class="step-content">
+            <text class="step-title">结果记录</text>
+            <text class="step-desc">详细记录评分结果及相关信息</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="guide-section">
+      <view class="section-header">
+        <text class="section-icon">⚠️</text>
+        <text class="section-title">注意事项</text>
+      </view>
+      <view class="notice-list">
+        <view class="notice-item">
+          <view class="notice-dot"></view>
+          <text class="notice-text">评估前需充分解释量表使用方法</text>
+        </view>
+        <view class="notice-item">
+          <view class="notice-dot"></view>
+          <text class="notice-text">观察患者的非言语疼痛表现</text>
+        </view>
+        <view class="notice-item">
+          <view class="notice-dot"></view>
+          <text class="notice-text">定期复评，跟踪疼痛变化趋势</text>
+        </view>
+        <view class="notice-item">
+          <view class="notice-dot"></view>
+          <text class="notice-text">结合病史和体格检查综合判断</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
