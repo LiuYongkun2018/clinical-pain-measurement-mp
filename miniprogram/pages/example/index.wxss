@@ -5,7 +5,7 @@ page {
 }
 
 .page-container {
-  padding: 20rpx 40rpx;
+ 
 }
 
 .tip {
@@ -183,3 +183,78 @@ page {
 .modal-title { font-size: 18px; margin-bottom: 16px; }
 .modal-input { margin-bottom: 12px; border: 1px solid #eee; padding: 8px; border-radius: 4px; width: 100%; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+
+.container {
+  box-sizing: border-box;
+  width: 100vw;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+.form-header {
+  text-align: center;
+  margin: 60rpx 0 40rpx 0;
+}
+
+.form-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.form-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.content-container {
+  width: 100%;
+}
+
+.analysis-section {
+  background: white;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+  border-left: 8rpx solid #007AFF;
+  padding-left: 16rpx;
+}
+
+.content-item {
+  margin-bottom: 20rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.content-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.content-label {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.content-text {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}

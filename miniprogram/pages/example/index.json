@@ -1,6 +1,4 @@
 {
   "navigationBarTitleText": "分析",
-  "usingComponents": {
-    "cloud-tip-modal": "/components/cloudTipModal/index"
-  }
+  "usingComponents": {}
 }
