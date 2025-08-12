@@ -1,60 +1,40 @@
-<!--pages/exampleDetail/index.wxml-->
+<!--pages/relaxation/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="header-title">放松训练</text>
+    <text class="header-subtitle">静心聆听，释放压力</text>
+  </view>
 
-<view class="page-container">
-    <view class="container" style="padding-left: 16rpx; padding-right: 16rpx;">
-        <view class="form-header">
-            <text class="form-title">疼痛测量分析</text>
-            <text class="form-subtitle">专业的疼痛评估与分析工具</text>
+  <scroll-view scroll-y class="audio-list">
+    <view 
+      class="audio-item {{item.id === currentPlayingId ? 'playing' : ''}}" 
+      wx:for="{{audioList}}" 
+      wx:key="id"
+    >
+      <image class="cover-image" src="{{item.coverImgUrl}}" mode="aspectFill" />
+      <view class="item-overlay"></view>
+      
+      <view class="item-content">
+        <view class="text-info">
+          <text class="title">{{item.title}}</text>
+          <text class="artist">{{item.artist}}</text>
         </view>
-
-        <view class="content-container">
-            <view class="analysis-section">
-                <text class="section-title">疼痛评估标准</text>
-                <view class="content-item">
-                    <text class="content-label">数字评分法 (NRS)</text>
-                    <text class="content-text">0-10分制评分，0分表示无痛，10分表示能想象到的最剧烈疼痛</text>
-                </view>
-                <view class="content-item">
-                    <text class="content-label">视觉模拟评分法 (VAS)</text>
-                    <text class="content-text">通过10厘米长的直线，患者在直线上标记疼痛程度</text>
-                </view>
-                <view class="content-item">
-                    <text class="content-label">面部表情评分法</text>
-                    <text class="content-text">适用于儿童或表达困难的患者，通过面部表情判断疼痛程度</text>
-                </view>
-            </view>
-
-            <view class="analysis-section">
-                <text class="section-title">疼痛特征分类</text>
-                <view class="content-item">
-                    <text class="content-label">急性疼痛</text>
-                    <text class="content-text">持续时间较短，通常与组织损伤直接相关</text>
-                </view>
-                <view class="content-item">
-                    <text class="content-label">慢性疼痛</text>
-                    <text class="content-text">持续时间超过3个月，可能伴有心理和社会因素</text>
-                </view>
-                <view class="content-item">
-                    <text class="content-label">神经性疼痛</text>
-                    <text class="content-text">由神经系统损伤或疾病引起的疼痛</text>
-                </view>
-            </view>
-
-            <view class="analysis-section">
-                <text class="section-title">临床应用</text>
-                <view class="content-item">
-                    <text class="content-label">术后疼痛管理</text>
-                    <text class="content-text">评估手术后疼痛强度，指导镇痛药物使用</text>
-                </view>
-                <view class="content-item">
-                    <text class="content-label">慢性病疼痛</text>
-                    <text class="content-text">监测癌症、关节炎等慢性疾病的疼痛变化</text>
-                </view>
-                <view class="content-item">
-                    <text class="content-label">疼痛治疗效果</text>
-                    <text class="content-text">评估各种疼痛治疗方案的有效性</text>
-                </view>
-            </view>
+        
+        <view class="controls">
+          <view class="icon-wrapper favorite-btn" bindtap="toggleFavorite" data-id="{{item.id}}">
+            <image 
+              class="icon" 
+              src="{{item.isFavorite ? '/images/icons/heart-active.svg' : '/images/icons/heart.svg'}}"
+            />
+          </view>
+          <view class="icon-wrapper play-btn" bindtap="playAudio" data-id="{{item.id}}" data-src="{{item.src}}">
+            <image 
+              class="icon play-icon" 
+              src="{{item.isPlaying ? '/images/icons/pause.svg' : '/images/icons/play.svg'}}"
+            />
+          </view>
         </view>
+      </view>
     </view>
+  </scroll-view>
 </view>
