@@ -1,9 +1,9 @@
 <!--pages/profile/index.wxml-->
 <view class="container">
-  <view class="profile-header">
+  <!-- <view class="profile-header">
     <text class="header-title">个人中心</text>
     <text class="header-subtitle">管理您的个人信息和使用记录</text>
-  </view>
+  </view> -->
 
   <!-- 未登录状态 -->
   <view class="login-section" wx:if="{{!isLoggedIn}}">
