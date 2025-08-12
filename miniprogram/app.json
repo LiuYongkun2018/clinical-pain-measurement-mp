@@ -1,7 +1,7 @@
 {
   "pages": [
     "pages/guide/index",
-    "pages/example/index",
+    "pages/relaxation/index",
     "pages/assessment/index",
     "pages/promotion/index",
     "pages/profile/index"
@@ -26,8 +26,8 @@
         "selectedIconPath": "images/icons/examples-active.png"
       },
       {
-        "pagePath": "pages/example/index",
-        "text": "分析",
+        "pagePath": "pages/relaxation/index",
+        "text": "放松",
         "iconPath": "images/icons/business.png",
         "selectedIconPath": "images/icons/business-active.png"
       },
