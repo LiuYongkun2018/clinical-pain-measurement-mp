@@ -172,6 +172,8 @@ const savePaintRecord = async (event) => {
         paintsId: event.paintsId,
         paintName: event.paintName,
         painLevelDescriptions: event.painLevelDescriptions,
+        openid: event.openid || '',  // 保存用户openid
+        submitTime: event.submitTime || new Date().toISOString(),
         createTime: db.serverDate()
       }
     })
@@ -186,6 +188,64 @@ const savePaintRecord = async (event) => {
     return {
       success: false,
       errMsg: e.message || '保存失败'
+    }
+  }
+}
+
+// 保存用户信息到云数据库
+const saveUserInfo = async (event) => {
+  try {
+    const { userInfo, openid } = event
+    
+    if (!userInfo || !openid) {
+      return {
+        success: false,
+        errMsg: '缺少用户信息或openid'
+      }
+    }
+
+    // 检查用户是否已存在
+    const userExists = await db.collection('users').where({
+      openid: openid
+    }).get()
+
+    if (userExists.data.length > 0) {
+      // 用户已存在，更新信息
+      await db.collection('users').where({
+        openid: openid
+      }).update({
+        data: {
+          userInfo: userInfo,
+          lastLoginTime: db.serverDate()
+        }
+      })
+      
+      return {
+        success: true,
+        message: '用户信息更新成功'
+      }
+    } else {
+      // 新用户，创建记录
+      const result = await db.collection('users').add({
+        data: {
+          openid: openid,
+          userInfo: userInfo,
+          createTime: db.serverDate(),
+          lastLoginTime: db.serverDate()
+        }
+      })
+      
+      return {
+        success: true,
+        message: '用户信息保存成功',
+        _id: result._id
+      }
+    }
+  } catch (e) {
+    console.error('保存用户信息失败:', e)
+    return {
+      success: false,
+      errMsg: e.message || '保存用户信息失败'
     }
   }
 }
@@ -216,6 +276,8 @@ exports.main = async (event, context) => {
     case "deleteRecord":
       return await deleteRecord(event);
     case "savePaintRecord":
-      return await savePaintRecord(event)
+      return await savePaintRecord(event);
+    case "saveUserInfo":
+      return await saveUserInfo(event);
   }
 };

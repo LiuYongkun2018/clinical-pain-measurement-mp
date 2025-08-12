@@ -1,0 +1,94 @@
+<!--pages/profile/index.wxml-->
+<view class="container">
+  <view class="profile-header">
+    <text class="header-title">个人中心</text>
+    <text class="header-subtitle">管理您的个人信息和使用记录</text>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="login-section" wx:if="{{!isLoggedIn}}">
+    <view class="login-card">
+      <view class="login-icon">👤</view>
+      <text class="login-title">欢迎使用CCBT疼痛疗法</text>
+      <text class="login-desc">登录后可享受个性化服务和数据同步</text>
+      <button 
+        class="login-btn {{loginLoading ? 'loading' : ''}}" 
+        bindtap="getUserProfile"
+        disabled="{{loginLoading}}"
+      >
+        <text class="login-btn-text">{{loginLoading ? '登录中...' : '微信登录'}}</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 已登录状态 -->
+  <view class="profile-content" wx:if="{{isLoggedIn}}">
+    <!-- 用户信息卡片 -->
+    <view class="user-card">
+      <view class="user-avatar">
+        <image 
+          src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" 
+          class="avatar-img"
+          mode="aspectFill"
+        />
+      </view>
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickName || '微信用户'}}</text>
+        <text class="user-id">OpenID: {{openid}}</text>
+        <view class="copy-btn" bindtap="copyOpenId">
+          <text class="copy-text">复制</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 功能菜单 -->
+    <view class="menu-section">
+      <text class="section-title">功能菜单</text>
+      <view class="menu-list">
+        <view class="menu-item" bindtap="viewMyRecords">
+          <view class="menu-icon">📝</view>
+          <view class="menu-content">
+            <text class="menu-title">我的记录</text>
+            <text class="menu-desc">查看历史评估记录</text>
+          </view>
+          <view class="menu-arrow">›</view>
+        </view>
+        
+        <view class="menu-item" bindtap="showAbout">
+          <view class="menu-icon">ℹ️</view>
+          <view class="menu-content">
+            <text class="menu-title">关于我们</text>
+            <text class="menu-desc">了解CCBT疼痛疗法</text>
+          </view>
+          <view class="menu-arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 使用统计 -->
+    <view class="stats-section">
+      <text class="section-title">使用统计</text>
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">0</text>
+          <text class="stat-label">评估次数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">0</text>
+          <text class="stat-label">学习天数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">0</text>
+          <text class="stat-label">观看视频</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 退出登录 -->
+    <view class="logout-section">
+      <button class="logout-btn" bindtap="logout">
+        <text class="logout-text">退出登录</text>
+      </button>
+    </view>
+  </view>
+</view>

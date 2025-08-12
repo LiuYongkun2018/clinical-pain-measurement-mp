@@ -59,6 +59,26 @@ Page({
     const { paintsId, paintName, painLevelDescriptions } = e.detail.value
     console.log("表单数据: ", e.detail.value)
     
+    // 检查登录状态
+    const openid = wx.getStorageSync('openid')
+    const userInfo = wx.getStorageSync('userInfo')
+    
+    if (!openid || !userInfo) {
+      wx.showModal({
+        title: '提示',
+        content: '请先登录后再提交信息',
+        confirmText: '去登录',
+        success: (res) => {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '/pages/profile/index'
+            })
+          }
+        }
+      })
+      return
+    }
+    
     // 防止重复提交
     if (this.data.isSubmitting) {
       return
@@ -90,11 +110,14 @@ Page({
     })
     
     wx.cloud.callFunction({
-      name: 'painUtilsFunctions',  // 云函数名称
+      name: 'quickstartFunctions',  // 修正云函数名称
       data: {
+        type: 'savePaintRecord',    // 指定要调用的具体方法
         paintsId: paintsId.trim(),
         paintName: paintName.trim(),
-        painLevelDescriptions: painLevelDescriptions.trim()
+        painLevelDescriptions: painLevelDescriptions.trim(),
+        openid: openid,  // 关联用户openid
+        submitTime: new Date().toISOString()
       },
       success: res => {
         wx.hideLoading()
