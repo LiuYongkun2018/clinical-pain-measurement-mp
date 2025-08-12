@@ -3,8 +3,98 @@
     <text class="form-title">临床疼痛测量指南</text>
     <text class="form-subtitle">专业的疼痛评估标准与操作指导</text>
   </view>
-  
   <view class="guide-container">
+    <view class="guide-section">
+      <view class="section-header">
+        <text class="section-icon">🧠</text>
+        <text class="section-title">CCBT疼痛疗法核心意义</text>
+      </view>
+      <view class="ccbt-intro">
+        <text class="intro-text">CCBT（计算机化认知行为疗法）疼痛疗法通过数字化手段帮助患者管理慢性疼痛，其核心意义可总结为以下5点：</text>
+      </view>
+      <view class="ccbt-points">
+        <view class="point-item">
+          <view class="point-header">
+            <text class="point-number">1</text>
+            <text class="point-title">打破"疼痛-消极认知-行为回避"的恶性循环</text>
+          </view>
+          <view class="point-content">
+            <view class="comparison">
+              <text class="comparison-label">传统认知：</text>
+              <text class="comparison-text">疼痛仅由身体损伤引起，需依赖药物或手术。</text>
+            </view>
+            <view class="comparison">
+              <text class="comparison-label">CCBT视角：</text>
+              <text class="comparison-text">疼痛是生理、心理、行为共同作用的结果，通过调整认知（如减少灾难化思维）和行为（如渐进活动）可有效降低痛感。</text>
+            </view>
+          </view>
+        </view>
+        <view class="point-item">
+          <view class="point-header">
+            <text class="point-number">2</text>
+            <text class="point-title">提供可及性强、低成本的疼痛管理方案</text>
+          </view>
+          <view class="point-content">
+            <view class="feature-list">
+              <text class="feature-label">优势：</text>
+              <text class="feature-text">通过小程序/APP即可获取，突破地域、时间限制，降低医疗成本。</text>
+            </view>
+            <view class="feature-list">
+              <text class="feature-label">适用人群：</text>
+              <text class="feature-text">尤其适合无法频繁就诊的慢性疼痛患者（如纤维肌痛、腰背痛）。</text>
+            </view>
+          </view>
+        </view>
+        <view class="point-item">
+          <view class="point-header">
+            <text class="point-number">3</text>
+            <text class="point-title">赋能患者，从"被动治疗"转向"主动管理"</text>
+          </view>
+          <view class="point-content">
+            <view class="feature-list">
+              <text class="feature-label">技能培养：</text>
+              <text class="feature-text">教授呼吸放松、正念、认知重构等工具，让患者掌握长期应对疼痛的能力。</text>
+            </view>
+            <view class="feature-list">
+              <text class="feature-label">目标转变：</text>
+              <text class="feature-text">从"消除疼痛"变为"提高生活功能"（如恢复散步、工作）。</text>
+            </view>
+          </view>
+        </view>
+        <view class="point-item">
+          <view class="point-header">
+            <text class="point-number">4</text>
+            <text class="point-title">减少对药物的过度依赖</text>
+          </view>
+          <view class="point-content">
+            <view class="feature-list">
+              <text class="feature-label">证据支持：</text>
+              <text class="feature-text">研究显示CCBT可降低非甾体抗炎药（NSAIDs）和阿片类药物的使用量（JAMA Internal Medicine, 2021）。</text>
+            </view>
+            <view class="feature-list">
+              <text class="feature-label">补充作用：</text>
+              <text class="feature-text">与药物/物理治疗联合使用时效果更佳。</text>
+            </view>
+          </view>
+        </view>
+        <view class="point-item">
+          <view class="point-header">
+            <text class="point-number">5</text>
+            <text class="point-title">改善心理健康与生活质量</text>
+          </view>
+          <view class="point-content">
+            <view class="feature-list">
+              <text class="feature-label">情绪调节：</text>
+              <text class="feature-text">缓解疼痛伴随的焦虑、抑郁（慢性疼痛患者抑郁风险是普通人的3倍）。</text>
+            </view>
+            <view class="feature-list">
+              <text class="feature-label">社会功能：</text>
+              <text class="feature-text">帮助患者恢复社交、工作能力，减少"病患身份"的自我标签化。</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
     <view class="guide-section">
       <view class="section-header">
         <text class="section-icon">📊</text>
@@ -25,7 +115,6 @@
         </view>
       </view>
     </view>
-    
     <view class="guide-section">
       <view class="section-header">
         <text class="section-icon">🎯</text>
@@ -62,7 +151,6 @@
         </view>
       </view>
     </view>
-    
     <view class="guide-section">
       <view class="section-header">
         <text class="section-icon">⚠️</text>
@@ -70,19 +158,23 @@
       </view>
       <view class="notice-list">
         <view class="notice-item">
-          <view class="notice-dot"></view>
+          <view class="notice-dot">
+          </view>
           <text class="notice-text">评估前需充分解释量表使用方法</text>
         </view>
         <view class="notice-item">
-          <view class="notice-dot"></view>
+          <view class="notice-dot">
+          </view>
           <text class="notice-text">观察患者的非言语疼痛表现</text>
         </view>
         <view class="notice-item">
-          <view class="notice-dot"></view>
+          <view class="notice-dot">
+          </view>
           <text class="notice-text">定期复评，跟踪疼痛变化趋势</text>
         </view>
         <view class="notice-item">
-          <view class="notice-dot"></view>
+          <view class="notice-dot">
+          </view>
           <text class="notice-text">结合病史和体格检查综合判断</text>
         </view>
       </view>

@@ -9,7 +9,11 @@
     "list": [
       {
         "pagePath": "pages/guide/index",
-        "text": "疼痛指南"
+        "text": "指南"
+      },
+      {
+        "pagePath": "pages/assessment/index",
+        "text": "测验"
       },
       {
         "pagePath": "pages/example/index",
@@ -18,10 +22,6 @@
       {
         "pagePath": "pages/promotion/index",
         "text": "信息收集"
-      },
-      {
-        "pagePath": "pages/assessment/index",
-        "text": "测验"
       }
     ]
   },
