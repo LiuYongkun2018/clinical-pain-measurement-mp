@@ -3,7 +3,30 @@
     <text class="form-title">临床疼痛测量指南</text>
     <text class="form-subtitle">专业的疼痛评估标准与操作指导</text>
   </view>
+  
+  
   <view class="guide-container">
+  <view class="video-section">
+    <view class="video-header">
+      <text class="video-title">CCBT疼痛疗法介绍视频</text>
+      <text class="video-subtitle">了解计算机化认知行为疗法的基本原理</text>
+    </view>
+    <view class="video-container">
+      <video 
+        src="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/风和自由.mp4" 
+        controls 
+        poster=""
+        show-center-play-btn
+        show-play-btn
+        show-fullscreen-btn
+        show-progress
+        enable-progress-gesture
+        object-fit="contain"
+        class="therapy-video"
+      ></video>
+    </view>
+  </view>
+
     <view class="guide-section">
       <view class="section-header">
         <text class="section-icon">🧠</text>

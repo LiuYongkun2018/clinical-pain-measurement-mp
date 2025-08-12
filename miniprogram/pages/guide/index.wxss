@@ -47,6 +47,52 @@ scroll-view.container {
   font-weight: 400;
 }
 
+/* 视频部分样式 */
+.video-section {
+  /* 统一与 .guide-section 一致的宽度与外观 */
+  margin: 0 0 32rpx 0; /* 移除左右外边距，保持与其它卡片一致的底部间距 */
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1rpx solid #f1f3f4; /* 与其它卡片一致 */
+}
+
+.video-header {
+  padding: 40rpx 30rpx 30rpx 30rpx;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.video-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.2);
+}
+
+.video-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+}
+
+.video-container {
+  padding: 32rpx; /* 与 .guide-section 的左右内边距 32rpx 对齐 */
+  background: #ffffff;
+}
+
+.therapy-video {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 16rpx;
+  background: #f8f9fa;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
 .guide-container {
   width: 100%;
 }
