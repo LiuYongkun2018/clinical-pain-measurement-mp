@@ -35,9 +35,9 @@
       <view class="user-info">
         <text class="user-name">{{userInfo.nickName || '微信用户'}}</text>
         <text class="user-id">OpenID: {{openid}}</text>
-        <view class="copy-btn" bindtap="copyOpenId">
+        <!-- <view class="copy-btn" bindtap="copyOpenId">
           <text class="copy-text">复制</text>
-        </view>
+        </view> -->
       </view>
     </view>
 
