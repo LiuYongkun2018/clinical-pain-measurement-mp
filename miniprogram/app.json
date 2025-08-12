@@ -27,7 +27,7 @@
       },
       {
         "pagePath": "pages/relaxation/index",
-        "text": "放松",
+        "text": "放松训练",
         "iconPath": "images/icons/business.png",
         "selectedIconPath": "images/icons/business-active.png"
       },
