@@ -1,5 +1,135 @@
-<view class="container">
-  <!-- 使用判断题组件 -->
-  <quiz-judgment-question class="quiz-question">
-  </quiz-judgment-question>
+<view class="assessment-container">
+  <!-- 疼痛度评估 VAS量表 -->
+  <view class="assessment-section">
+    <view class="section-header">
+      <text class="section-title">疼痛强度评估</text>
+      <text class="section-subtitle">请滑动选择您当前的疼痛程度</text>
+    </view>
+    
+    <view class="vas-scale">
+      <view class="scale-container">
+        <view class="scale-track">
+          <view class="scale-handle" style="left: {{painLevel * 10}}%" bindtouchstart="onScaleStart" bindtouchmove="onScaleMove" bindtouchend="onScaleEnd"></view>
+          <view class="scale-fill" style="width: {{painLevel * 10}}%"></view>
+        </view>
+        <view class="scale-labels">
+          <text class="scale-label">0</text>
+          <text class="scale-label">2</text>
+          <text class="scale-label">4</text>
+          <text class="scale-label">6</text>
+          <text class="scale-label">8</text>
+          <text class="scale-label">10</text>
+        </view>
+        <view class="scale-descriptions">
+          <text class="scale-desc">无痛</text>
+          <text class="scale-desc">剧烈疼痛</text>
+        </view>
+      </view>
+      
+      <view class="pain-level-display">
+        <text class="pain-number">{{painLevel}}</text>
+        <text class="pain-description">{{painDescription}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛部位选择 -->
+  <view class="assessment-section">
+    <view class="section-header">
+      <text class="section-title">疼痛部位</text>
+      <text class="section-subtitle">请勾选您感到疼痛的部位</text>
+    </view>
+    
+    <view class="body-map">
+      <view class="body-areas">
+        <view class="body-area {{selectedAreas.includes(item.id) ? 'selected' : ''}}" 
+              wx:for="{{bodyAreas}}" wx:key="id"
+              bindtap="toggleArea" data-id="{{item.id}}">
+          <view class="area-icon">{{item.icon}}</view>
+          <text class="area-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛持续时间 -->
+  <view class="assessment-section">
+    <view class="section-header">
+      <text class="section-title">疼痛持续时间</text>
+      <text class="section-subtitle">请选择疼痛持续的时间</text>
+    </view>
+    
+    <view class="duration-options">
+      <view class="option-item {{selectedDuration === item.value ? 'selected' : ''}}"
+            wx:for="{{durationOptions}}" wx:key="value"
+            bindtap="selectDuration" data-value="{{item.value}}">
+        <text class="option-text">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛触发因素 -->
+  <view class="assessment-section">
+    <view class="section-header">
+      <text class="section-title">疼痛触发因素</text>
+      <text class="section-subtitle">请选择可能引起或加重疼痛的因素（可多选）</text>
+    </view>
+    
+    <view class="trigger-factors">
+      <view class="factor-item {{selectedFactors.includes(item.id) ? 'selected' : ''}}"
+            wx:for="{{triggerFactors}}" wx:key="id"
+            bindtap="toggleFactor" data-id="{{item.id}}">
+        <view class="factor-icon">{{item.icon}}</view>
+        <text class="factor-text">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛性质 -->
+  <view class="assessment-section">
+    <view class="section-header">
+      <text class="section-title">疼痛性质</text>
+      <text class="section-subtitle">请描述您的疼痛感受</text>
+    </view>
+    
+    <view class="pain-qualities">
+      <view class="quality-item {{selectedQualities.includes(item.id) ? 'selected' : ''}}"
+            wx:for="{{painQualities}}" wx:key="id"
+            bindtap="toggleQuality" data-id="{{item.id}}">
+        <text class="quality-text">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 情绪状态 -->
+  <view class="assessment-section">
+    <view class="section-header">
+      <text class="section-title">情绪状态</text>
+      <text class="section-subtitle">疼痛如何影响您的情绪？</text>
+    </view>
+    
+    <view class="emotion-scale">
+      <view class="emotion-item" wx:for="{{emotions}}" wx:key="id">
+        <text class="emotion-label">{{item.name}}</text>
+        <view class="emotion-slider">
+          <slider value="{{item.value}}" 
+                  min="0" max="10" 
+                  block-color="#1677ff"
+                  activeColor="#1677ff"
+                  backgroundColor="#f0f0f0"
+                  bindchange="onEmotionChange"
+                  data-emotion="{{item.id}}" />
+          <text class="emotion-value">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section">
+    <button class="submit-btn" bindtap="submitAssessment" disabled="{{!canSubmit}}">
+      完成评估
+    </button>
+    <text class="submit-note" wx:if="{{!canSubmit}}">请完成必填项目</text>
+  </view>
 </view>

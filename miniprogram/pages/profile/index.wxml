@@ -1,94 +1,118 @@
-<!--pages/profile/index.wxml-->
-<view class="container">
-  <!-- <view class="profile-header">
-    <text class="header-title">个人中心</text>
-    <text class="header-subtitle">管理您的个人信息和使用记录</text>
-  </view> -->
-
-  <!-- 未登录状态 -->
-  <view class="login-section" wx:if="{{!isLoggedIn}}">
-    <view class="login-card">
-      <view class="login-icon">👤</view>
-      <text class="login-title">欢迎使用CCBT疼痛疗法</text>
-      <text class="login-desc">登录后可享受个性化服务和数据同步</text>
-      <button 
-        class="login-btn {{loginLoading ? 'loading' : ''}}" 
-        bindtap="getUserProfile"
-        disabled="{{loginLoading}}"
-      >
-        <text class="login-btn-text">{{loginLoading ? '登录中...' : '微信登录'}}</text>
-      </button>
+<view class="profile-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-avatar">
+      <image class="avatar-image" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill"></image>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickName || '用户'}}</text>
+      <text class="user-level">疼痛管理 {{userLevel}} 级</text>
+    </view>
+    <view class="edit-button" bindtap="editProfile">
+      <text class="edit-text">编辑</text>
     </view>
   </view>
 
-  <!-- 已登录状态 -->
-  <view class="profile-content" wx:if="{{isLoggedIn}}">
-    <!-- 用户信息卡片 -->
-    <view class="user-card">
-      <view class="user-avatar">
-        <image 
-          src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" 
-          class="avatar-img"
-          mode="aspectFill"
-        />
+  <!-- 数据统计 -->
+  <view class="stats-section">
+    <view class="stats-title">我的数据</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-number">{{userStats.totalDays}}</text>
+        <text class="stat-label">使用天数</text>
       </view>
-      <view class="user-info">
-        <text class="user-name">{{userInfo.nickName || '微信用户'}}</text>
-        <text class="user-id">OpenID: {{openid}}</text>
-        <!-- <view class="copy-btn" bindtap="copyOpenId">
-          <text class="copy-text">复制</text>
-        </view> -->
+      <view class="stat-item">
+        <text class="stat-number">{{userStats.assessments}}</text>
+        <text class="stat-label">评估次数</text>
       </view>
+      <view class="stat-item">
+        <text class="stat-number">{{userStats.completedCourses}}</text>
+        <text class="stat-label">完成课程</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{userStats.mindfulnessMinutes}}</text>
+        <text class="stat-label">正念时长(分)</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛趋势图表 -->
+  <view class="chart-section">
+    <view class="chart-header">
+      <text class="chart-title">疼痛趋势</text>
+      <view class="chart-tabs">
+        <text class="chart-tab {{chartPeriod === '7d' ? 'active' : ''}}" bindtap="switchChartPeriod" data-period="7d">7天</text>
+        <text class="chart-tab {{chartPeriod === '30d' ? 'active' : ''}}" bindtap="switchChartPeriod" data-period="30d">30天</text>
+      </view>
+    </view>
+    <view class="chart-container">
+      <canvas class="pain-chart" canvas-id="painTrendChart" id="painTrendChart"></canvas>
+    </view>
+  </view>
+
+  <!-- 成就徽章 -->
+  <view class="achievements-section">
+    <view class="section-title">我的成就</view>
+    <view class="achievements-grid">
+      <view class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}" 
+            wx:for="{{achievements}}" wx:key="id">
+        <view class="achievement-icon">{{item.icon}}</view>
+        <text class="achievement-name">{{item.name}}</text>
+        <text class="achievement-desc">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="exportData">
+      <view class="menu-icon">📊</view>
+      <view class="menu-content">
+        <text class="menu-title">数据导出</text>
+        <text class="menu-desc">导出您的疼痛管理数据</text>
+      </view>
+      <view class="menu-arrow">></view>
     </view>
 
-    <!-- 功能菜单 -->
-    <view class="menu-section">
-      <text class="section-title">功能菜单</text>
-      <view class="menu-list">
-        <view class="menu-item" bindtap="viewMyRecords">
-          <view class="menu-icon">📝</view>
-          <view class="menu-content">
-            <text class="menu-title">我的记录</text>
-            <text class="menu-desc">查看历史评估记录</text>
-          </view>
-          <view class="menu-arrow">›</view>
-        </view>
-        
-        <view class="menu-item" bindtap="showAbout">
-          <view class="menu-icon">ℹ️</view>
-          <view class="menu-content">
-            <text class="menu-title">关于我们</text>
-            <text class="menu-desc">了解CCBT疼痛疗法</text>
-          </view>
-          <view class="menu-arrow">›</view>
-        </view>
+    <view class="menu-item" bindtap="remindSettings">
+      <view class="menu-icon">⏰</view>
+      <view class="menu-content">
+        <text class="menu-title">提醒设置</text>
+        <text class="menu-desc">设置评估和训练提醒</text>
       </view>
+      <view class="menu-arrow">></view>
     </view>
 
-    <!-- 使用统计 -->
-    <view class="stats-section">
-      <text class="section-title">使用统计</text>
-      <view class="stats-grid">
-        <view class="stat-item">
-          <text class="stat-number">0</text>
-          <text class="stat-label">评估次数</text>
-        </view>
-        <view class="stat-item">
-          <text class="stat-number">0</text>
-          <text class="stat-label">学习天数</text>
-        </view>
-        <view class="stat-item">
-          <text class="stat-number">0</text>
-          <text class="stat-label">观看视频</text>
-        </view>
+    <view class="menu-item" bindtap="privacySettings">
+      <view class="menu-icon">🔒</view>
+      <view class="menu-content">
+        <text class="menu-title">隐私设置</text>
+        <text class="menu-desc">管理您的数据隐私</text>
       </view>
+      <view class="menu-arrow">></view>
     </view>
 
-    <!-- 退出登录 -->
-    <view class="logout-section">
-      <button class="logout-btn" bindtap="logout">
-        <text class="logout-text">退出登录</text>
-      </button>
+    <view class="menu-item" bindtap="aboutApp">
+      <view class="menu-icon">ℹ️</view>
+      <view class="menu-content">
+        <text class="menu-title">关于应用</text>
+        <text class="menu-desc">版本信息和使用帮助</text>
+      </view>
+      <view class="menu-arrow">></view>
     </view>
+
+    <view class="menu-item" bindtap="feedback">
+      <view class="menu-icon">💬</view>
+      <view class="menu-content">
+        <text class="menu-title">意见反馈</text>
+        <text class="menu-desc">帮助我们改进应用</text>
+      </view>
+      <view class="menu-arrow">></view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <button class="logout-btn" bindtap="logout">退出登录</button>
   </view>
 </view>

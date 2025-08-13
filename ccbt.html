@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>疼痛管理 - 基于CCBT的解决方案</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1677ff',
+                        secondary: '#36cbcb',
+                        accent: '#ff7d00',
+                        neutral: '#f5f5f5',
+                        'neutral-dark': '#e5e5e5',
+                        'text-primary': '#333333',
+                        'text-secondary': '#666666',
+                        'text-tertiary': '#999999',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 4px 16px rgba(0, 0, 0, 0.12)',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .text-shadow {
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            }
+            .wechat-header {
+                height: 48px;
+                padding-top: env(safe-area-inset-top);
+            }
+            .wechat-tabbar {
+                height: 50px;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .page-container {
+                height: calc(100vh - 48px - 50px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-text-primary overflow-hidden">
+    <!-- 微信小程序头部导航 -->
+    <header class="wechat-header bg-white shadow-sm flex items-center justify-center fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="header">
+        <div class="absolute left-4 top-1/2 -translate-y-1/2">
+            <i class="fa fa-arrow-left text-text-secondary text-lg" id="backBtn"></i>
+        </div>
+        <h1 class="text-lg font-medium" id="pageTitle">疼痛管理</h1>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2">
+            <i class="fa fa-ellipsis-v text-text-secondary text-lg" id="moreBtn"></i>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="page-container pt-[48px] pb-[50px] transition-opacity duration-300" id="mainContent">
+        <!-- 首页/仪表盘 -->
+        <section id="homePage" class="page active">
+            <!-- 用户信息卡片 -->
+            <div class="bg-gradient-to-r from-primary to-secondary text-white p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-xl font-semibold">您好，张先生</h2>
+                            <p class="text-white/80 text-sm">今天感觉怎么样？</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                            <i class="fa fa-user text-xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-2 mt-6">
+                        <div class="bg-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
+                            <p class="text-xs opacity-80">当前疼痛度</p>
+                            <p class="text-2xl font-bold mt-1">3/10</p>
+                        </div>
+                        <div class="bg-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
+                            <p class="text-xs opacity-80">连续记录</p>
+                            <p class="text-2xl font-bold mt-1">7天</p>
+                        </div>
+                        <div class="bg-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
+                            <p class="text-xs opacity-80">完成课程</p>
+                            <p class="text-2xl font-bold mt-1">5节</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 今日任务 -->
+            <div class="bg-white p-4 mt-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-medium">今日任务</h3>
+                    <span class="text-primary text-sm">3/5 完成</span>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center p-3 bg-neutral rounded-lg">
+                        <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                            <i class="fa fa-check text-primary text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm">晨间疼痛评估</p>
+                        </div>
+                        <div class="text-xs text-text-tertiary">已完成</div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-neutral rounded-lg">
+                        <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                            <i class="fa fa-check text-primary text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm">10分钟呼吸练习</p>
+                        </div>
+                        <div class="text-xs text-text-tertiary">已完成</div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-neutral rounded-lg">
+                        <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                            <i class="fa fa-check text-primary text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm">轻度伸展运动</p>
+                        </div>
+                        <div class="text-xs text-text-tertiary">已完成</div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-white border border-neutral-dark rounded-lg">
+                        <div class="w-6 h-6 rounded-full border border-text-tertiary flex items-center justify-center mr-3">
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm">疼痛日记记录</p>
+                        </div>
+                        <div class="text-xs text-accent">进行中</div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-white border border-neutral-dark rounded-lg">
+                        <div class="w-6 h-6 rounded-full border border-text-tertiary flex items-center justify-center mr-3">
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm">认知重构练习</p>
+                        </div>
+                        <div class="text-xs text-text-tertiary">未完成</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 推荐内容 -->
+            <div class="mt-4 px-4">
+                <h3 class="font-medium mb-3">为您推荐</h3>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white rounded-xl shadow-card p-4 transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                            <i class="fa fa-bed text-primary"></i>
+                        </div>
+                        <h4 class="font-medium text-sm mb-1">改善睡眠疼痛</h4>
+                        <p class="text-text-tertiary text-xs">10分钟 · 音频引导</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mb-3">
+                            <i class="fa fa-book text-secondary"></i>
+                        </div>
+                        <h4 class="font-medium text-sm mb-1">疼痛的神经机制</h4>
+                        <p class="text-text-tertiary text-xs">图文 · 5分钟阅读</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-3">
+                            <i class="fa fa-users text-accent"></i>
+                        </div>
+                        <h4 class="font-medium text-sm mb-1">腰背痛互助小组</h4>
+                        <p class="text-text-tertiary text-xs">今日新话题 · 28人参与</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center mb-3">
+                            <i class="fa fa-line-chart text-green-500"></i>
+                        </div>
+                        <h4 class="font-medium text-sm mb-1">本周疼痛趋势</h4>
+                        <p class="text-text-tertiary text-xs">数据报告 · 查看详情</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速工具 -->
+            <div class="mt-6 px-4 pb-6">
+                <h3 class="font-medium mb-3">快速工具</h3>
+                
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                            <i class="fa fa-stethoscope text-primary"></i>
+                        </div>
+                        <span class="text-xs text-text-secondary">疼痛评估</span>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-2">
+                            <i class="fa fa-book text-secondary"></i>
+                        </div>
+                        <span class="text-xs text-text-secondary">疼痛日记</span>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-2">
+                            <i class="fa fa-headphones text-accent"></i>
+                        </div>
+                        <span class="text-xs text-text-secondary">放松训练</span>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-2">
+                            <i class="fa fa-lightbulb-o text-purple-500"></i>
+                        </div>
+                        <span class="text-xs text-text-secondary">认知练习</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 评估模块页面 -->
+        <section id="assessmentPage" class="page hidden">
+            <div class="bg-white p-4">
+                <h2 class="text-xl font-semibold mb-2">疼痛评估</h2>
+                <p class="text-text-secondary text-sm">定期评估有助于跟踪您的疼痛状况变化</p>
+            </div>
+            
+            <div class="mt-4 bg-white p-5 rounded-t-2xl">
+                <h3 class="font-medium mb-4">当前疼痛强度</h3>
+                
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-xs text-text-tertiary">无痛</span>
+                        <span class="text-xs text-text-tertiary">轻微</span>
+                        <span class="text-xs text-text-tertiary">中度</span>
+                        <span class="text-xs text-text-tertiary">重度</span>
+                        <span class="text-xs text-text-tertiary">剧痛</span>
+                    </div>
+                    
+                    <div class="relative h-6 mb-1">
+                        <div class="absolute inset-0 bg-gray-100 rounded-full"></div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 rounded-full" style="width: 30%"></div>
+                        <div class="absolute left-[30%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-primary rounded-full shadow-md"></div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span class="text-primary font-semibold">3</span>
+                        <span class="text-text-tertiary text-sm ml-1">/ 10分</span>
+                    </div>
+                </div>
+                
+                <div class="mb-5">
+                    <label class="block text-sm font-medium mb-2">疼痛部位</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="border border-neutral-dark rounded-lg p-2 text-center text-sm">背部</div>
+                        <div class="border border-neutral-dark rounded-lg p-2 text-center text-sm bg-primary/10 border-primary text-primary">腰部</div>
+                        <div class="border border-neutral-dark rounded-lg p-2 text-center text-sm">颈部</div>
+                        <div class="border border-neutral-dark rounded-lg p-2 text-center text-sm">肩部</div>
+                        <div class="border border-neutral-dark rounded-lg p-2 text-center text-sm">腿部</div>
+                        <div class="border border-neutral-dark rounded-lg p-2 text-center text-sm">其他</div>
+                    </div>
+                </div>
+                
+                <div class="mb-5">
+                    <label class="block text-sm font-medium mb-2">疼痛持续时间</label>
+                    <select class="w-full border border-neutral-dark rounded-lg p-3 text-sm">
+                        <option>不到1小时</option>
+                        <option selected>1-3小时</option>
+                        <option>3-6小时</option>
+                        <option>6-12小时</option>
+                        <option>12-24小时</option>
+                        <option>超过24小时</option>
+                    </select>
+                </div>
+                
+                <div class="mb-5">
+                    <label class="block text-sm font-medium mb-2">可能的触发因素（可多选）</label>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full">久坐</span>
+                        <span class="px-3 py-1 bg-neutral rounded-full text-text-secondary text-xs">运动</span>
+                        <span class="px-3 py-1 bg-neutral rounded-full text-text-secondary text-xs">压力大</span>
+                        <span class="px-3 py-1 bg-neutral rounded-full text-text-secondary text-xs">睡眠不足</span>
+                        <span class="px-3 py-1 bg-neutral rounded-full text-text-secondary text-xs">天气变化</span>
+                        <span class="px-3 py-1 bg-neutral rounded-full text-text-secondary text-xs">其他</span>
+                    </div>
+                </div>
+                
+                <div class="mb-5">
+                    <label class="block text-sm font-medium mb-2">疼痛描述</label>
+                    <textarea class="w-full border border-neutral-dark rounded-lg p-3 text-sm h-24" placeholder="请描述您的疼痛感受..."></textarea>
+                </div>
+                
+                <button class="w-full bg-primary text-white py-3 rounded-lg font-medium">完成评估</button>
+            </div>
+        </section>
+        
+        <!-- CCBT干预模块页面 -->
+        <section id="ccbtPage" class="page hidden">
+            <div class="bg-white p-4">
+                <h2 class="text-xl font-semibold mb-2">CCBT干预训练</h2>
+                <p class="text-text-secondary text-sm">通过认知行为疗法技术管理疼痛</p>
+            </div>
+            
+            <div class="mt-4 px-4">
+                <div class="bg-white rounded-xl shadow-card overflow-hidden mb-4">
+                    <div class="h-36 bg-gradient-to-r from-primary to-secondary relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-sm">
+                                <i class="fa fa-play text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 text-white">
+                            <h3 class="font-medium">认知重构入门</h3>
+                            <p class="text-sm text-white/80">识别疼痛相关的负面思维</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="flex items-center">
+                                <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">15分钟</span>
+                                <span class="text-text-tertiary text-xs ml-2">初级</span>
+                            </div>
+                            <span class="text-text-tertiary text-xs">上次完成：3天前</span>
+                        </div>
+                        <p class="text-sm text-text-secondary mb-3">学习如何识别与疼痛相关的负面自动思维，以及它们如何影响您的感受和行为。</p>
+                        <button class="w-full bg-primary/10 text-primary py-2 rounded-lg text-sm font-medium">继续学习</button>
+                    </div>
+                </div>
+                
+                <h3 class="font-medium mb-3">推荐练习</h3>
+                
+                <div class="space-y-3 mb-6">
+                    <div class="bg-white rounded-xl shadow-card p-4 flex items-center transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fa fa-exchange text-secondary"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm">思维替换练习</h4>
+                            <p class="text-text-tertiary text-xs mt-1">将"我永远不会好"替换为更平衡的想法</p>
+                        </div>
+                        <i class="fa fa-arrow-right text-text-tertiary"></i>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 flex items-center transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fa fa-calendar-check-o text-accent"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm">活动计划制定</h4>
+                            <p class="text-text-tertiary text-xs mt-1">逐步增加日常活动，克服疼痛恐惧</p>
+                        </div>
+                        <i class="fa fa-arrow-right text-text-tertiary"></i>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 flex items-center transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fa fa-pencil text-purple-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm">思维记录表</h4>
+                            <p class="text-text-tertiary text-xs mt-1">记录并分析疼痛时的自动思维</p>
+                        </div>
+                        <i class="fa fa-arrow-right text-text-tertiary"></i>
+                    </div>
+                </div>
+                
+                <h3 class="font-medium mb-3">行为激活</h3>
+                
+                <div class="bg-white rounded-xl shadow-card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-medium">今日活动建议</h4>
+                        <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">适合您的强度</span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 border border-neutral-dark rounded-lg">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-walking text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm">慢走10分钟</p>
+                                <p class="text-text-tertiary text-xs">分两次进行，每次5分钟</p>
+                            </div>
+                            <button class="text-primary text-sm">开始</button>
+                        </div>
+                        
+                        <div class="flex items-center p-3 border border-neutral-dark rounded-lg">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-child text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm">温和伸展运动</p>
+                                <p class="text-text-tertiary text-xs">3个动作，每个保持15秒</p>
+                            </div>
+                            <button class="text-primary text-sm">开始</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 心理调节工具页面 -->
+        <section id="toolsPage" class="page hidden">
+            <div class="bg-white p-4">
+                <h2 class="text-xl font-semibold mb-2">心理调节工具</h2>
+                <p class="text-text-secondary text-sm">放松训练与情绪管理技巧</p>
+            </div>
+            
+            <div class="mt-4 px-4">
+                <h3 class="font-medium mb-3">正念与放松训练</h3>
+                
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="bg-white rounded-xl shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="h-28 bg-primary/10 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                                    <i class="fa fa-play text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-black/20 text-white text-xs px-1.5 py-0.5 rounded">5分钟</div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium text-sm">快速呼吸放松</h4>
+                            <p class="text-text-tertiary text-xs mt-1">缓解急性疼痛焦虑</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="h-28 bg-secondary/10 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center">
+                                    <i class="fa fa-play text-secondary"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-black/20 text-white text-xs px-1.5 py-0.5 rounded">15分钟</div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium text-sm">渐进式肌肉放松</h4>
+                            <p class="text-text-tertiary text-xs mt-1">全身肌肉放松训练</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="h-28 bg-accent/10 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                                    <i class="fa fa-play text-accent"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-black/20 text-white text-xs px-1.5 py-0.5 rounded">20分钟</div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium text-sm">身体扫描冥想</h4>
+                            <p class="text-text-tertiary text-xs mt-1">关注并释放身体紧张</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-card-hover">
+                        <div class="h-28 bg-purple-100 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center">
+                                    <i class="fa fa-play text-purple-500"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-black/20 text-white text-xs px-1.5 py-0.5 rounded">10分钟</div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium text-sm">正念行走练习</h4>
+                            <p class="text-text-tertiary text-xs mt-1">结合移动的正念训练</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="font-medium mb-3">情绪管理</h3>
+                
+                <div class="bg-white rounded-xl shadow-card p-4 mb-4">
+                    <h4 class="font-medium mb-3">今日情绪追踪</h4>
+                    
+                    <div class="grid grid-cols-5 gap-2 mb-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mb-1">
+                                <i class="fa fa-angry text-red-500"></i>
+                            </div>
+                            <span class="text-xs">愤怒</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mb-1">
+                                <i class="fa fa-frown-o text-yellow-500"></i>
+                            </div>
+                            <span class="text-xs">焦虑</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center mb-1">
+                                <i class="fa fa-meh-o text-primary"></i>
+                            </div>
+                            <span class="text-xs">平静</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-1">
+                                <i class="fa fa-smile-o text-green-500"></i>
+                            </div>
+                            <span class="text-xs">愉快</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-1">
+                                <i class="fa fa-surprise text-purple-500"></i>
+                            </div>
+                            <span class="text-xs">疲惫</span>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium">记录详细情绪日志</button>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-card p-4">
+                    <h4 class="font-medium mb-3">实用工具</h4>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 border border-neutral-dark rounded-lg">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-file-text-o text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm">思维记录表</p>
+                                <p class="text-text-tertiary text-xs">记录并分析自动思维</p>
+                            </div>
+                            <i class="fa fa-arrow-right text-text-tertiary"></i>
+                        </div>
+                        
+                        <div class="flex items-center p-3 border border-neutral-dark rounded-lg">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-clock-o text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm">注意力训练</p>
+                                <p class="text-text-tertiary text-xs">5分钟注意力集中练习</p>
+                            </div>
+                            <i class="fa fa-arrow-right text-text-tertiary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 个人中心页面 -->
+        <section id="profilePage" class="page hidden">
+            <div class="bg-gradient-to-r from-primary to-secondary p-6 text-white relative">
+                <div class="flex items-center">
+                    <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mr-4">
+                        <i class="fa fa-user text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold">张先生</h2>
+                        <p class="text-white/80 text-sm mt-1">慢性腰痛 · 开始于3个月前</p>
+                        <div class="flex items-center mt-2">
+                            <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full mr-2">完成度 35%</span>
+                            <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full">连续登录7天</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 px-4">
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-white rounded-xl shadow-card p-4 text-center">
+                        <p class="text-text-tertiary text-sm">完成课程</p>
+                        <p class="text-2xl font-bold text-primary mt-1">5</p>
+                        <p class="text-xs text-text-tertiary mt-1">共30节</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 text-center">
+                        <p class="text-text-tertiary text-sm">疼痛改善</p>
+                        <p class="text-2xl font-bold text-secondary mt-1">-28%</p>
+                        <p class="text-xs text-text-tertiary mt-1">较初始评估</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-4 text-center">
+                        <p class="text-text-tertiary text-sm">获得徽章</p>
+                        <p class="text-2xl font-bold text-accent mt-1">3</p>
+                        <p class="text-xs text-text-tertiary mt-1">共12个</p>
+                    </div>
+                </div>
+                
+                <h3 class="font-medium mb-3">我的数据</h3>
+                
+                <div class="bg-white rounded-xl shadow-card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-medium">疼痛趋势</h4>
+                        <span class="text-primary text-sm">查看全部</span>
+                    </div>
+                    
+                    <div class="h-40">
+                        <canvas id="painChart"></canvas>
+                    </div>
+                </div>
+                
+                <h3 class="font-medium mb-3">设置与帮助</h3>
+                
+                <div class="bg-white rounded-xl shadow-card p-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 border-b border-neutral-dark">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-cog text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1 text-sm">设置</div>
+                            <i class="fa fa-arrow-right text-text-tertiary"></i>
+                        </div>
+                        
+                        <div class="flex items-center p-3 border-b border-neutral-dark">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-question-circle text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1 text-sm">帮助中心</div>
+                            <i class="fa fa-arrow-right text-text-tertiary"></i>
+                        </div>
+                        
+                        <div class="flex items-center p-3 border-b border-neutral-dark">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-file-text-o text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1 text-sm">关于CCBT</div>
+                            <i class="fa fa-arrow-right text-text-tertiary"></i>
+                        </div>
+                        
+                        <div class="flex items-center p-3">
+                            <div class="w-8 h-8 rounded-full bg-neutral flex items-center justify-center mr-3">
+                                <i class="fa fa-shield text-text-secondary"></i>
+                            </div>
+                            <div class="flex-1 text-sm">隐私政策</div>
+                            <i class="fa fa-arrow-right text-text-tertiary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 微信小程序底部Tab栏 -->
+    <footer class="wechat-tabbar bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50 flex">
+        <div class="flex-1 flex flex-col items-center justify-center text-primary" data-page="homePage">
+            <i class="fa fa-home text-lg"></i>
+            <span class="text-xs mt-1">首页</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-center text-text-tertiary" data-page="assessmentPage">
+            <i class="fa fa-stethoscope text-lg"></i>
+            <span class="text-xs mt-1">评估</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-center text-text-tertiary" data-page="ccbtPage">
+            <i class="fa fa-brain text-lg"></i>
+            <span class="text-xs mt-1">训练</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-center text-text-tertiary" data-page="toolsPage">
+            <i class="fa fa-heart-o text-lg"></i>
+            <span class="text-xs mt-1">工具</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center justify-center text-text-tertiary" data-page="profilePage">
+            <i class="fa fa-user-o text-lg"></i>
+            <span class="text-xs mt-1">我的</span>
+        </div>
+    </footer>
+
+    <script>
+        // 页面切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化疼痛趋势图表
+            initPainChart();
+            
+            // Tab栏点击事件
+            const tabItems = document.querySelectorAll('.wechat-tabbar > div');
+            tabItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有Tab的活跃状态
+                    tabItems.forEach(i => i.classList.remove('text-primary'));
+                    tabItems.forEach(i => i.classList.add('text-text-tertiary'));
+                    
+                    // 添加当前Tab的活跃状态
+                    this.classList.remove('text-text-tertiary');
+                    this.classList.add('text-primary');
+                    
+                    // 获取目标页面
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // 隐藏所有页面
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.add('hidden');
+                    });
+                    
+                    // 显示目标页面
+                    document.getElementById(targetPage).classList.remove('hidden');
+                    
+                    // 更新标题
+                    updatePageTitle(targetPage);
+                    
+                    // 显示返回按钮（首页不显示）
+                    document.getElementById('backBtn').style.display = targetPage === 'homePage' ? 'none' : 'block';
+                });
+            });
+            
+            // 返回按钮点击事件
+            document.getElementById('backBtn').addEventListener('click', function() {
+                // 切换到首页
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.add('hidden');
+                });
+                document.getElementById('homePage').classList.remove('hidden');
+                
+                // 更新Tab状态
+                tabItems.forEach(i => i.classList.remove('text-primary'));
+                tabItems.forEach(i => i.classList.add('text-text-tertiary'));
+                tabItems[0].classList.remove('text-text-tertiary');
+                tabItems[0].classList.add('text-primary');
+                
+                // 更新标题
+                updatePageTitle('homePage');
+                
+                // 隐藏返回按钮
+                this.style.display = 'none';
+            });
+            
+            // 初始隐藏返回按钮
+            document.getElementById('backBtn').style.display = 'none';
+        });
+        
+        // 更新页面标题
+        function updatePageTitle(pageId) {
+            const titleElement = document.getElementById('pageTitle');
+            switch(pageId) {
+                case 'homePage':
+                    titleElement.textContent = '疼痛管理';
+                    break;
+                case 'assessmentPage':
+                    titleElement.textContent = '疼痛评估';
+                    break;
+                case 'ccbtPage':
+                    titleElement.textContent = 'CCBT训练';
+                    break;
+                case 'toolsPage':
+                    titleElement.textContent = '心理调节';
+                    break;
+                case 'profilePage':
+                    titleElement.textContent = '个人中心';
+                    break;
+                default:
+                    titleElement.textContent = '疼痛管理';
+            }
+        }
+        
+        // 初始化疼痛趋势图表
+        function initPainChart() {
+            const ctx = document.getElementById('painChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '疼痛强度',
+                        data: [5, 6, 4, 5, 4, 3, 3],
+                        borderColor: '#1677ff',
+                        backgroundColor: 'rgba(22, 119, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#1677ff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

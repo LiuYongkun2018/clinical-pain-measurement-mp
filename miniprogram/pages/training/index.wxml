@@ -1,0 +1,156 @@
+<view class="training-container">
+  <!-- 标题区域 -->
+  <view class="header-section">
+    <text class="main-title">认知行为训练</text>
+    <text class="subtitle">科学的疼痛管理方法，帮您重建积极心态</text>
+  </view>
+
+  <!-- 训练分类标签 -->
+  <view class="category-tabs">
+    <view class="tab-item {{currentTab === item.id ? 'active' : ''}}" 
+          wx:for="{{categoryTabs}}" wx:key="id"
+          bindtap="switchTab" data-tab="{{item.id}}">
+      <text class="tab-text">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 认知重构训练 -->
+  <view class="training-section" wx:if="{{currentTab === 'cognitive'}}">
+    <view class="section-header">
+      <text class="section-title">认知重构练习</text>
+      <text class="section-desc">识别和改变消极思维模式，建立更健康的认知方式</text>
+    </view>
+
+    <view class="course-grid">
+      <view class="course-card {{item.completed ? 'completed' : ''}}" 
+            wx:for="{{cognitiveModules}}" wx:key="id"
+            bindtap="startCourse" data-course="{{item.id}}" data-type="cognitive">
+        <view class="card-header">
+          <view class="course-icon">{{item.icon}}</view>
+          <view class="completion-badge" wx:if="{{item.completed}}">✓</view>
+        </view>
+        <view class="card-content">
+          <text class="course-title">{{item.title}}</text>
+          <text class="course-description">{{item.description}}</text>
+          <view class="course-meta">
+            <text class="duration">{{item.duration}}</text>
+            <text class="difficulty">{{item.difficulty}}</text>
+          </view>
+        </view>
+        <view class="progress-bar" wx:if="{{item.progress > 0}}">
+          <view class="progress-fill" style="width: {{item.progress}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 行为激活训练 -->
+  <view class="training-section" wx:if="{{currentTab === 'behavioral'}}">
+    <view class="section-header">
+      <text class="section-title">行为激活计划</text>
+      <text class="section-desc">通过有意义的活动安排，提升生活质量和情绪状态</text>
+    </view>
+
+    <view class="course-grid">
+      <view class="course-card {{item.completed ? 'completed' : ''}}" 
+            wx:for="{{behavioralModules}}" wx:key="id"
+            bindtap="startCourse" data-course="{{item.id}}" data-type="behavioral">
+        <view class="card-header">
+          <view class="course-icon">{{item.icon}}</view>
+          <view class="completion-badge" wx:if="{{item.completed}}">✓</view>
+        </view>
+        <view class="card-content">
+          <text class="course-title">{{item.title}}</text>
+          <text class="course-description">{{item.description}}</text>
+          <view class="course-meta">
+            <text class="duration">{{item.duration}}</text>
+            <text class="difficulty">{{item.difficulty}}</text>
+          </view>
+        </view>
+        <view class="progress-bar" wx:if="{{item.progress > 0}}">
+          <view class="progress-fill" style="width: {{item.progress}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 综合训练 -->
+  <view class="training-section" wx:if="{{currentTab === 'integrated'}}">
+    <view class="section-header">
+      <text class="section-title">综合训练课程</text>
+      <text class="section-desc">结合认知重构和行为激活的综合性训练方案</text>
+    </view>
+
+    <view class="course-grid">
+      <view class="course-card {{item.completed ? 'completed' : ''}}" 
+            wx:for="{{integratedModules}}" wx:key="id"
+            bindtap="startCourse" data-course="{{item.id}}" data-type="integrated">
+        <view class="card-header">
+          <view class="course-icon">{{item.icon}}</view>
+          <view class="completion-badge" wx:if="{{item.completed}}">✓</view>
+        </view>
+        <view class="card-content">
+          <text class="course-title">{{item.title}}</text>
+          <text class="course-description">{{item.description}}</text>
+          <view class="course-meta">
+            <text class="duration">{{item.duration}}</text>
+            <text class="difficulty">{{item.difficulty}}</text>
+          </view>
+        </view>
+        <view class="progress-bar" wx:if="{{item.progress > 0}}">
+          <view class="progress-fill" style="width: {{item.progress}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学习统计 -->
+  <view class="stats-section">
+    <view class="stats-header">
+      <text class="stats-title">学习统计</text>
+    </view>
+    
+    <view class="stats-cards">
+      <view class="stat-card">
+        <text class="stat-number">{{totalProgress}}%</text>
+        <text class="stat-label">总体进度</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{completedCourses}}</text>
+        <text class="stat-label">已完成课程</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{studyDays}}</text>
+        <text class="stat-label">学习天数</text>
+      </view>
+    </view>
+
+    <view class="weekly-progress">
+      <text class="progress-title">本周学习进度</text>
+      <view class="progress-chart">
+        <view class="day-progress" wx:for="{{weeklyProgress}}" wx:key="day">
+          <view class="progress-dot {{item.completed ? 'completed' : ''}}"></view>
+          <text class="day-label">{{item.day}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐课程 -->
+  <view class="recommendation-section">
+    <view class="rec-header">
+      <text class="rec-title">为您推荐</text>
+      <text class="rec-subtitle">基于您的学习情况和疼痛评估结果</text>
+    </view>
+    
+    <view class="rec-course" wx:for="{{recommendedCourses}}" wx:key="id"
+          bindtap="startCourse" data-course="{{item.id}}" data-type="{{item.type}}">
+      <view class="rec-icon">{{item.icon}}</view>
+      <view class="rec-content">
+        <text class="rec-course-title">{{item.title}}</text>
+        <text class="rec-reason">{{item.reason}}</text>
+      </view>
+      <view class="rec-arrow">→</view>
+    </view>
+  </view>
+</view>

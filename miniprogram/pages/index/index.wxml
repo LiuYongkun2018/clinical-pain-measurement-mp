@@ -1,0 +1,99 @@
+<view class="dashboard-container">
+  <!-- 欢迎区域 -->
+  <view class="welcome-section">
+    <view class="welcome-header">
+      <text class="welcome-title">您好，{{userName}}</text>
+      <text class="welcome-date">{{currentDate}}</text>
+    </view>
+    <text class="welcome-subtitle">让我们一起管理疼痛，重拾健康生活</text>
+  </view>
+
+  <!-- 疼痛状态卡片 -->
+  <view class="status-cards">
+    <!-- 当前疼痛度 -->
+    <view class="status-card pain-level-card">
+      <view class="card-header">
+        <text class="card-title">疼痛度</text>
+        <text class="card-value">{{currentPainLevel}}</text>
+      </view>
+      <view class="pain-scale">
+        <view class="scale-bar">
+          <view class="scale-fill" style="width: {{currentPainLevel * 10}}%"></view>
+        </view>
+        <text class="scale-label">0 - 无痛    10 - 剧烈疼痛</text>
+      </view>
+    </view>
+
+    <!-- 连续记录天数 -->
+    <view class="status-card">
+      <view class="card-icon streak-icon">🔥</view>
+      <view class="card-content">
+        <text class="card-number">{{consecutiveDays}}</text>
+        <text class="card-label">连续记录天数</text>
+      </view>
+    </view>
+
+    <!-- 完成课程数 -->
+    <view class="status-card">
+      <view class="card-icon course-icon">📚</view>
+      <view class="card-content">
+        <text class="card-number">{{completedCourses}}</text>
+        <text class="card-label">已完成课程</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日任务 -->
+  <view class="today-tasks">
+    <view class="section-header">
+      <text class="section-title">今日任务</text>
+      <text class="section-subtitle">{{todayProgress.completed}}/{{todayProgress.total}} 已完成</text>
+    </view>
+    
+    <view class="task-list">
+      <view class="task-item {{item.completed ? 'completed' : ''}}" wx:for="{{todayTasks}}" wx:key="id" bindtap="toggleTask" data-id="{{item.id}}">
+        <view class="task-checkbox">
+          <view class="checkbox {{item.completed ? 'checked' : ''}}">
+            <text class="checkmark" wx:if="{{item.completed}}">✓</text>
+          </view>
+        </view>
+        <view class="task-content">
+          <text class="task-title">{{item.title}}</text>
+          <text class="task-description">{{item.description}}</text>
+        </view>
+        <view class="task-icon">{{item.icon}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛趋势图表 -->
+  <view class="pain-chart">
+    <view class="section-header">
+      <text class="section-title">疼痛趋势</text>
+      <text class="section-subtitle">过去7天</text>
+    </view>
+    <view class="chart-container">
+      <canvas class="chart-canvas" canvas-id="painChart" id="painChart"></canvas>
+    </view>
+  </view>
+
+  <!-- 快速操作 -->
+  <view class="quick-actions">
+    <view class="action-button" bindtap="recordPain">
+      <view class="action-icon">📝</view>
+      <text class="action-text">记录疼痛</text>
+    </view>
+    <view class="action-button" bindtap="startMindfulness">
+      <view class="action-icon">🧘</view>
+      <text class="action-text">正念练习</text>
+    </view>
+    <view class="action-button" bindtap="viewCourses">
+      <view class="action-icon">📖</view>
+      <text class="action-text">学习课程</text>
+    </view>
+    <view class="action-button" bindtap="emotionLog">
+      <view class="action-icon">💭</view>
+      <text class="action-text">情绪日志</text>
+    </view>
+  </view>
+</view>
