@@ -1,0 +1,341 @@
+/* 个人中心页面样式 */
+.profile-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  padding-bottom: 40rpx;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  margin: 40rpx 30rpx;
+  padding: 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.user-avatar {
+  margin-right: 24rpx;
+}
+
+.avatar-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.user-level {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.edit-button {
+  padding: 16rpx 32rpx;
+  background: linear-gradient(135deg, #1677ff 0%, #69b7ff 100%);
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.3);
+}
+
+.edit-text {
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* 数据统计 */
+.stats-section {
+  margin: 0 30rpx 40rpx;
+  padding: 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.stats-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24rpx;
+}
+
+.stat-item {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #f1f8ff 0%, #e6f3ff 100%);
+  border-radius: 16rpx;
+  text-align: center;
+  border: 1rpx solid rgba(22, 119, 255, 0.1);
+}
+
+.stat-number {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #1677ff;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 图表部分 */
+.chart-section {
+  margin: 0 30rpx 40rpx;
+  padding: 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.chart-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.chart-tabs {
+  display: flex;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 4rpx;
+}
+
+.chart-tab {
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  color: #666;
+  border-radius: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.chart-tab.active {
+  background: #1677ff;
+  color: #fff;
+  font-weight: 500;
+}
+
+.chart-placeholder {
+  padding: 60rpx 40rpx;
+  text-align: center;
+  background: linear-gradient(135deg, #f6f9fc 0%, #eef7ff 100%);
+  border-radius: 16rpx;
+  border: 2rpx dashed #d0e4ff;
+}
+
+.placeholder-icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+}
+
+.placeholder-text {
+  display: block;
+  font-size: 32rpx;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 12rpx;
+}
+
+.placeholder-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 成就系统 */
+.achievements-section {
+  margin: 0 30rpx 40rpx;
+  padding: 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.achievements-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.achievement-item.unlocked {
+  background: linear-gradient(135deg, #fff4e6 0%, #ffe7ba 100%);
+  border: 1rpx solid #ffd591;
+}
+
+.achievement-item.locked {
+  background: #f5f5f5;
+  border: 1rpx solid #e5e5e5;
+  opacity: 0.7;
+}
+
+.achievement-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+  width: 56rpx;
+  text-align: center;
+}
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.achievement-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.achievement-status {
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.achievement-item.unlocked .achievement-status {
+  background: #52c41a;
+}
+
+.achievement-item.locked .achievement-status {
+  background: #d9d9d9;
+}
+
+.status-text {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 设置部分 */
+.settings-section {
+  margin: 0 30rpx 40rpx;
+  padding: 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 20rpx;
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.setting-item:active {
+  background: rgba(22, 119, 255, 0.05);
+}
+
+.setting-icon {
+  font-size: 36rpx;
+  margin-right: 24rpx;
+  width: 48rpx;
+  text-align: center;
+}
+
+.setting-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.setting-arrow {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 退出登录 */
+.logout-section {
+  margin: 0 30rpx;
+  padding: 40rpx;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 32rpx;
+  background: linear-gradient(135deg, #ff4757 0%, #ff6b7d 100%);
+  border-radius: 16rpx;
+  text-align: center;
+  box-shadow: 0 6rpx 20rpx rgba(255, 71, 87, 0.3);
+  transition: all 0.3s ease;
+}
+
+.logout-button:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 16rpx rgba(255, 71, 87, 0.3);
+}
+
+.logout-text {
+  font-size: 32rpx;
+  color: #fff;
+  font-weight: 600;
+}
