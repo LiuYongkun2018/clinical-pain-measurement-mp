@@ -126,10 +126,10 @@ Page({
     console.log('点击自然音卡片:', item.title);
     
     // 这里可以跳转到自然音详情页面或者显示更多选项
-    wx.showToast({
-      title: `进入${item.title}分类`,
-      icon: 'none'
-    });
+    // wx.showToast({
+    //   title: `进入${item.title}分类`,
+    //   icon: 'none'
+    // });
   },
 
   // 播放自然音
