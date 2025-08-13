@@ -317,12 +317,14 @@
 .logout-section {
   margin: 0 30rpx;
   padding: 40rpx;
+  text-align: center;
 }
 
 .logout-button {
   width: 100%;
-  padding: 32rpx;
+  padding: 32rpx 0;
   background: linear-gradient(135deg, #ff4757 0%, #ff6b7d 100%);
+  background-color: blue;
   border-radius: 16rpx;
   text-align: center;
   box-shadow: 0 6rpx 20rpx rgba(255, 71, 87, 0.3);
