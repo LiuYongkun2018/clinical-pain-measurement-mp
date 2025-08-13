@@ -72,13 +72,13 @@
   <view class="assessment-section">
     <view class="section-header">
       <text class="section-title">疼痛触发因素</text>
-      <text class="section-subtitle">请选择可能引起或加重疼痛的因素（可多选）</text>
+      <text class="section-subtitle">请选择最主要的疼痛触发因素</text>
     </view>
     
     <view class="trigger-factors">
-      <view class="factor-item {{selectedFactors.includes(item.id) ? 'selected' : ''}}"
+      <view class="factor-item {{selectedFactor === item.id ? 'selected' : ''}}"
             wx:for="{{triggerFactors}}" wx:key="id"
-            bindtap="toggleFactor" data-id="{{item.id}}">
+            bindtap="selectFactor" data-id="{{item.id}}">
         <view class="factor-icon">{{item.icon}}</view>
         <text class="factor-text">{{item.name}}</text>
       </view>
@@ -128,7 +128,7 @@
   <!-- 提交按钮 -->
   <view class="submit-section">
     <button class="submit-btn" bindtap="submitAssessment" disabled="{{!canSubmit}}">
-      完成评估
+      提交评估
     </button>
     <text class="submit-note" wx:if="{{!canSubmit}}">请完成必填项目</text>
   </view>

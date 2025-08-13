@@ -4,7 +4,7 @@ Page({
     painDescription: '无痛',
     selectedArea: '', // 改为单个选择
     selectedDuration: '',
-    selectedFactor: '', // 改为单个选择
+    selectedFactor: '', // 疼痛触发因素(单选)
     selectedQuality: '', // 改为单个选择
     emotions: [
       { id: 'anxiety', name: '焦虑', value: 0 },
@@ -122,46 +122,59 @@ Page({
     });
   },
 
-  // 选择身体部位（改为单选）
+  // 选择身体部位（单选模式，支持取消选择）
   selectArea: function (e) {
     const areaId = e.currentTarget.dataset.id;
     
+    // 如果点击的是已选中的项，则取消选择；否则选择新项
+    const newSelectedArea = this.data.selectedArea === areaId ? '' : areaId;
+    
     this.setData({
-      selectedArea: areaId
+      selectedArea: newSelectedArea
     });
     
     this.checkCanSubmit();
     this.provideFeedback();
   },
 
-  // 选择疼痛持续时间
+  // 选择疼痛持续时间（单选模式，支持取消选择）
   selectDuration: function (e) {
     const duration = e.currentTarget.dataset.value;
+    
+    // 如果点击的是已选中的项，则取消选择；否则选择新项
+    const newSelectedDuration = this.data.selectedDuration === duration ? '' : duration;
+    
     this.setData({
-      selectedDuration: duration
+      selectedDuration: newSelectedDuration
     });
     
     this.checkCanSubmit();
     this.provideFeedback();
   },
 
-  // 选择触发因素（改为单选）
+  // 选择触发因素(单选模式，支持取消选择)
   selectFactor: function (e) {
     const factorId = e.currentTarget.dataset.id;
     
+    // 如果点击的是已选中的项，则取消选择；否则选择新项
+    const newSelectedFactor = this.data.selectedFactor === factorId ? '' : factorId;
+    
     this.setData({
-      selectedFactor: factorId
+      selectedFactor: newSelectedFactor
     });
     
     this.provideFeedback();
   },
 
-  // 选择疼痛性质（改为单选）
+  // 选择疼痛性质（单选模式，支持取消选择）
   selectQuality: function (e) {
     const qualityId = e.currentTarget.dataset.id;
     
+    // 如果点击的是已选中的项，则取消选择；否则选择新项
+    const newSelectedQuality = this.data.selectedQuality === qualityId ? '' : qualityId;
+    
     this.setData({
-      selectedQuality: qualityId
+      selectedQuality: newSelectedQuality
     });
     
     this.provideFeedback();
@@ -182,9 +195,11 @@ Page({
     }
   },
 
-  // 检查是否可以提交
+  // 检查是否可以提交(优化版本)
   checkCanSubmit: function () {
-    const canSubmit = this.data.selectedArea !== '' && this.data.selectedDuration !== '';
+    const { selectedArea, selectedDuration, painLevel } = this.data;
+    const canSubmit = selectedArea !== '' && selectedDuration !== '' && painLevel > 0;
+    
     this.setData({
       canSubmit: canSubmit
     });
@@ -197,12 +212,13 @@ Page({
     });
   },
 
-  // 提交评估
+  // 提交评估(添加更完整的数据验证)
   submitAssessment: function () {
     if (!this.data.canSubmit) {
       wx.showToast({
         title: '请完成必填项目',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
@@ -211,39 +227,50 @@ Page({
     const assessmentData = {
       painLevel: this.data.painLevel,
       painDescription: this.data.painDescription,
-      area: this.data.selectedArea, // 改为单个区域
+      area: this.data.selectedArea,
       duration: this.data.selectedDuration,
-      factor: this.data.selectedFactor, // 改为单个因素
-      quality: this.data.selectedQuality, // 改为单个性质
+      factor: this.data.selectedFactor || null, // 触发因素可选
+      quality: this.data.selectedQuality || null, // 疼痛性质可选
       emotions: this.data.emotions.reduce((obj, emotion) => {
         obj[emotion.id] = emotion.value;
         return obj;
       }, {}),
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       date: new Date().toDateString()
     };
 
-    // 保存到本地存储
-    let painRecords = wx.getStorageSync('painRecords') || [];
-    painRecords.push(assessmentData);
-    wx.setStorageSync('painRecords', painRecords);
+    console.log('提交的评估数据:', assessmentData);
 
-    // 更新今日任务状态
-    this.updateTodayTasks();
+    try {
+      // 保存到本地存储
+      let painRecords = wx.getStorageSync('painRecords') || [];
+      painRecords.push(assessmentData);
+      wx.setStorageSync('painRecords', painRecords);
 
-    // 显示成功提示
-    wx.showToast({
-      title: '评估完成',
-      icon: 'success',
-      duration: 2000
-    });
+      // 更新今日任务状态
+      this.updateTodayTasks();
 
-    // 延迟跳转回首页
-    setTimeout(() => {
-      wx.switchTab({
-        url: '/pages/index/index'
+      // 显示成功提示
+      wx.showToast({
+        title: '评估完成',
+        icon: 'success',
+        duration: 2000
       });
-    }, 2000);
+
+      // 延迟跳转回首页
+      setTimeout(() => {
+        wx.switchTab({
+          url: '/pages/index/index'
+        });
+      }, 2000);
+    } catch (error) {
+      console.error('保存评估数据失败:', error);
+      wx.showToast({
+        title: '保存失败，请重试',
+        icon: 'none',
+        duration: 2000
+      });
+    }
   },
 
   // 更新今日任务状态
