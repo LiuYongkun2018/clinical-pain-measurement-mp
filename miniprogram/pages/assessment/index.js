@@ -2,10 +2,10 @@ Page({
   data: {
     painLevel: 0,
     painDescription: '无痛',
-    selectedAreas: [],
+    selectedArea: '', // 改为单个选择
     selectedDuration: '',
-    selectedFactors: [],
-    selectedQualities: [],
+    selectedFactor: '', // 改为单个选择
+    selectedQuality: '', // 改为单个选择
     emotions: [
       { id: 'anxiety', name: '焦虑', value: 0 },
       { id: 'depression', name: '沮丧', value: 0 },
@@ -122,20 +122,12 @@ Page({
     });
   },
 
-  // 选择身体部位
-  toggleArea: function (e) {
+  // 选择身体部位（改为单选）
+  selectArea: function (e) {
     const areaId = e.currentTarget.dataset.id;
-    let selectedAreas = [...this.data.selectedAreas];
-    
-    const index = selectedAreas.indexOf(areaId);
-    if (index > -1) {
-      selectedAreas.splice(index, 1);
-    } else {
-      selectedAreas.push(areaId);
-    }
     
     this.setData({
-      selectedAreas: selectedAreas
+      selectedArea: areaId
     });
     
     this.checkCanSubmit();
@@ -153,39 +145,23 @@ Page({
     this.provideFeedback();
   },
 
-  // 选择触发因素
-  toggleFactor: function (e) {
+  // 选择触发因素（改为单选）
+  selectFactor: function (e) {
     const factorId = e.currentTarget.dataset.id;
-    let selectedFactors = [...this.data.selectedFactors];
-    
-    const index = selectedFactors.indexOf(factorId);
-    if (index > -1) {
-      selectedFactors.splice(index, 1);
-    } else {
-      selectedFactors.push(factorId);
-    }
     
     this.setData({
-      selectedFactors: selectedFactors
+      selectedFactor: factorId
     });
     
     this.provideFeedback();
   },
 
-  // 选择疼痛性质
-  toggleQuality: function (e) {
+  // 选择疼痛性质（改为单选）
+  selectQuality: function (e) {
     const qualityId = e.currentTarget.dataset.id;
-    let selectedQualities = [...this.data.selectedQualities];
-    
-    const index = selectedQualities.indexOf(qualityId);
-    if (index > -1) {
-      selectedQualities.splice(index, 1);
-    } else {
-      selectedQualities.push(qualityId);
-    }
     
     this.setData({
-      selectedQualities: selectedQualities
+      selectedQuality: qualityId
     });
     
     this.provideFeedback();
@@ -208,7 +184,7 @@ Page({
 
   // 检查是否可以提交
   checkCanSubmit: function () {
-    const canSubmit = this.data.selectedAreas.length > 0 && this.data.selectedDuration !== '';
+    const canSubmit = this.data.selectedArea !== '' && this.data.selectedDuration !== '';
     this.setData({
       canSubmit: canSubmit
     });
@@ -235,10 +211,10 @@ Page({
     const assessmentData = {
       painLevel: this.data.painLevel,
       painDescription: this.data.painDescription,
-      areas: this.data.selectedAreas,
+      area: this.data.selectedArea, // 改为单个区域
       duration: this.data.selectedDuration,
-      factors: this.data.selectedFactors,
-      qualities: this.data.selectedQualities,
+      factor: this.data.selectedFactor, // 改为单个因素
+      quality: this.data.selectedQuality, // 改为单个性质
       emotions: this.data.emotions.reduce((obj, emotion) => {
         obj[emotion.id] = emotion.value;
         return obj;

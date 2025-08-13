@@ -2,7 +2,7 @@
   <!-- 疼痛度评估 VAS量表 -->
   <view class="assessment-section">
     <view class="section-header">
-      <text class="section-title">疼痛强度评估</text>
+      <text class="section-title">NRS评估量表</text>
       <text class="section-subtitle">请滑动选择您当前的疼痛程度</text>
     </view>
     
@@ -37,14 +37,14 @@
   <view class="assessment-section">
     <view class="section-header">
       <text class="section-title">疼痛部位</text>
-      <text class="section-subtitle">请勾选您感到疼痛的部位</text>
+      <text class="section-subtitle">请选择您感到疼痛的主要部位</text>
     </view>
     
     <view class="body-map">
       <view class="body-areas">
-        <view class="body-area {{selectedAreas.includes(item.id) ? 'selected' : ''}}" 
+        <view class="body-area {{selectedArea === item.id ? 'selected' : ''}}" 
               wx:for="{{bodyAreas}}" wx:key="id"
-              bindtap="toggleArea" data-id="{{item.id}}">
+              bindtap="selectArea" data-id="{{item.id}}">
           <view class="area-icon">{{item.icon}}</view>
           <text class="area-name">{{item.name}}</text>
         </view>
@@ -89,13 +89,13 @@
   <view class="assessment-section">
     <view class="section-header">
       <text class="section-title">疼痛性质</text>
-      <text class="section-subtitle">请描述您的疼痛感受</text>
+      <text class="section-subtitle">请选择最符合您疼痛感受的描述</text>
     </view>
     
     <view class="pain-qualities">
-      <view class="quality-item {{selectedQualities.includes(item.id) ? 'selected' : ''}}"
+      <view class="quality-item {{selectedQuality === item.id ? 'selected' : ''}}"
             wx:for="{{painQualities}}" wx:key="id"
-            bindtap="toggleQuality" data-id="{{item.id}}">
+            bindtap="selectQuality" data-id="{{item.id}}">
         <text class="quality-text">{{item.name}}</text>
       </view>
     </view>
