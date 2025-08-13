@@ -1,0 +1,227 @@
+/* pages/sleep-aid/index.wxss */
+.container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  text-align: center;
+  padding: 60rpx 40rpx 30rpx 40rpx;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10rpx);
+}
+
+.header-title {
+  display: block;
+  font-size: 52rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 16rpx;
+  text-shadow: 0 4rpx 8rpx rgba(0,0,0,0.3);
+}
+
+.header-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.8);
+  font-weight: 300;
+}
+
+.intro-section {
+  padding: 30rpx 40rpx;
+  text-align: center;
+}
+
+.intro-text {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+}
+
+.content-area {
+  height: calc(100vh - 300rpx);
+  padding: 0 30rpx;
+}
+
+.section {
+  margin-bottom: 60rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 0 10rpx;
+}
+
+.section-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.3);
+}
+
+.view-all {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.7);
+}
+
+/* 自然音网格布局 */
+.nature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20rpx;
+}
+
+.nature-card {
+  position: relative;
+  height: 280rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.nature-card:active {
+  transform: scale(0.95);
+}
+
+.nature-card:hover .play-btn,
+.nature-card.active .play-btn {
+  opacity: 1;
+}
+
+/* 助眠曲列表布局 */
+.sleep-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.sleep-card {
+  position: relative;
+  height: 320rpx;
+  border-radius: 28rpx;
+  overflow: hidden;
+  box-shadow: 0 16rpx 40rpx rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+
+.sleep-card:active {
+  transform: scale(0.98);
+}
+
+/* 通用卡片样式 */
+.card-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+  z-index: 1;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 6rpx rgba(0,0,0,0.5);
+  margin-bottom: 8rpx;
+}
+
+.card-desc {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.8);
+  text-shadow: 0 1rpx 4rpx rgba(0,0,0,0.4);
+  line-height: 1.4;
+  max-width: 400rpx;
+}
+
+/* 自然音卡片特殊布局 */
+.nature-card .card-content {
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.nature-card .card-title {
+  font-size: 28rpx;
+  margin-bottom: 0;
+}
+
+.nature-card .play-btn {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10rpx);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.nature-card:hover .play-btn {
+  opacity: 1;
+}
+
+.play-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+/* 助眠曲卡片特殊布局 */
+.sleep-card .card-content {
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.sleep-card .text-info {
+  flex: 1;
+}
+
+.play-btn-large {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.9);
+  backdrop-filter: blur(10rpx);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.play-btn-large:active {
+  transform: scale(1.1);
+  background: rgba(102, 126, 234, 1);
+}
+
+.play-icon-large {
+  width: 32rpx;
+  height: 32rpx;
+}

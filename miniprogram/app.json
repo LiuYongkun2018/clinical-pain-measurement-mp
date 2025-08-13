@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/guide/index",
+    "pages/sleep-aid/index",
+    "pages/sleep-category/index",
     "pages/relaxation/index",
     "pages/assessment/index",
     "pages/promotion/index",
@@ -20,6 +22,12 @@
         "selectedIconPath": "images/icons/home-active.png"
       },
       {
+        "pagePath": "pages/sleep-aid/index",
+        "text": "助眠",
+        "iconPath": "images/icons/sleep.png",
+        "selectedIconPath": "images/icons/sleep-active.png"
+      },
+      {
         "pagePath": "pages/assessment/index",
         "text": "测验",
         "iconPath": "images/icons/examples.png",
@@ -36,13 +44,13 @@
         "text": "信息收集",
         "iconPath": "images/icons/goods.png",
         "selectedIconPath": "images/icons/goods-active.png"
-      },
-      {
-        "pagePath": "pages/profile/index",
-        "text": "个人中心",
-        "iconPath": "images/icons/usercenter.png",
-        "selectedIconPath": "images/icons/usercenter-active.png"
       }
+      // {
+      //   "pagePath": "pages/profile/index",
+      //   "text": "个人中心",
+      //   "iconPath": "images/icons/usercenter.png",
+      //   "selectedIconPath": "images/icons/usercenter-active.png"
+      // }
     ]
   },
   "usingComponents": {
