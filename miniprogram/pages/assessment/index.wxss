@@ -36,6 +36,8 @@
 /* VAS疼痛量表 */
 .vas-scale {
   width: 100%;
+  padding: 0 24rpx;
+  box-sizing: border-box;
 }
 
 .scale-container {
