@@ -235,8 +235,8 @@
 }
 
 .play-btn-large {
-  width: 100rpx; /* 进一步增大按钮 */
-  height: 100rpx;
+  width: 80rpx; /* 进一步增大按钮 */
+  height: 80rpx;
   border-radius: 50%;
   background: rgba(102, 126, 234, 0.95);
   backdrop-filter: blur(10rpx);
