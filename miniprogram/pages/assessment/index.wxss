@@ -143,6 +143,7 @@
   background: #fafafa;
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .body-area:active {
@@ -150,24 +151,49 @@
 }
 
 .body-area.selected {
-  border-color: #1677ff;
-  background: rgba(22, 119, 255, 0.1);
+  border-color: #1677ff !important;
+  background: rgba(22, 119, 255, 0.15) !important;
+  box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.body-area.selected::before {
+  content: '✓';
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  color: #1677ff;
+  font-size: 24rpx;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 32rpx;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .area-icon {
   font-size: 40rpx;
   margin-bottom: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.body-area.selected .area-icon {
+  transform: scale(1.1);
 }
 
 .area-name {
   font-size: 24rpx;
   color: #333;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 .body-area.selected .area-name {
-  color: #1677ff;
-  font-weight: 500;
+  color: #1677ff !important;
+  font-weight: 600;
 }
 
 /* 持续时间选项 */
@@ -184,6 +210,7 @@
   background: #fafafa;
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .option-item:active {
@@ -191,18 +218,32 @@
 }
 
 .option-item.selected {
-  border-color: #1677ff;
-  background: rgba(22, 119, 255, 0.1);
+  border-color: #1677ff !important;
+  background: rgba(22, 119, 255, 0.15) !important;
+  box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.2);
+  transform: scale(1.01);
+}
+
+.option-item.selected::before {
+  content: '✓';
+  position: absolute;
+  right: 16rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #1677ff;
+  font-size: 28rpx;
+  font-weight: bold;
 }
 
 .option-text {
   font-size: 28rpx;
   color: #333;
+  transition: all 0.3s ease;
 }
 
 .option-item.selected .option-text {
-  color: #1677ff;
-  font-weight: 500;
+  color: #1677ff !important;
+  font-weight: 600;
 }
 
 /* 触发因素 */
@@ -221,6 +262,7 @@
   background: #fafafa;
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .factor-item:active {
@@ -228,24 +270,49 @@
 }
 
 .factor-item.selected {
-  border-color: #1677ff;
-  background: rgba(22, 119, 255, 0.1);
+  border-color: #1677ff !important;
+  background: rgba(22, 119, 255, 0.15) !important;
+  box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.factor-item.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  color: #1677ff;
+  font-size: 20rpx;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 28rpx;
+  height: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .factor-icon {
   font-size: 32rpx;
   margin-right: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.factor-item.selected .factor-icon {
+  transform: scale(1.1);
 }
 
 .factor-text {
   font-size: 26rpx;
   color: #333;
   flex: 1;
+  transition: all 0.3s ease;
 }
 
 .factor-item.selected .factor-text {
-  color: #1677ff;
-  font-weight: 500;
+  color: #1677ff !important;
+  font-weight: 600;
 }
 
 /* 疼痛性质 */
@@ -263,6 +330,7 @@
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .quality-item:active {
@@ -270,18 +338,38 @@
 }
 
 .quality-item.selected {
-  border-color: #1677ff;
-  background: rgba(22, 119, 255, 0.1);
+  border-color: #1677ff !important;
+  background: rgba(22, 119, 255, 0.15) !important;
+  box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.quality-item.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  color: #1677ff;
+  font-size: 20rpx;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 28rpx;
+  height: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .quality-text {
   font-size: 26rpx;
   color: #333;
+  transition: all 0.3s ease;
 }
 
 .quality-item.selected .quality-text {
-  color: #1677ff;
-  font-weight: 500;
+  color: #1677ff !important;
+  font-weight: 600;
 }
 
 /* 情绪量表 */
