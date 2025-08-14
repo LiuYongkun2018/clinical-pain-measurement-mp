@@ -45,10 +45,25 @@
         <text class="chart-tab {{chartPeriod === '30d' ? 'active' : ''}}" bindtap="switchChartPeriod" data-period="30d">30天</text>
       </view>
     </view>
-    <view class="chart-placeholder">
-      <view class="placeholder-icon">📊</view>
-      <text class="placeholder-text">图表功能开发中</text>
-      <text class="placeholder-desc">敬请期待更直观的数据展示</text>
+    <view class="chart-container">
+      <canvas class="chart-canvas" canvas-id="profilePainChart" id="profilePainChart"></canvas>
+      <view class="chart-summary" wx:if="{{painTrendData && painTrendData.length > 0}}">
+        <view class="summary-item">
+          <text class="summary-label">平均疼痛度</text>
+          <text class="summary-value">{{averagePain}}</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-label">{{chartPeriod === '7d' ? '7天' : '30天'}}变化</text>
+          <text class="summary-value {{painTrend > 0 ? 'trend-up' : (painTrend < 0 ? 'trend-down' : 'trend-stable')}}">
+            {{painTrend > 0 ? '+' : ''}}{{painTrend.toFixed(1)}}
+          </text>
+        </view>
+      </view>
+      <view class="chart-placeholder" wx:else>
+        <view class="placeholder-icon">📊</view>
+        <text class="placeholder-text">暂无疼痛数据</text>
+        <text class="placeholder-desc">开始记录疼痛以查看趋势</text>
+      </view>
     </view>
   </view>
 

@@ -3,6 +3,9 @@ Page({
     userInfo: {},
     userLevel: '初级',
     chartPeriod: '7d',
+    painTrendData: [],
+    averagePain: 0,
+    painTrend: 0,
     
     userStats: {
       totalDays: 12,
@@ -61,10 +64,28 @@ Page({
     this.loadUserData();
     this.calculateUserLevel();
     this.refreshUserStats();
+    this.loadPainTrendData();
+    
+    // 初始化测试数据（如果没有真实数据）
+    this.initTestDataIfNeeded();
   },
 
   onShow: function () {
     this.refreshUserStats();
+    this.loadPainTrendData();
+    setTimeout(() => {
+      this.initChart();
+    }, 300);
+  },
+
+  // 初始化测试数据
+  initTestDataIfNeeded: function () {
+    const painRecords = wx.getStorageSync('painRecords') || [];
+    if (painRecords.length === 0) {
+      console.log('初始化测试疼痛数据');
+      // 这里可以添加一些测试数据，但不会保存到存储中
+      // 真实数据将通过评估模块产生
+    }
   },
 
   // 加载用户数据
@@ -149,6 +170,198 @@ Page({
     });
   },
 
+  // 加载疼痛趋势数据
+  loadPainTrendData: function () {
+    const painRecords = wx.getStorageSync('painRecords') || [];
+    const period = this.data.chartPeriod;
+    const days = period === '7d' ? 7 : 30;
+    
+    const trendData = [];
+    const today = new Date();
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const targetDate = new Date(today);
+      targetDate.setDate(today.getDate() - i);
+      const targetDateStr = targetDate.toDateString();
+      
+      const dayRecord = painRecords.find(record => 
+        new Date(record.date).toDateString() === targetDateStr
+      );
+      
+      trendData.push(dayRecord ? dayRecord.level : 0);
+    }
+    
+    // 如果没有真实数据，提供示例数据用于演示
+    if (painRecords.length === 0) {
+      if (period === '7d') {
+        // 7天示例数据
+        trendData.splice(0, 7, 4, 3, 5, 2, 3, 4, 3);
+      } else {
+        // 30天示例数据
+        const sampleData = [4, 3, 5, 2, 3, 4, 3, 5, 4, 2, 3, 4, 5, 3, 2, 4, 3, 5, 4, 3, 2, 4, 3, 5, 3, 4, 2, 3, 4, 5];
+        trendData.splice(0, 30, ...sampleData);
+      }
+    }
+    
+    // 计算统计数据
+    const validData = trendData.filter(value => value > 0);
+    const averagePain = validData.length > 0 
+      ? (validData.reduce((sum, val) => sum + val, 0) / validData.length).toFixed(1)
+      : 0;
+    
+    // 计算趋势（最近一半与前一半的对比）
+    let painTrend = 0;
+    if (validData.length > 0) {
+      const halfPoint = Math.floor(days / 2);
+      const recentData = trendData.slice(halfPoint).filter(v => v > 0);
+      const earlierData = trendData.slice(0, halfPoint).filter(v => v > 0);
+      
+      if (recentData.length > 0 && earlierData.length > 0) {
+        const recentAvg = recentData.reduce((sum, val) => sum + val, 0) / recentData.length;
+        const earlierAvg = earlierData.reduce((sum, val) => sum + val, 0) / earlierData.length;
+        painTrend = recentAvg - earlierAvg;
+      }
+    }
+    
+    this.setData({
+      painTrendData: trendData,
+      averagePain: averagePain,
+      painTrend: painTrend
+    });
+  },
+
+  // 初始化疼痛趋势图表
+  initChart: function () {
+    const canvas = wx.createCanvasContext('profilePainChart');
+    const painData = this.data.painTrendData;
+    const period = this.data.chartPeriod;
+    
+    if (!painData || painData.length === 0 || !painData.some(val => val > 0)) {
+      return;
+    }
+    
+    const canvasWidth = 320;
+    const canvasHeight = 180;
+    const padding = 40;
+    const chartWidth = canvasWidth - padding * 2;
+    const chartHeight = canvasHeight - padding * 2;
+    
+    // 清除画布
+    canvas.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    // 绘制背景
+    canvas.setFillStyle('#fafbfc');
+    canvas.fillRect(0, 0, canvasWidth, canvasHeight);
+    
+    // 绘制背景网格
+    canvas.setStrokeStyle('#f0f0f0');
+    canvas.setLineWidth(1);
+    
+    // 水平网格线 (疼痛等级 0-10)
+    for (let i = 0; i <= 10; i += 2) {
+      const y = padding + chartHeight - (i / 10) * chartHeight;
+      canvas.moveTo(padding, y);
+      canvas.lineTo(canvasWidth - padding, y);
+      canvas.stroke();
+      
+      // Y轴标签
+      if (i % 2 === 0) {
+        canvas.setFillStyle('#999');
+        canvas.setFontSize(10);
+        canvas.fillText(i.toString(), padding - 15, y + 3);
+      }
+    }
+    
+    // 垂直网格线
+    const stepCount = period === '7d' ? 6 : 5;
+    for (let i = 0; i <= stepCount; i++) {
+      const x = padding + (chartWidth / stepCount) * i;
+      canvas.setStrokeStyle('#f0f0f0');
+      canvas.moveTo(x, padding);
+      canvas.lineTo(x, padding + chartHeight);
+      canvas.stroke();
+    }
+    
+    // 绘制数据线和填充区域
+    const validPoints = [];
+    painData.forEach((value, index) => {
+      if (value > 0) {
+        const x = padding + (chartWidth / (painData.length - 1)) * index;
+        const y = padding + chartHeight - (value / 10) * chartHeight;
+        validPoints.push({ x, y, value, index });
+      }
+    });
+    
+    if (validPoints.length > 0) {
+      // 绘制填充区域
+      canvas.setFillStyle('rgba(22, 119, 255, 0.1)');
+      canvas.beginPath();
+      canvas.moveTo(validPoints[0].x, padding + chartHeight);
+      validPoints.forEach(point => {
+        canvas.lineTo(point.x, point.y);
+      });
+      canvas.lineTo(validPoints[validPoints.length - 1].x, padding + chartHeight);
+      canvas.closePath();
+      canvas.fill();
+      
+      // 绘制数据线
+      canvas.setStrokeStyle('#1677ff');
+      canvas.setLineWidth(3);
+      canvas.beginPath();
+      validPoints.forEach((point, index) => {
+        if (index === 0) {
+          canvas.moveTo(point.x, point.y);
+        } else {
+          canvas.lineTo(point.x, point.y);
+        }
+      });
+      canvas.stroke();
+      
+      // 绘制数据点
+      validPoints.forEach(point => {
+        // 外圈
+        canvas.setFillStyle('#1677ff');
+        canvas.beginPath();
+        canvas.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+        canvas.fill();
+        
+        // 内圈
+        canvas.setFillStyle('#fff');
+        canvas.beginPath();
+        canvas.arc(point.x, point.y, 2, 0, 2 * Math.PI);
+        canvas.fill();
+        
+        // 数值标签（仅在7天模式或稀疏数据时显示）
+        if (period === '7d' || validPoints.length <= 15) {
+          canvas.setFillStyle('#333');
+          canvas.setFontSize(10);
+          canvas.fillText(point.value.toString(), point.x - 4, point.y - 10);
+        }
+      });
+    }
+    
+    // 绘制坐标轴
+    canvas.setStrokeStyle('#ddd');
+    canvas.setLineWidth(2);
+    // Y轴
+    canvas.moveTo(padding, padding);
+    canvas.lineTo(padding, padding + chartHeight);
+    // X轴  
+    canvas.moveTo(padding, padding + chartHeight);
+    canvas.lineTo(padding + chartWidth, padding + chartHeight);
+    canvas.stroke();
+    
+    // 添加标题和说明
+    canvas.setFillStyle('#333');
+    canvas.setFontSize(12);
+    canvas.fillText('疼痛等级', 5, 20);
+    canvas.setFontSize(10);
+    canvas.fillText(`${period === '7d' ? '最近7天' : '最近30天'}`, 
+                    canvasWidth - 60, canvasHeight - 5);
+    
+    canvas.draw();
+  },
+
   // 切换图表时间周期
   switchChartPeriod: function (e) {
     const period = e.currentTarget.dataset.period;
@@ -156,9 +369,18 @@ Page({
       chartPeriod: period
     });
     
+    // 重新加载对应周期的数据
+    this.loadPainTrendData();
+    
+    // 重新绘制图表
+    setTimeout(() => {
+      this.initChart();
+    }, 100);
+    
     wx.showToast({
-      title: '图表功能开发中',
-      icon: 'none'
+      title: `切换到${period === '7d' ? '7天' : '30天'}视图`,
+      icon: 'success',
+      duration: 1000
     });
   },
 
