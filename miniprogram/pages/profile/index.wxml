@@ -8,9 +8,9 @@
       <text class="user-name">{{userInfo.nickName || '用户'}}</text>
       <text class="user-level">疼痛管理 {{userLevel}} 级</text>
     </view>
-    <view class="edit-button" bindtap="editProfile">
+    <!-- <view class="edit-button" bindtap="editProfile">
       <text class="edit-text">编辑</text>
-    </view>
+    </view> -->
   </view>
 
   <!-- 数据统计 -->
