@@ -135,6 +135,6 @@
     <button class="submit-btn" bindtap="submitAssessment" disabled="{{!canSubmit}}">
       提交评估
     </button>
-    <text class="submit-note" wx:if="{{!canSubmit}}">请完成必填项目</text>
+    <!-- <text class="submit-note" wx:if="{{!canSubmit}}">请完成必填项目</text> -->
   </view>
 </view>
