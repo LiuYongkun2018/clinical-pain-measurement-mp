@@ -1,37 +1,39 @@
 <view class="profile-container">
   <!-- 用户信息卡片 -->
   <view class="user-card">
-    <view class="user-avatar">
-      <image class="avatar-image" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill"></image>
+    <!-- 用户基本信息 -->
+    <view class="user-header">
+      <view class="user-avatar">
+        <image class="avatar-image" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill"></image>
+      </view>
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickName || '用户'}}</text>
+        <text class="user-level">疼痛管理 {{userLevel}} 级</text>
+      </view>
+      <!-- <view class="edit-button" bindtap="editProfile">
+        <text class="edit-text">编辑</text>
+      </view> -->
     </view>
-    <view class="user-info">
-      <text class="user-name">{{userInfo.nickName || '用户'}}</text>
-      <text class="user-level">疼痛管理 {{userLevel}} 级</text>
-    </view>
-    <!-- <view class="edit-button" bindtap="editProfile">
-      <text class="edit-text">编辑</text>
-    </view> -->
-  </view>
-
-  <!-- 数据统计 -->
-  <view class="stats-section">
-    <view class="stats-title">我的数据</view>
-    <view class="stats-grid">
-      <view class="stat-item">
-        <text class="stat-number">{{userStats.totalDays}}</text>
-        <text class="stat-label">使用天数</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{userStats.assessments}}</text>
-        <text class="stat-label">评估次数</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{userStats.completedCourses}}</text>
-        <text class="stat-label">完成课程</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{userStats.mindfulnessMinutes}}</text>
-        <text class="stat-label">正念时长(分)</text>
+    
+    <!-- 数据统计 -->
+    <view class="user-stats">
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.totalDays}}</text>
+          <text class="stat-label">使用天数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.assessments}}</text>
+          <text class="stat-label">评估次数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.completedCourses}}</text>
+          <text class="stat-label">完成课程</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.mindfulnessMinutes}}</text>
+          <text class="stat-label">正念时长(分)</text>
+        </view>
       </view>
     </view>
   </view>
