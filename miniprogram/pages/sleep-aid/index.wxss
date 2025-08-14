@@ -1,0 +1,373 @@
+/* pages/sleep-aid/index.wxss */
+.container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+  padding: 0 16rpx;
+}
+
+.header {
+  text-align: center;
+  padding: 60rpx 40rpx 30rpx 40rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.header-title {
+  display: block;
+  font-size: 52rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 16rpx;
+  text-shadow: 0 4rpx 8rpx rgba(0,0,0,0.3);
+}
+
+.header-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.8);
+  font-weight: 300;
+}
+
+.intro-section {
+  padding: 30rpx 40rpx;
+  text-align: center;
+}
+
+.intro-text {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+}
+
+.content-area {
+  height: calc(100vh - 320rpx); /* 调整高度计算 */
+  padding: 0 30rpx;
+}
+
+.section {
+  margin-bottom: 60rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 0 10rpx;
+}
+
+.section-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.3);
+}
+
+.view-all {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.7);
+}
+
+/* 自然音网格布局 */
+.nature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20rpx;
+}
+
+.nature-card {
+  position: relative;
+  height: 320rpx; /* 进一步增加高度 */
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.nature-card:active {
+  transform: scale(0.95);
+}
+
+.nature-card:hover .play-btn,
+.nature-card.active .play-btn {
+  opacity: 1;
+}
+
+/* 助眠曲列表布局 */
+.sleep-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding-bottom: 48rpx;
+}
+
+.sleep-card {
+  position: relative;
+  height: 360rpx; /* 增加高度 */
+  border-radius: 28rpx;
+  overflow: hidden;
+  box-shadow: 0 16rpx 40rpx rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+  margin-bottom: 24rpx;
+}
+
+.sleep-card:active {
+  transform: scale(0.98);
+}
+
+/* 通用卡片样式 */
+.card-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease; /* 添加过渡效果 */
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6)); /* 减少遮罩透明度 */
+  z-index: 1;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30rpx; /* 增加内边距 */
+}
+
+.card-title {
+  font-size: 36rpx; /* 增大字体 */
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 3rpx 8rpx rgba(0,0,0,0.7); /* 增强阴影 */
+  margin-bottom: 12rpx; /* 增加下边距 */
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 26rpx; /* 增大字体 */
+  color: rgba(255,255,255,0.9); /* 增加透明度 */
+  text-shadow: 0 2rpx 6rpx rgba(0,0,0,0.6); /* 增强阴影 */
+  line-height: 1.5;
+  max-width: 450rpx; /* 增加最大宽度 */
+}
+
+/* 自然音卡片特殊布局 */
+.nature-card .card-content {
+  justify-content: space-between; /* 改为space-between布局 */
+  align-items: stretch;
+  padding: 30rpx; /* 增加内边距 */
+  flex-direction: column;
+}
+
+.nature-card .card-title {
+  font-size: 32rpx; /* 调整字体大小 */
+  margin-bottom: 64rpx;
+  text-shadow: 0 3rpx 8rpx rgba(0,0,0,0.8); /* 增强阴影 */
+
+  margin-top: auto; /* 推到底部 */
+}
+
+.nature-card .play-btn {
+  position: absolute;
+  top: 24rpx; /* 调整位置 */
+  right: 24rpx;
+  width: 64rpx; /* 增大按钮 */
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3); /* 增加背景透明度 */
+  backdrop-filter: blur(10rpx);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.9; /* 提高默认透明度 */
+  transition: all 0.3s ease;
+  box-shadow: 0 6rpx 16rpx rgba(0,0,0,0.4); /* 增强阴影 */
+  z-index: 10; /* 确保在最顶层 */
+}
+
+.nature-card:hover .play-btn,
+.nature-card.active .play-btn {
+  opacity: 1;
+  transform: scale(1.1); /* 增加悬停效果 */
+  background: rgba(255,255,255,0.4);
+}
+
+.play-icon {
+  width: 32rpx; /* 进一步增大图标 */
+  height: 32rpx;
+}
+
+/* 助眠曲卡片特殊布局 */
+.sleep-card .card-content {
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 45rpx; /* 进一步增加内边距 */
+}
+
+.sleep-card .text-info {
+  flex: 1;
+  padding-right: 30rpx; /* 增加右边距 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 96rpx;
+}
+
+.sleep-card .card-title {
+  font-size: 42rpx; /* 进一步增大助眠曲标题字体 */
+  margin-bottom: 24rpx; /* 增加下边距 */
+  line-height: 1.3;
+}
+
+.sleep-card .card-desc {
+  font-size: 30rpx; /* 进一步增大描述字体 */
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+.play-btn-large {
+  width: 80rpx; /* 进一步增大按钮 */
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(10rpx);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8rpx 20rpx rgba(102, 126, 234, 0.5); /* 增强彩色阴影 */
+  flex-shrink: 0; /* 防止按钮被压缩 */
+  margin-bottom: 120rpx;
+}
+
+.play-btn-large:active {
+  transform: scale(1.15);
+  background: rgba(102, 126, 234, 1);
+  box-shadow: 0 10rpx 25rpx rgba(102, 126, 234, 0.7);
+}
+
+.play-icon-large {
+  width: 40rpx; /* 进一步增大图标 */
+  height: 40rpx;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 750rpx) {
+  .nature-card {
+    height: 280rpx; /* 小屏幕适配 */
+  }
+  
+  .sleep-card {
+    height: 340rpx;
+  }
+  
+  .nature-card .card-title {
+    font-size: 28rpx;
+  }
+  
+  .sleep-card .card-title {
+    font-size: 36rpx;
+  }
+  
+  .sleep-card .card-desc {
+    font-size: 26rpx;
+  }
+  
+  .nature-card .play-btn {
+    width: 70rpx;
+    height: 70rpx;
+  }
+  
+  .play-btn-large {
+    width: 85rpx;
+    height: 85rpx;
+  }
+  
+  .play-icon {
+    width: 28rpx;
+    height: 28rpx;
+  }
+  
+  .play-icon-large {
+    width: 34rpx;
+    height: 34rpx;
+  }
+}
+
+/* 防止内容重叠的保护性样式 */
+.nature-card {
+  min-height: 320rpx; /* 确保最小高度 */
+}
+
+.sleep-card {
+  min-height: 360rpx; /* 确保最小高度 */
+}
+
+/* 确保播放按钮不遮挡文字 */
+.nature-card .card-content {
+  padding-right: 120rpx; /* 为播放按钮预留空间 */
+}
+
+/* 增强按钮可点击性 */
+.nature-card .play-btn,
+.play-btn-large {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 增强文字可读性 */
+.card-title, .card-desc {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  word-wrap: break-word; /* 防止文字溢出 */
+  overflow-wrap: break-word;
+}
+
+/* 确保文字不被截断 */
+.nature-card .card-title,
+.sleep-card .card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.sleep-card .card-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 限制为两行 */
+  line-clamp: 2; /* 标准属性 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 添加卡片悬停效果增强 */
+.nature-card:active {
+  transform: scale(0.95);
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.3);
+}
+
+.sleep-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 12rpx 32rpx rgba(0,0,0,0.3);
+}
+
+/* 改善遮罩层渐变效果 */
+.nature-card .card-overlay {
+  background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.4)); /* 进一步减少遮罩 */
+}
+
+.sleep-card .card-overlay {
+  background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.5)); /* 进一步减少遮罩 */
+}

@@ -1,0 +1,242 @@
+/* pages/sleep-category/index.wxss */
+.container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+  padding: 0 16rpx;
+  padding-top: 24rpx;
+  box-sizing: border-box;
+}
+
+.header {
+  height: 400rpx;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+
+.header-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  padding: 60rpx 40rpx;
+  color: white;
+}
+
+.category-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.5);
+}
+
+.category-desc {
+  display: block;
+  font-size: 28rpx;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 20rpx;
+  text-shadow: 0 1rpx 4rpx rgba(0,0,0,0.5);
+}
+
+.track-count {
+  display: block;
+  font-size: 24rpx;
+  opacity: 0.7;
+}
+
+.audio-list {
+  height: calc(100vh - 400rpx);
+  padding: 30rpx;
+}
+
+.audio-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10rpx);
+  border-radius: 20rpx;
+  transition: all 0.3s ease;
+}
+
+.audio-item.playing {
+  background: rgba(102, 126, 234, 0.2);
+  transform: scale(1.02);
+}
+
+.audio-item:active {
+  transform: scale(0.98);
+}
+
+.cover-image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 16rpx;
+  margin-right: 24rpx;
+}
+
+.audio-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.audio-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1rpx 3rpx rgba(0,0,0,0.3);
+}
+
+.audio-artist {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.audio-duration {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.favorite-btn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+.play-btn {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.play-btn:active {
+  transform: scale(1.1);
+  background: rgba(102, 126, 234, 1);
+}
+
+.icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.play-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+/* 底部播放控制栏 */
+.player-bar {
+  position: fixed;
+  bottom: 100rpx;
+  left: 30rpx;
+  right: 30rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.player-cover {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 12rpx;
+}
+
+.player-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.player-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.player-artist {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.player-controls {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.control-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.control-btn:active {
+  transform: scale(1.1);
+}
+
+.control-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  50% { transform: scale(1.05); }
+  75% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}

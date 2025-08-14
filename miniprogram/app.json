@@ -4,7 +4,10 @@
     "pages/assessment/index", 
     "pages/training/index",
     "pages/tools/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/relaxation/index",
+    "pages/sleep-aid/index",
+    "pages/sleep-category/index"
   ],
   "tabBar": {
     "custom": false,
@@ -32,7 +35,7 @@
         "selectedIconPath": "images/icons/business-active.png"
       },
       {
-        "pagePath": "pages/tools/index",
+        "pagePath": "pages/sleep-aid/index",
         "text": "工具",
         "iconPath": "images/icons/goods.png",
         "selectedIconPath": "images/icons/goods-active.png"

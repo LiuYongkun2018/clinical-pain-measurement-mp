@@ -1,0 +1,40 @@
+<!--pages/relaxation/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="header-title">放松训练</text>
+    <text class="header-subtitle">静心聆听，释放压力</text>
+  </view>
+
+  <scroll-view scroll-y class="audio-list">
+    <view 
+      class="audio-item {{item.id === currentPlayingId ? 'playing' : ''}}" 
+      wx:for="{{audioList}}" 
+      wx:key="id"
+    >
+      <image class="cover-image" src="{{item.coverImgUrl}}" mode="aspectFill" />
+      <view class="item-overlay"></view>
+      
+      <view class="item-content">
+        <view class="text-info">
+          <text class="title">{{item.title}}</text>
+          <text class="artist">{{item.artist}}</text>
+        </view>
+        
+        <view class="controls">
+          <view class="icon-wrapper favorite-btn" bindtap="toggleFavorite" data-id="{{item.id}}">
+            <image 
+              class="icon" 
+              src="{{item.isFavorite ? '/images/icons/heart-active.svg' : '/images/icons/heart.svg'}}"
+            />
+          </view>
+          <view class="icon-wrapper play-btn" bindtap="playAudio" data-id="{{item.id}}" data-src="{{item.src}}">
+            <image 
+              class="icon play-icon" 
+              src="{{item.isPlaying ? '/images/icons/pause.svg' : '/images/icons/play.svg'}}"
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>
