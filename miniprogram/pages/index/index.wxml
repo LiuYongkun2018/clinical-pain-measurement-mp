@@ -25,7 +25,7 @@
     </view>
 
     <!-- 连续记录天数 -->
-    <view class="status-card">
+    <view class="status-card streak-card">
       <view class="card-icon streak-icon">🔥</view>
       <view class="card-content">
         <text class="card-number">{{consecutiveDays}}</text>
@@ -34,7 +34,7 @@
     </view>
 
     <!-- 完成课程数 -->
-    <view class="status-card">
+    <view class="status-card course-card">
       <view class="card-icon course-icon">📚</view>
       <view class="card-content">
         <text class="card-number">{{completedCourses}}</text>
@@ -79,19 +79,19 @@
 
   <!-- 快速操作 -->
   <view class="quick-actions">
-    <view class="action-button" bindtap="recordPain">
+    <view class="action-button record-pain-btn" bindtap="recordPain">
       <view class="action-icon">📝</view>
       <text class="action-text">记录疼痛</text>
     </view>
-    <view class="action-button" bindtap="startMindfulness">
+    <view class="action-button mindfulness-btn" bindtap="startMindfulness">
       <view class="action-icon">🧘</view>
       <text class="action-text">正念练习</text>
     </view>
-    <view class="action-button" bindtap="viewCourses">
+    <view class="action-button courses-btn" bindtap="viewCourses">
       <view class="action-icon">📖</view>
       <text class="action-text">学习课程</text>
     </view>
-    <view class="action-button" bindtap="emotionLog">
+    <view class="action-button emotion-btn" bindtap="emotionLog">
       <view class="action-icon">💭</view>
       <text class="action-text">情绪日志</text>
     </view>
