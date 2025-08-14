@@ -64,11 +64,11 @@
       <text class="section-subtitle">请选择疼痛持续的时间</text>
     </view>
     
-    <view class="duration-options">
-      <view class="option-item {{selectedDuration === item.value ? 'selected' : ''}}"
+    <view class="duration-grid">
+      <view class="duration-item {{selectedDuration === item.value ? 'selected' : ''}}"
             wx:for="{{durationOptions}}" wx:key="value"
             bindtap="selectDuration" data-value="{{item.value}}">
-        <text class="option-text">{{item.label}}</text>
+        <text class="duration-text">{{item.label}}</text>
       </view>
     </view>
   </view>

@@ -225,6 +225,82 @@
   gap: 12rpx;
 }
 
+/* 疼痛持续时间网格布局 */
+.duration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  margin-top: 8rpx;
+}
+
+.duration-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 12rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 16rpx;
+  background: #fafafa;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  min-height: 88rpx;
+  text-align: center;
+}
+
+.duration-item:hover {
+  border-color: #d1d1d1;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.duration-item:active {
+  transform: translateY(1rpx);
+}
+
+.duration-item.selected {
+  border-color: #1677ff !important;
+  background: rgba(22, 119, 255, 0.12) !important;
+  box-shadow: 0 6rpx 20rpx rgba(22, 119, 255, 0.25) !important;
+  transform: scale(1.05);
+}
+
+.duration-item.selected::before {
+  content: '✓';
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  color: #1677ff;
+  font-size: 22rpx;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  width: 28rpx;
+  height: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(22, 119, 255, 0.3);
+  animation: checkmark-appear 0.3s ease-out;
+}
+
+.duration-text {
+  font-size: 24rpx;
+  color: #333;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1.3;
+  font-weight: 500;
+  text-align: center;
+  word-wrap: break-word;
+  padding: 0 4rpx;
+}
+
+.duration-item.selected .duration-text {
+  color: #1677ff !important;
+  font-weight: 700;
+  transform: translateY(-1rpx);
+}
+
 .option-item {
   padding: 20rpx 24rpx;
   border: 2rpx solid #e8e8e8;
