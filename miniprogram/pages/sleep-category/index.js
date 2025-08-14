@@ -180,7 +180,7 @@ Page({
           artist: "睡眠专家",
           duration: "45:20",
           coverImgUrl: "https://picsum.photos/id/1062/300/300",
-          audioUrl: "https://example.com/muscle-relax.mp3",
+          audioUrl: "cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/风和自由.mp4",
           isFavorite: true
         }
       ]
