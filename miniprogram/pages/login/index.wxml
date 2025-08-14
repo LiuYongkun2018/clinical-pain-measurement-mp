@@ -1,0 +1,4 @@
+<view class="container">
+  <view class="login-title">欢迎使用疼痛管理小程序</view>
+  <button class="login-button" bindtap="handleLogin">微信一键登录</button>
+</view>
