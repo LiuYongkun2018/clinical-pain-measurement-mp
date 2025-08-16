@@ -48,7 +48,13 @@
       </view>
     </view>
     <view class="chart-container">
-      <canvas class="chart-canvas" canvas-id="profilePainChart" id="profilePainChart"></canvas>
+      <canvas 
+        class="chart-canvas" 
+        canvas-id="profilePainChart" 
+        id="profilePainChart"
+        type="2d"
+        disable-scroll="{{true}}"
+      ></canvas>
       <view class="chart-summary" wx:if="{{painTrendData && painTrendData.length > 0}}">
         <view class="summary-item">
           <text class="summary-label">平均疼痛度</text>
