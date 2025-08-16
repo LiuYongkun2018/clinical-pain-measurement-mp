@@ -5,9 +5,21 @@ Page({
     currentPainLevel: 3,
     consecutiveDays: 7,
     completedCourses: 5,
+    hasUnreadNotifications: true,
+    statusBarHeight: 0,
+    safeAreaTop: 0,
+    navBarHeight: 88,
     todayProgress: {
       completed: 2,
       total: 4
+    },
+    // 视频数据
+    videoInfo: {
+      title: '认知行为疗法：改变对疼痛的认知',
+      description: '了解如何通过认知重构来管理慢性疼痛',
+      duration: '3:45',
+      views: '1.2万',
+      tag: '推荐'
     },
     todayTasks: [
       {
@@ -43,8 +55,23 @@ Page({
   },
 
   onLoad: function (options) {
+    // 获取设备信息
+    this.getSystemInfo();
     this.setCurrentDate();
     this.loadUserData();
+    this.updateVideoViewCount();
+  },
+
+  // 获取设备信息
+  getSystemInfo: function () {
+    const systemInfo = wx.getSystemInfoSync();
+    const { statusBarHeight, safeArea } = systemInfo;
+    
+    this.setData({
+      statusBarHeight: statusBarHeight,
+      safeAreaTop: safeArea ? safeArea.top : statusBarHeight,
+      navBarHeight: statusBarHeight + 44 // 动态计算导航栏高度
+    });
   },
 
   onShow: function () {
@@ -52,6 +79,8 @@ Page({
     setTimeout(() => {
       this.initChart();
     }, 300);
+    // 更新视频观看数显示
+    this.updateVideoViewCount();
   },
 
   // 设置当前日期
@@ -257,6 +286,72 @@ Page({
     }
   },
 
+  // 播放疼痛科普视频
+  playEducationVideo: function () {
+    // 显示加载动画
+    wx.showLoading({
+      title: '准备视频...',
+      mask: true
+    });
+
+    // 记录用户行为
+    this.recordVideoAction('view');
+
+    // 模拟加载过程
+    setTimeout(() => {
+      wx.hideLoading();
+      
+      // 直接跳转到视频播放页面
+      wx.navigateTo({
+        url: '/pages/video-player/index?src=cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/pain.mp4&title=认知行为疗法：改变对疼痛的认知'
+      });
+    }, 500);
+  },
+
+  // 记录视频相关行为
+  recordVideoAction: function (action) {
+    const videoStats = wx.getStorageSync('videoStats') || {
+      views: 0,
+      later: 0,
+      lastView: null
+    };
+    
+    if (action === 'view') {
+      videoStats.views += 1;
+      videoStats.lastView = new Date().toISOString();
+    } else if (action === 'later') {
+      videoStats.later += 1;
+    }
+    
+    wx.setStorageSync('videoStats', videoStats);
+    
+    // 更新视频观看数显示
+    this.updateVideoViewCount();
+    
+    // 触觉反馈
+    wx.vibrateShort();
+  },
+
+  // 更新视频观看数显示
+  updateVideoViewCount: function () {
+    const videoStats = wx.getStorageSync('videoStats') || { views: 0 };
+    const baseViews = 12000; // 基础观看数
+    const totalViews = baseViews + videoStats.views;
+    
+    let viewsText = '';
+    if (totalViews >= 10000) {
+      viewsText = (totalViews / 10000).toFixed(1) + '万';
+    } else if (totalViews >= 1000) {
+      viewsText = (totalViews / 1000).toFixed(1) + 'k';
+    } else {
+      viewsText = totalViews.toString();
+    }
+    
+    this.setData({
+      'videoInfo.views': viewsText
+    });
+  },
+
   // 记录疼痛
   recordPain: function () {
     wx.navigateTo({
@@ -282,6 +377,73 @@ Page({
   emotionLog: function () {
     wx.navigateTo({
       url: '/pages/tools/index?tab=emotion'
+    });
+  },
+
+  // 返回上一页
+  goBack: function () {
+    // 检查是否有上一页
+    const pages = getCurrentPages();
+    if (pages.length > 1) {
+      wx.navigateBack({
+        delta: 1
+      });
+    } else {
+      // 如果是首页，可以显示提示或执行其他操作
+      wx.showToast({
+        title: '已在首页',
+        icon: 'none',
+        duration: 1500
+      });
+    }
+  },
+
+  // 显示通知
+  showNotifications: function () {
+    wx.showActionSheet({
+      itemList: ['查看系统通知', '疼痛提醒设置', '课程更新通知'],
+      success: (res) => {
+        switch (res.tapIndex) {
+          case 0:
+            this.viewSystemNotifications();
+            break;
+          case 1:
+            this.setPainReminders();
+            break;
+          case 2:
+            this.viewCourseUpdates();
+            break;
+        }
+      }
+    });
+  },
+
+  // 查看系统通知
+  viewSystemNotifications: function () {
+    wx.showModal({
+      title: '系统通知',
+      content: '暂无新通知',
+      showCancel: false
+    });
+    
+    // 清除通知红点
+    this.setData({
+      hasUnreadNotifications: false
+    });
+  },
+
+  // 设置疼痛提醒
+  setPainReminders: function () {
+    wx.showToast({
+      title: '提醒设置功能开发中',
+      icon: 'none'
+    });
+  },
+
+  // 查看课程更新
+  viewCourseUpdates: function () {
+    wx.navigateTo({
+      url: '/pages/training/index'
     });
   },
 

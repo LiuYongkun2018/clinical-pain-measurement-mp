@@ -1,12 +1,30 @@
 <view class="dashboard-container">
-  <!-- 欢迎区域 -->
-  <view class="welcome-section">
-    <view class="welcome-header">
-      <text class="welcome-title">您好，{{userName}}</text>
-      <text class="welcome-date">{{currentDate}}</text>
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar" style="height: {{navBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx;">
+    <view class="navbar-content">
+      <view class="back-button" bindtap="goBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <view class="navbar-title">疼痛管理</view>
+      <view class="navbar-actions">
+        <view class="notification-button" bindtap="showNotifications">
+          <text class="notification-icon">🔔</text>
+          <view class="notification-badge" wx:if="{{hasUnreadNotifications}}"></view>
+        </view>
+      </view>
     </view>
-    <text class="welcome-subtitle">让我们一起管理疼痛，重拾健康生活</text>
   </view>
+
+  <!-- 内容区域 -->
+  <view class="content-wrapper" style="padding-top: {{navBarHeight}}rpx;">
+    <!-- 欢迎区域 -->
+    <view class="welcome-section">
+      <view class="welcome-header">
+        <text class="welcome-title">您好，{{userName}}</text>
+        <text class="welcome-date">{{currentDate}}</text>
+      </view>
+      <text class="welcome-subtitle">让我们一起管理疼痛，重拾健康生活</text>
+    </view>
 
   <!-- 疼痛状态卡片 -->
   <view class="status-cards">
@@ -39,6 +57,33 @@
       <view class="card-content">
         <text class="card-number">{{completedCourses}}</text>
         <text class="card-label">已完成课程</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 疼痛科普视频 -->
+  <view class="education-video">
+    <view class="section-header">
+      <text class="section-title">疼痛科普</text>
+      <text class="section-subtitle">了解疼痛管理知识</text>
+    </view>
+    
+    <view class="video-card" bindtap="playEducationVideo">
+      <view class="video-container">
+        <image class="video-poster" src="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/pain_video_poster.jpg" mode="aspectFill"></image>
+        <view class="video-play-btn">
+          <image class="play-icon" src="/images/icons/play.svg"></image>
+        </view>
+        <view class="video-duration">12:30</view>
+      </view>
+      <view class="video-info">
+        <text class="video-title">认知行为疗法：改变对疼痛的认知</text>
+        <text class="video-description">了解如何通过认知重构来管理慢性疼痛</text>
+        <view class="video-meta">
+          <text class="video-views">{{videoInfo.views}}次观看</text>
+          <text class="video-tag">专业推荐</text>
+          <text class="video-level">初级</text>
+        </view>
       </view>
     </view>
   </view>
@@ -95,5 +140,6 @@
       <view class="action-icon">💭</view>
       <text class="action-text">情绪日志</text>
     </view>
+  </view>
   </view>
 </view>

@@ -1,0 +1,109 @@
+<view class="video-player-container">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar" style="padding-top: {{statusBarHeight}}rpx;">
+    <view class="navbar-overlay"></view>
+    <view class="navbar-content">
+      <view class="back-button" bindtap="goBack">
+        <view class="back-icon-wrapper">
+          <text class="back-icon">‹</text>
+        </view>
+      </view>
+      <view class="navbar-title">{{videoTitle}}</view>
+      <view class="navbar-actions">
+        <view class="share-button" bindtap="shareVideo">
+          <view class="share-icon-wrapper">
+            <text class="share-icon">⋯</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 视频播放器 -->
+  <view class="video-wrapper">
+    <video 
+      id="painVideo"
+      class="video-player"
+      src="{{videoSrc}}"
+      poster="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/pain_video_poster.jpg"
+      controls="{{true}}"
+      autoplay="{{false}}"
+      loop="{{false}}"
+      muted="{{false}}"
+      show-center-play-btn="{{true}}"
+      show-play-btn="{{true}}"
+      show-fullscreen-btn="{{true}}"
+      show-progress="{{true}}"
+      enable-progress-gesture="{{true}}"
+      object-fit="contain"
+      bindplay="onVideoPlay"
+      bindpause="onVideoPause"
+      bindended="onVideoEnd"
+      binderror="onVideoError"
+      bindtimeupdate="onTimeUpdate"
+      bindloadedmetadata="onVideoLoaded"
+    ></video>
+    
+    <!-- 视频加载遮罩 -->
+    <view class="video-loading" wx:if="{{isLoading}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">视频加载中...</text>
+    </view>
+  </view>
+
+  <!-- 视频信息 -->
+  <view class="video-info-section">
+    <view class="video-title-section">
+      <text class="video-main-title">{{videoTitle}}</text>
+      <view class="video-stats">
+        <text class="video-duration">时长: {{formattedDuration}}</text>
+        <text class="video-views">{{viewCount}}次观看</text>
+        <text class="video-category">疼痛管理</text>
+      </view>
+    </view>
+
+    <!-- 视频描述 -->
+    <view class="video-description">
+      <view class="description-header">
+        <text class="description-title">视频简介</text>
+        <view class="expand-button" bindtap="toggleDescription">
+          <text class="expand-text">{{isDescExpanded ? '收起' : '展开'}}</text>
+          <text class="expand-icon">{{isDescExpanded ? '↑' : '↓'}}</text>
+        </view>
+      </view>
+      <text class="description-content {{isDescExpanded ? 'expanded' : ''}}">
+        本视频详细介绍了认知行为疗法在疼痛管理中的应用。您将学习到：
+
+        • 疼痛的认知机制和心理因素
+        • 如何识别和改变负面思维模式
+        • 认知重构的具体技巧和方法
+        • 实际案例分析和练习指导
+        • 日常生活中的应用策略
+
+        通过系统学习，您可以更好地理解疼痛，掌握科学的疼痛管理方法，提高生活质量。
+      </text>
+    </view>
+
+    <!-- 相关推荐 -->
+    <view class="related-videos">
+      <text class="related-title">相关推荐</text>
+      <scroll-view class="related-list" scroll-x="true" show-scrollbar="false">
+        <view class="related-item" bindtap="playRelatedVideo" data-id="relaxation">
+          <image class="related-poster" src="/images/relaxation_music_bg.jpg" mode="aspectFill"></image>
+          <text class="related-video-title">深度放松技巧</text>
+          <text class="related-duration">8:30</text>
+        </view>
+        <view class="related-item" bindtap="playRelatedVideo" data-id="mindfulness">
+          <image class="related-poster" src="/images/relaxation_music_bg.jpg" mode="aspectFill"></image>
+          <text class="related-video-title">正念冥想入门</text>
+          <text class="related-duration">12:15</text>
+        </view>
+        <view class="related-item" bindtap="playRelatedVideo" data-id="breathing">
+          <image class="related-poster" src="/images/relaxation_music_bg.jpg" mode="aspectFill"></image>
+          <text class="related-video-title">呼吸调节法</text>
+          <text class="related-duration">6:45</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

@@ -7,7 +7,8 @@
     "pages/profile/index",
     "pages/relaxation/index",
     "pages/sleep-aid/index",
-    "pages/sleep-category/index"
+    "pages/sleep-category/index",
+    "pages/video-player/index"
   ],
   "tabBar": {
     "custom": false,
