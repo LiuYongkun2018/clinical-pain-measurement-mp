@@ -564,7 +564,7 @@ Page({
     // 重新加载对应周期的数据
     this.loadPainTrendData();
     
-    // 重新绘制图表，增加延迟确保数据更新完成
+    // 重新绘制图表，增加延迟确保数据更新完成 
     setTimeout(() => {
       this.initChart();
     }, 200);
