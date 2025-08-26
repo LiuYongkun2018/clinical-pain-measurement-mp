@@ -65,12 +65,27 @@ Page({
   // 获取设备信息
   getSystemInfo: function () {
     const systemInfo = wx.getSystemInfoSync();
-    const { statusBarHeight, safeArea } = systemInfo;
+    const { statusBarHeight, safeArea, screenHeight, windowHeight } = systemInfo;
+    
+    // 计算真实的状态栏高度，处理不同设备的差异
+    const realStatusBarHeight = statusBarHeight || 20;
+    const safeAreaTop = safeArea ? safeArea.top : realStatusBarHeight;
+    
+    // 导航栏高度 = 状态栏高度 + 导航内容高度(44) + 额外安全距离(8)
+    const navBarHeight = realStatusBarHeight + 44 + 8;
+    
+    console.log('设备信息:', {
+      statusBarHeight: realStatusBarHeight,
+      safeAreaTop,
+      navBarHeight,
+      screenHeight,
+      windowHeight
+    });
     
     this.setData({
-      statusBarHeight: statusBarHeight,
-      safeAreaTop: safeArea ? safeArea.top : statusBarHeight,
-      navBarHeight: statusBarHeight + 44 // 动态计算导航栏高度
+      statusBarHeight: realStatusBarHeight,
+      safeAreaTop: safeAreaTop,
+      navBarHeight: navBarHeight
     });
   },
 

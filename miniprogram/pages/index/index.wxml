@@ -1,22 +1,27 @@
 <view class="dashboard-container">
   <!-- 自定义导航栏 -->
-  <view class="custom-navbar" style="height: {{navBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx;">
+  <view class="navbar" style="height: {{navBarHeight + statusBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx;">
+    <view class="navbar-overlay"></view>
     <view class="navbar-content">
       <view class="back-button" bindtap="goBack">
-        <text class="back-icon">‹</text>
+        <view class="back-icon-wrapper">
+          <text class="back-icon">‹</text>
+        </view>
       </view>
       <view class="navbar-title">疼痛管理</view>
       <view class="navbar-actions">
         <view class="notification-button" bindtap="showNotifications">
-          <text class="notification-icon">🔔</text>
-          <view class="notification-badge" wx:if="{{hasUnreadNotifications}}"></view>
+          <view class="notification-icon-wrapper">
+            <text class="notification-icon">🔔</text>
+            <view class="notification-badge" wx:if="{{hasUnreadNotifications}}"></view>
+          </view>
         </view>
       </view>
     </view>
   </view>
 
   <!-- 内容区域 -->
-  <view class="content-wrapper" style="padding-top: {{navBarHeight}}rpx;">
+  <view class="content-wrapper" style="margin-top: {{navBarHeight + statusBarHeight}}rpx;">
     <!-- 欢迎区域 -->
     <view class="welcome-section">
       <view class="welcome-header">
