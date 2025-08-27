@@ -2,7 +2,7 @@ Page({
   data: {
     videoSrc: '',
     videoTitle: '疼痛科普视频',
-    viewCount: '1.2万',
+    viewCount: '1218',
     isLoading: true,
     isDescExpanded: false,
     currentTime: 0,
@@ -13,6 +13,9 @@ Page({
   },
 
   onLoad: function (options) {
+    // 初始化观看次数数据
+    this.initializeViewCount();
+    
     // 获取传入的参数
     const { src, title } = options;
     
@@ -23,7 +26,35 @@ Page({
 
     // 检查网络状态
     this.checkNetworkStatus();
+  },
 
+  // 初始化观看次数数据
+  initializeViewCount: function () {
+    let videoStats = wx.getStorageSync('videoStats');
+    
+    // 如果数据无效或不存在，重置为默认值
+    if (!videoStats || typeof videoStats !== 'object' || 
+        isNaN(videoStats.totalViews) || isNaN(videoStats.views)) {
+      videoStats = {
+        views: 0,
+        totalViews: 1218
+      };
+      wx.setStorageSync('videoStats', videoStats);
+    }
+    
+    // 确保数据为整数
+    if (videoStats.totalViews) {
+      videoStats.totalViews = parseInt(videoStats.totalViews) || 1218;
+    }
+    if (videoStats.views) {
+      videoStats.views = parseInt(videoStats.views) || 0;
+    }
+    
+    wx.setStorageSync('videoStats', videoStats);
+    this.updateViewCount();
+  },
+
+  onReady: function () {
     // 创建视频上下文
     this.data.videoContext = wx.createVideoContext('painVideo', this);
     
@@ -34,6 +65,13 @@ Page({
     wx.setNavigationBarTitle({
       title: this.data.videoTitle
     });
+    
+    // 页面渲染完成后隐藏加载状态
+    setTimeout(() => {
+      this.setData({
+        isLoading: false
+      });
+    }, 1000);
   },
 
   // 检查网络状态
@@ -57,15 +95,6 @@ Page({
         }
       }
     });
-  },
-
-  onReady: function () {
-    // 页面渲染完成后隐藏加载状态
-    setTimeout(() => {
-      this.setData({
-        isLoading: false
-      });
-    }, 1000);
   },
 
   onShow: function () {
@@ -259,24 +288,42 @@ Page({
   updateViewCount: function () {
     let videoStats = wx.getStorageSync('videoStats') || {
       views: 0,
-      totalViews: 12000
+      totalViews: 1218  // 设置默认观看次数为1218
     };
     
     // 增加观看次数
     videoStats.views += 1;
     wx.setStorageSync('videoStats', videoStats);
     
-    // 更新显示
-    const totalViews = videoStats.totalViews + videoStats.views;
+    // 计算总观看次数，确保为整数
+    const totalViews = parseInt(videoStats.totalViews || 1218) + parseInt(videoStats.views || 0);
     let viewsText = '';
     
-    if (totalViews >= 10000) {
-      viewsText = (totalViews / 10000).toFixed(1) + '万';
+    // 格式化观看次数显示
+    if (isNaN(totalViews) || totalViews <= 0) {
+      viewsText = '1218';  // 默认值
+    } else if (totalViews >= 10000) {
+      viewsText = (Math.floor(totalViews / 1000) / 10).toFixed(1) + '万';
+      // 如果是整万，去掉小数点
+      if (viewsText.endsWith('.0万')) {
+        viewsText = viewsText.replace('.0万', '万');
+      }
     } else if (totalViews >= 1000) {
-      viewsText = (totalViews / 1000).toFixed(1) + 'k';
+      viewsText = (Math.floor(totalViews / 100) / 10).toFixed(1) + 'k';
+      // 如果是整千，去掉小数点
+      if (viewsText.endsWith('.0k')) {
+        viewsText = viewsText.replace('.0k', 'k');
+      }
     } else {
       viewsText = totalViews.toString();
     }
+    
+    console.log('观看次数更新:', {
+      originalViews: videoStats.totalViews,
+      incrementViews: videoStats.views,
+      totalViews: totalViews,
+      displayText: viewsText
+    });
     
     this.setData({
       viewCount: viewsText

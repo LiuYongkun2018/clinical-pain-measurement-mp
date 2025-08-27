@@ -17,8 +17,8 @@ Page({
     videoInfo: {
       title: '认知行为疗法：改变对疼痛的认知',
       description: '了解如何通过认知重构来管理慢性疼痛',
-      duration: '3:45',
-      views: '1.2万',
+      duration: '02:38',
+      views: '1218',  // 设置默认观看次数为1218
       tag: '推荐'
     },
     todayTasks: [
@@ -55,11 +55,37 @@ Page({
   },
 
   onLoad: function (options) {
-    // 获取设备信息
-    this.getSystemInfo();
+    // 初始化观看次数数据
+    this.initializeVideoViewCount();
+    
     this.setCurrentDate();
     this.loadUserData();
     this.updateVideoViewCount();
+  },
+
+  // 初始化视频观看次数数据
+  initializeVideoViewCount: function () {
+    let videoStats = wx.getStorageSync('videoStats');
+    
+    // 如果数据无效或不存在，重置为默认值
+    if (!videoStats || typeof videoStats !== 'object' || 
+        isNaN(videoStats.totalViews) || isNaN(videoStats.views)) {
+      videoStats = {
+        views: 0,
+        totalViews: 1218
+      };
+      wx.setStorageSync('videoStats', videoStats);
+    }
+    
+    // 确保数据为整数
+    if (videoStats.totalViews) {
+      videoStats.totalViews = parseInt(videoStats.totalViews) || 1218;
+    }
+    if (videoStats.views) {
+      videoStats.views = parseInt(videoStats.views) || 0;
+    }
+    
+    wx.setStorageSync('videoStats', videoStats);
   },
 
   onShow: function () {
@@ -322,18 +348,43 @@ Page({
 
   // 更新视频观看数显示
   updateVideoViewCount: function () {
-    const videoStats = wx.getStorageSync('videoStats') || { views: 0 };
-    const baseViews = 12000; // 基础观看数
-    const totalViews = baseViews + videoStats.views;
+    const videoStats = wx.getStorageSync('videoStats') || { 
+      views: 0,
+      totalViews: 1218  // 设置默认基础观看数为1218
+    };
+    
+    // 计算总观看次数，确保为整数
+    const baseViews = parseInt(videoStats.totalViews || 1218);
+    const userViews = parseInt(videoStats.views || 0);
+    const totalViews = baseViews + userViews;
     
     let viewsText = '';
-    if (totalViews >= 10000) {
-      viewsText = (totalViews / 10000).toFixed(1) + '万';
+    
+    // 防止NaN显示
+    if (isNaN(totalViews) || totalViews <= 0) {
+      viewsText = '1218';
+    } else if (totalViews >= 10000) {
+      viewsText = (Math.floor(totalViews / 1000) / 10).toFixed(1) + '万';
+      // 如果是整万，去掉小数点
+      if (viewsText.endsWith('.0万')) {
+        viewsText = viewsText.replace('.0万', '万');
+      }
     } else if (totalViews >= 1000) {
-      viewsText = (totalViews / 1000).toFixed(1) + 'k';
+      viewsText = (Math.floor(totalViews / 100) / 10).toFixed(1) + 'k';
+      // 如果是整千，去掉小数点  
+      if (viewsText.endsWith('.0k')) {
+        viewsText = viewsText.replace('.0k', 'k');
+      }
     } else {
       viewsText = totalViews.toString();
     }
+    
+    console.log('首页观看次数更新:', {
+      baseViews: baseViews,
+      userViews: userViews,
+      totalViews: totalViews,
+      displayText: viewsText
+    });
     
     this.setData({
       'videoInfo.views': viewsText

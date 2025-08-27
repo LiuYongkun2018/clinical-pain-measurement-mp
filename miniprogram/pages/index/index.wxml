@@ -72,11 +72,11 @@
     
     <view class="video-card" bindtap="playEducationVideo">
       <view class="video-container">
-        <image class="video-poster" src="cloud://cloud1-0ghb31rxf59a59fa.636c-cloud1-0ghb31rxf59a59fa-1307936480/pain_video_poster.jpg" mode="aspectFill"></image>
+        <image class="video-poster" src="/images/relaxation_music_bg.jpg" mode="aspectFill"></image>
         <view class="video-play-btn">
           <image class="play-icon" src="/images/icons/play.svg"></image>
         </view>
-        <view class="video-duration">12:30</view>
+        <view class="video-duration">02:38</view>
       </view>
       <view class="video-info">
         <text class="video-title">认知行为疗法：改变对疼痛的认知</text>
