@@ -87,12 +87,15 @@ page {
   box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
 }
 
-/* 内容区域需要padding */
+/* 内容区域需要padding，居中显示 */
 .content-wrapper {
   width: 100%;
-  padding: 0 20rpx 20rpx 20rpx;
+  max-width: 750rpx;
+  margin: 0 auto;
+  padding: 0 32rpx 20rpx 32rpx;
   position: relative;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 /* 页面容器 */
@@ -129,6 +132,8 @@ page {
   border: 1rpx solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .welcome-section::before {
@@ -180,6 +185,9 @@ page {
   flex-direction: column;
   gap: 20rpx;
   margin-bottom: 28rpx;
+  width: 100%;
+  padding: 0 8rpx;
+  box-sizing: border-box;
 }
 
 .status-card {
@@ -194,6 +202,8 @@ page {
   border: 1rpx solid rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .status-card::before {
@@ -340,6 +350,8 @@ page {
   border: 1rpx solid rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .education-video::before {
@@ -394,6 +406,7 @@ page {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  border-radius: 20rpx;
 }
 
 .video-poster {
@@ -515,6 +528,8 @@ page {
   border: 1rpx solid rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .today-tasks::before, .pain-chart::before {
@@ -870,5 +885,25 @@ page {
   /* iPhone 12/13/14 Pro Max */
   .navbar {
     padding-top: 47px;
+  }
+}
+
+/* 响应式布局优化 */
+@media screen and (max-width: 375px) {
+  /* 小屏设备 */
+  .content-wrapper {
+    padding: 0 24rpx 20rpx 24rpx;
+  }
+  
+  .status-cards {
+    padding: 0 4rpx;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  /* 大屏设备 - 如iPad */
+  .content-wrapper {
+    max-width: 600rpx;
+    padding: 0 40rpx 20rpx 40rpx;
   }
 }
