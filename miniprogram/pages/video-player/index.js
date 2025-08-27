@@ -9,15 +9,10 @@ Page({
     duration: 0,
     formattedDuration: '00:00',
     videoContext: null,
-    statusBarHeight: 0,
-    safeAreaTop: 0,
-    navBarHeight: 88
+    isLoading: true
   },
 
   onLoad: function (options) {
-    // 获取导航栏信息
-    this.getNavBarInfo();
-    
     // 获取传入的参数
     const { src, title } = options;
     
@@ -38,22 +33,6 @@ Page({
     // 设置页面标题
     wx.setNavigationBarTitle({
       title: this.data.videoTitle
-    });
-  },
-
-  // 获取导航栏信息
-  getNavBarInfo: function () {
-    const systemInfo = wx.getSystemInfoSync();
-    const { statusBarHeight } = systemInfo;
-    
-    // 计算真实的状态栏高度
-    const realStatusBarHeight = statusBarHeight || 20;
-    // 导航栏高度 = 状态栏高度 + 导航内容高度(44) + 额外安全距离(8)
-    const navBarHeight = realStatusBarHeight + 44 + 8;
-    
-    this.setData({
-      statusBarHeight: realStatusBarHeight,
-      navBarHeight: navBarHeight
     });
   },
 

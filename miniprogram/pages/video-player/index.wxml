@@ -1,23 +1,6 @@
 <view class="video-player-container">
-  <!-- 使用通用导航栏组件 -->
-  <custom-navbar 
-    title="{{videoTitle || '视频详情'}}"
-    backgroundColor="rgba(255, 255, 255, 0.95)"
-    showBackButton="{{true}}"
-    showNotificationButton="{{false}}"
-    theme="white"
-    bind:back="goBack">
-    <view slot="right">
-      <view class="share-button" bindtap="shareVideo">
-        <view class="share-icon-wrapper">
-          <text class="share-icon">⋯</text>
-        </view>
-      </view>
-    </view>
-  </custom-navbar>
-
   <!-- 视频播放器 -->
-  <view class="video-wrapper" style="margin-top: {{navBarHeight + statusBarHeight}}rpx;">
+  <view class="video-wrapper">
     <video 
       id="painVideo"
       class="video-player"

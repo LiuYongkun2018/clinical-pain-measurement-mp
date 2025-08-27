@@ -1,18 +1,24 @@
 <view class="dashboard-container">
-  <!-- 使用通用导航栏组件 -->
-  <custom-navbar 
-    title="疼痛管理"
-    backgroundColor="transparent"
-    showBackButton="{{false}}"
-    showNotificationButton="{{true}}"
-    hasUnreadNotifications="{{hasUnreadNotifications}}"
-    showOverlay="{{true}}"
-    theme="transparent"
-    bind:notification="showNotifications">
-  </custom-navbar>
+  <!-- 添加与工具页面一致的header -->
+  <view class="header">
+    <view class="header-content">
+      <view class="header-text">
+        <text class="header-title">疼痛管理</text>
+        <text class="header-subtitle">科学管理，健康生活</text>
+      </view>
+      <view class="header-actions">
+        <view class="notification-button" bindtap="showNotifications">
+          <view class="notification-icon-wrapper">
+            <text class="notification-icon">🔔</text>
+            <view class="notification-badge" wx:if="{{hasUnreadNotifications}}"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
 
   <!-- 内容区域 -->
-  <view class="content-wrapper" style="margin-top: {{navBarHeight + statusBarHeight}}rpx;">
+  <view class="content-wrapper">
     <!-- 欢迎区域 -->
     <view class="welcome-section">
       <view class="welcome-header">

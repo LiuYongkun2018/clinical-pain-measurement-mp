@@ -1,5 +1,7 @@
 {
-  "navigationStyle": "custom",
+  "navigationBarTitleText": "疼痛管理",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
   "backgroundColor": "#667eea",
   "backgroundTextStyle": "light",
   "enablePullDownRefresh": false,
