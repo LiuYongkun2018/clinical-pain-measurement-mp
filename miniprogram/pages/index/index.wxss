@@ -190,6 +190,121 @@ page {
   box-sizing: border-box;
 }
 
+/* 统一状态卡片 */
+.unified-status-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  border-radius: 28rpx;
+  padding: 32rpx;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.08), 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.unified-status-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.02), rgba(118, 75, 162, 0.02));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.unified-status-card:active {
+  transform: translateY(-4rpx);
+  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.12), 0 8rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.unified-status-card:active::before {
+  opacity: 1;
+}
+
+/* 疼痛度区域 */
+.pain-section {
+  margin-bottom: 24rpx;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.status-title {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.pain-value {
+  font-size: 52rpx;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4rpx 8rpx rgba(102, 126, 234, 0.2);
+}
+
+/* 分隔线 */
+.status-divider {
+  height: 1rpx;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+  margin: 24rpx 0;
+}
+
+/* 统计数据区域 */
+.stats-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 32rpx;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.stat-icon {
+  font-size: 36rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.1));
+}
+
+.stat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stat-number {
+  font-size: 32rpx;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #666;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
 .status-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20rpx);
@@ -225,12 +340,6 @@ page {
 
 .status-card:active::before {
   opacity: 1;
-}
-
-.pain-level-card {
-  flex-direction: column;
-  align-items: stretch;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92));
 }
 
 .card-header {
@@ -736,16 +845,16 @@ page {
 /* 响应式调整 */
 @media (min-width: 768px) {
   .status-cards {
-    flex-direction: row;
-    gap: 20rpx;
+    flex-direction: column; /* 保持统一卡片为单列布局 */
   }
   
-  .status-card {
-    flex: 1;
+  .unified-status-card {
+    width: 100%;
   }
   
-  .pain-level-card {
-    flex: 2;
+  .stats-section {
+    justify-content: space-around; /* 大屏幕下更均匀分布 */
+    gap: 48rpx;
   }
   
   .quick-actions {
@@ -808,15 +917,6 @@ page {
 
 .emotion-btn .action-icon {
   color: #f9ca24;
-}
-
-/* 卡片特定样式 */
-.streak-card:hover {
-  box-shadow: 0 16rpx 40rpx rgba(255, 154, 158, 0.15);
-}
-
-.course-card:hover {
-  box-shadow: 0 16rpx 40rpx rgba(102, 126, 234, 0.15);
 }
 
 /* 滑动效果 */
@@ -897,6 +997,21 @@ page {
   
   .status-cards {
     padding: 0 4rpx;
+  }
+  
+  /* 小屏幕下统计数据垂直排列 */
+  .stats-section {
+    flex-direction: column;
+    gap: 20rpx;
+  }
+  
+  .stat-item {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .stat-content {
+    align-items: center;
   }
 }
 
