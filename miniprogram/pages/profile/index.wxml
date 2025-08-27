@@ -7,8 +7,8 @@
         <image class="avatar-image" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill"></image>
       </view>
       <view class="user-info">
-        <text class="user-name">{{userInfo.nickName || '用户'}}</text>
-        <text class="user-level">疼痛管理 {{userLevel}} 级</text>
+        <text class="user-name">{{userInfo.nickName || 'zhangxiao'}}</text>
+        <text class="user-level">疼痛管理 {{userLevel}} </text>
       </view>
       <!-- <view class="edit-button" bindtap="editProfile">
         <text class="edit-text">编辑</text>
