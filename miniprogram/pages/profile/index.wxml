@@ -48,13 +48,40 @@
       </view>
     </view>
     <view class="chart-container">
+      <!-- 简化的Canvas图表 -->
       <canvas 
         class="chart-canvas" 
         canvas-id="profilePainChart" 
         id="profilePainChart"
-        type="2d"
-        disable-scroll="{{true}}"
+        bindtouchstart="onChartTouchStart"
+        bindtouchmove="onChartTouchMove"
       ></canvas>
+      
+      <!-- 备用的可视化图表 -->
+      <view class="visual-chart" wx:if="{{!canvasSupported && painTrendData && painTrendData.length > 0}}">
+        <view class="chart-grid">
+          <view class="grid-line" wx:for="{{[10,8,6,4,2,0]}}" wx:key="*this">
+            <text class="grid-label">{{item}}</text>
+            <view class="grid-line-bar"></view>
+          </view>
+        </view>
+        <view class="chart-data">
+          <view 
+            class="data-bar" 
+            wx:for="{{painTrendData}}" 
+            wx:key="index"
+            style="height: {{item * 10}}%; opacity: {{item > 0 ? 1 : 0.3}}"
+            data-value="{{item}}"
+            data-day="{{index + 1}}"
+          >
+            <view class="bar-value" wx:if="{{item > 0}}">{{item}}</view>
+          </view>
+        </view>
+        <view class="chart-x-axis">
+          <text class="x-label" wx:for="{{xAxisLabels}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+      
       <view class="chart-summary" wx:if="{{painTrendData && painTrendData.length > 0}}">
         <view class="summary-item">
           <text class="summary-label">平均疼痛度</text>
