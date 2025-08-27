@@ -1,0 +1,33 @@
+<!-- 通用顶部状态栏组件 -->
+<view class="custom-navbar" style="height: {{navBarHeight + statusBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx; background-color: {{backgroundColor}};">
+  <view class="navbar-overlay" wx:if="{{showOverlay}}"></view>
+  <view class="navbar-content">
+    <!-- 左侧内容 -->
+    <view class="navbar-left">
+      <view class="back-button" bindtap="goBack" wx:if="{{showBackButton}}">
+        <view class="back-icon-wrapper">
+          <text class="back-icon">‹</text>
+        </view>
+      </view>
+      <slot name="left"></slot>
+    </view>
+    
+    <!-- 中间标题 -->
+    <view class="navbar-center">
+      <text class="navbar-title" wx:if="{{title}}">{{title}}</text>
+      <slot name="center"></slot>
+    </view>
+    
+    <!-- 右侧内容 -->
+    <view class="navbar-right">
+      <slot name="right"></slot>
+      <!-- 通知按钮 -->
+      <view class="notification-button" bindtap="showNotifications" wx:if="{{showNotificationButton}}">
+        <view class="notification-icon-wrapper">
+          <text class="notification-icon">🔔</text>
+          <view class="notification-badge" wx:if="{{hasUnreadNotifications}}"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -3,5 +3,8 @@
   "backgroundColor": "#667eea",
   "backgroundTextStyle": "light",
   "enablePullDownRefresh": false,
-  "onReachBottomDistance": 50
+  "onReachBottomDistance": 50,
+  "usingComponents": {
+    "custom-navbar": "/components/custom-navbar/index"
+  }
 }

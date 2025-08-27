@@ -60,31 +60,22 @@ Page({
     this.setCurrentDate();
     this.loadUserData();
     this.updateVideoViewCount();
+    // 获取导航栏高度信息，用于内容区域定位
+    this.getNavBarInfo();
   },
 
-  // 获取设备信息
-  getSystemInfo: function () {
+  // 获取导航栏信息
+  getNavBarInfo: function () {
     const systemInfo = wx.getSystemInfoSync();
-    const { statusBarHeight, safeArea, screenHeight, windowHeight } = systemInfo;
+    const { statusBarHeight } = systemInfo;
     
-    // 计算真实的状态栏高度，处理不同设备的差异
+    // 计算真实的状态栏高度
     const realStatusBarHeight = statusBarHeight || 20;
-    const safeAreaTop = safeArea ? safeArea.top : realStatusBarHeight;
-    
     // 导航栏高度 = 状态栏高度 + 导航内容高度(44) + 额外安全距离(8)
     const navBarHeight = realStatusBarHeight + 44 + 8;
     
-    console.log('设备信息:', {
-      statusBarHeight: realStatusBarHeight,
-      safeAreaTop,
-      navBarHeight,
-      screenHeight,
-      windowHeight
-    });
-    
     this.setData({
       statusBarHeight: realStatusBarHeight,
-      safeAreaTop: safeAreaTop,
       navBarHeight: navBarHeight
     });
   },

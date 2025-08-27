@@ -15,8 +15,8 @@ Page({
   },
 
   onLoad: function (options) {
-    // 获取设备信息
-    this.getSystemInfo();
+    // 获取导航栏信息
+    this.getNavBarInfo();
     
     // 获取传入的参数
     const { src, title } = options;
@@ -41,29 +41,18 @@ Page({
     });
   },
 
-  // 获取设备信息
-  getSystemInfo: function () {
+  // 获取导航栏信息
+  getNavBarInfo: function () {
     const systemInfo = wx.getSystemInfoSync();
-    const { statusBarHeight, safeArea, screenHeight, windowHeight } = systemInfo;
+    const { statusBarHeight } = systemInfo;
     
-    // 计算真实的状态栏高度，处理不同设备的差异
+    // 计算真实的状态栏高度
     const realStatusBarHeight = statusBarHeight || 20;
-    const safeAreaTop = safeArea ? safeArea.top : realStatusBarHeight;
-    
     // 导航栏高度 = 状态栏高度 + 导航内容高度(44) + 额外安全距离(8)
     const navBarHeight = realStatusBarHeight + 44 + 8;
     
-    console.log('视频页设备信息:', {
-      statusBarHeight: realStatusBarHeight,
-      safeAreaTop,
-      navBarHeight,
-      screenHeight,
-      windowHeight
-    });
-    
     this.setData({
       statusBarHeight: realStatusBarHeight,
-      safeAreaTop: safeAreaTop,
       navBarHeight: navBarHeight
     });
   },

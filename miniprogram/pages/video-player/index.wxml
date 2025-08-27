@@ -1,23 +1,20 @@
 <view class="video-player-container">
-  <!-- 自定义导航栏 -->
-  <view class="custom-navbar" style="height: {{navBarHeight + statusBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx;">
-    <view class="navbar-overlay"></view>
-    <view class="navbar-content">
-      <view class="back-button" bindtap="goBack">
-        <view class="back-icon-wrapper">
-          <text class="back-icon">‹</text>
-        </view>
-      </view>
-      <view class="navbar-title">{{videoTitle}}</view>
-      <view class="navbar-actions">
-        <view class="share-button" bindtap="shareVideo">
-          <view class="share-icon-wrapper">
-            <text class="share-icon">⋯</text>
-          </view>
+  <!-- 使用通用导航栏组件 -->
+  <custom-navbar 
+    title="{{videoTitle || '视频详情'}}"
+    backgroundColor="rgba(255, 255, 255, 0.95)"
+    showBackButton="{{true}}"
+    showNotificationButton="{{false}}"
+    theme="white"
+    bind:back="goBack">
+    <view slot="right">
+      <view class="share-button" bindtap="shareVideo">
+        <view class="share-icon-wrapper">
+          <text class="share-icon">⋯</text>
         </view>
       </view>
     </view>
-  </view>
+  </custom-navbar>
 
   <!-- 视频播放器 -->
   <view class="video-wrapper" style="margin-top: {{navBarHeight + statusBarHeight}}rpx;">

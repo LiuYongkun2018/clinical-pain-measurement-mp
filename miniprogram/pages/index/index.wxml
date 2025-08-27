@@ -1,24 +1,15 @@
 <view class="dashboard-container">
-  <!-- 自定义导航栏 -->
-  <view class="navbar" style="height: {{navBarHeight + statusBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx;">
-    <view class="navbar-overlay"></view>
-    <view class="navbar-content">
-      <view class="back-button" bindtap="goBack">
-        <view class="back-icon-wrapper">
-          <text class="back-icon">‹</text>
-        </view>
-      </view>
-      <view class="navbar-title">疼痛管理</view>
-      <view class="navbar-actions">
-        <view class="notification-button" bindtap="showNotifications">
-          <view class="notification-icon-wrapper">
-            <text class="notification-icon">🔔</text>
-            <view class="notification-badge" wx:if="{{hasUnreadNotifications}}"></view>
-          </view>
-        </view>
-      </view>
-    </view>
-  </view>
+  <!-- 使用通用导航栏组件 -->
+  <custom-navbar 
+    title="疼痛管理"
+    backgroundColor="transparent"
+    showBackButton="{{false}}"
+    showNotificationButton="{{true}}"
+    hasUnreadNotifications="{{hasUnreadNotifications}}"
+    showOverlay="{{true}}"
+    theme="transparent"
+    bind:notification="showNotifications">
+  </custom-navbar>
 
   <!-- 内容区域 -->
   <view class="content-wrapper" style="margin-top: {{navBarHeight + statusBarHeight}}rpx;">
