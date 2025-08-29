@@ -93,15 +93,21 @@
   <!-- 疼痛性质 -->
   <view class="assessment-section">
     <view class="section-header">
-      <text class="section-title">疼痛性质</text>
-      <text class="section-subtitle">请选择最符合您疼痛感受的描述</text>
+      <view class="section-title-row">
+        <text class="section-title">疼痛性质</text>
+        <text class="clear-selection" bindtap="clearQualities" wx:if="{{selectedQualities.length > 0}}">清空选择</text>
+      </view>
+      <text class="section-subtitle">请选择所有符合您疼痛感受的描述（可多选）</text>
     </view>
     
     <view class="pain-qualities">
-      <view class="quality-item {{selectedQuality === item.id ? 'selected' : ''}}"
+      <view class="quality-item {{selectedQualities.includes(item.id) ? 'selected' : ''}}"
             wx:for="{{painQualities}}" wx:key="id"
-            bindtap="selectQuality" data-id="{{item.id}}">
+            bindtap="toggleQuality" data-id="{{item.id}}">
         <text class="quality-text">{{item.name}}</text>
+        <view class="quality-checkbox {{selectedQualities.includes(item.id) ? 'checked' : ''}}">
+          <text class="checkmark" wx:if="{{selectedQualities.includes(item.id)}}">✓</text>
+        </view>
       </view>
     </view>
   </view>

@@ -19,18 +19,41 @@
   margin-bottom: 32rpx;
 }
 
+/* 节部标题和清空按钮行 */
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
 .section-title {
   font-size: 32rpx;
   font-weight: 600;
   color: #1a1a1a;
   display: block;
-  margin-bottom: 8rpx;
 }
 
 .section-subtitle {
   font-size: 26rpx;
   color: #666;
   line-height: 1.4;
+}
+
+/* 清空选择按钮 */
+.clear-selection {
+  font-size: 24rpx;
+  color: #007AFF;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  background: rgba(0, 122, 255, 0.1);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.clear-selection:active {
+  background: rgba(0, 122, 255, 0.2);
+  transform: scale(0.95);
 }
 
 /* VAS疼痛量表 */
@@ -448,22 +471,23 @@
 /* 疼痛性质 */
 .pain-qualities {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12rpx;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
 }
 
 .quality-item {
-  padding: 18rpx 20rpx;
+  padding: 20rpx 16rpx;
   border: 2rpx solid #e8e8e8;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
   background: #fafafa;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
-  min-height: 76rpx;
+  min-height: 80rpx;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -481,40 +505,66 @@
   border-color: #1677ff !important;
   background: rgba(22, 119, 255, 0.12) !important;
   box-shadow: 0 6rpx 20rpx rgba(22, 119, 255, 0.25) !important;
-  transform: scale(1.04);
-}
-
-.quality-item.selected::after {
-  content: '✓';
-  position: absolute;
-  top: 6rpx;
-  right: 6rpx;
-  color: #1677ff;
-  font-size: 22rpx;
-  font-weight: bold;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 50%;
-  width: 32rpx;
-  height: 32rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2rpx 8rpx rgba(22, 119, 255, 0.3);
-  animation: checkmark-appear 0.3s ease-out;
+  transform: scale(1.02);
 }
 
 .quality-text {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: #333;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   line-height: 1.3;
-  max-width: calc(100% - 40rpx); /* 为对勾留出空间 */
+  text-align: center;
+  margin-bottom: 8rpx;
 }
 
 .quality-item.selected .quality-text {
   color: #1677ff !important;
-  font-weight: 700;
-  transform: scale(1.02);
+  font-weight: 600;
+}
+
+/* 疼痛性质复选框 */
+.quality-checkbox {
+  width: 32rpx;
+  height: 32rpx;
+  border: 2rpx solid #ddd;
+  border-radius: 6rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.quality-checkbox.checked {
+  background: #1677ff;
+  border-color: #1677ff;
+  animation: checkbox-check 0.3s ease;
+}
+
+.quality-checkbox .checkmark {
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: bold;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+.quality-checkbox.checked .checkmark {
+  transform: scale(1);
+}
+
+@keyframes checkbox-check {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* 情绪量表 */

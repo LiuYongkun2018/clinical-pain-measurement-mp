@@ -6,6 +6,7 @@ Page({
     selectedDuration: '',
     selectedFactor: '', // 疼痛触发因素(单选)
     selectedQuality: '', // 改为单个选择
+    selectedQualities: [], // 疼痛性质(多选)
     emotions: [
       { id: 'anxiety', name: '焦虑', value: 0 },
       { id: 'depression', name: '沮丧', value: 0 },
@@ -46,7 +47,10 @@ Page({
       { id: 'burning', name: '灼热痛' },
       { id: 'throbbing', name: '跳痛' },
       { id: 'cramping', name: '痉挛痛' },
-      { id: 'tingling', name: '麻木刺痛' }
+      { id: 'tingling', name: '麻木刺痛' },
+      { id: 'aching', name: '酸痛' },
+      { id: 'shooting', name: '射痛' },
+      { id: 'stabbing', name: '刺痛' }
     ],
     scaleRect: null,
     isDragging: false,
@@ -166,17 +170,38 @@ Page({
     this.provideFeedback();
   },
 
-  // 选择疼痛性质（单选模式，支持取消选择）
-  selectQuality: function (e) {
+  // 切换疼痛性质选择(多选模式)
+  toggleQuality: function (e) {
     const qualityId = e.currentTarget.dataset.id;
+    let selectedQualities = [...this.data.selectedQualities];
     
-    // 如果点击的是已选中的项，则取消选择；否则选择新项
-    const newSelectedQuality = this.data.selectedQuality === qualityId ? '' : qualityId;
+    // 如果已选中，则移除；如果未选中，则添加
+    const index = selectedQualities.indexOf(qualityId);
+    if (index > -1) {
+      selectedQualities.splice(index, 1);
+    } else {
+      selectedQualities.push(qualityId);
+    }
     
     this.setData({
-      selectedQuality: newSelectedQuality
+      selectedQualities: selectedQualities
     });
     
+    this.checkCanSubmit();
+    this.provideFeedback();
+  },
+
+  // 清空疼痛性质选择
+  clearQualities: function () {
+    this.setData({
+      selectedQualities: []
+    });
+    wx.showToast({
+      title: '已清空选择',
+      icon: 'success',
+      duration: 1000
+    });
+    this.checkCanSubmit();
     this.provideFeedback();
   },
 
@@ -230,7 +255,8 @@ Page({
       area: this.data.selectedArea,
       duration: this.data.selectedDuration,
       factor: this.data.selectedFactor || null, // 触发因素可选
-      quality: this.data.selectedQuality || null, // 疼痛性质可选
+      quality: this.data.selectedQuality || null, // 疼痛性质可选（保持向下兼容）
+      qualities: this.data.selectedQualities || [], // 疼痛性质(多选)
       emotions: this.data.emotions.reduce((obj, emotion) => {
         obj[emotion.id] = emotion.value;
         return obj;
