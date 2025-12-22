@@ -48,17 +48,16 @@
       </view>
     </view>
     <view class="chart-container">
-      <!-- 简化的Canvas图表 -->
+      <!-- Canvas 2D图表（优先显示） -->
       <canvas 
+        wx:if="{{canvasSupported}}"
         class="chart-canvas" 
-        canvas-id="profilePainChart" 
+        type="2d"
         id="profilePainChart"
-        bindtouchstart="onChartTouchStart"
-        bindtouchmove="onChartTouchMove"
       ></canvas>
       
-      <!-- 备用的可视化图表 -->
-      <view class="visual-chart" wx:if="{{!canvasSupported && painTrendData && painTrendData.length > 0}}">
+      <!-- 备用的可视化图表（安卓兼容方案） -->
+      <view class="visual-chart" wx:else>
         <view class="chart-grid">
           <view class="grid-line" wx:for="{{[10,8,6,4,2,0]}}" wx:key="*this">
             <text class="grid-label">{{item}}</text>

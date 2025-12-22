@@ -249,87 +249,153 @@ Page({
       return;
     }
     
-    // 尝试使用Canvas绘制
+    // 优先使用备用可视化图表（更兼容安卓）
+    this.setData({
+      canvasSupported: false
+    });
+    
+    // 尝试使用Canvas 2D绘制（作为增强）
     try {
-      this.drawSimpleChart();
+      this.drawChart2D();
     } catch (error) {
-      console.error('Canvas绘制失败:', error);
-      // 使用备用的可视化图表
-      this.setData({
-        canvasSupported: false
-      });
+      console.error('Canvas 2D绘制失败:', error);
+      // 已经设置了备用图表，无需额外处理
     }
   },
 
-  // 简化的Canvas绘制
-  drawSimpleChart: function () {
-    const ctx = wx.createCanvasContext('profilePainChart', this);
-    const painData = this.data.painTrendData;
-    
-    if (!painData || painData.length === 0) return;
-    
-    const canvasWidth = 300;
-    const canvasHeight = 150;
-    const padding = 30;
-    const chartWidth = canvasWidth - padding * 2;
-    const chartHeight = canvasHeight - padding * 2;
-    
-    // 清除画布
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    
-    // 设置背景
-    ctx.setFillStyle('#ffffff');
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    
-    // 绘制网格线
-    ctx.setStrokeStyle('#f0f0f0');
-    ctx.setLineWidth(1);
-    
-    // 水平网格线
-    for (let i = 0; i <= 10; i += 2) {
-      const y = padding + chartHeight - (i / 10) * chartHeight;
-      ctx.beginPath();
-      ctx.moveTo(padding, y);
-      ctx.lineTo(canvasWidth - padding, y);
-      ctx.stroke();
-    }
-    
-    // 绘制数据线
-    const validData = painData.filter(val => val > 0);
-    if (validData.length > 0) {
-      ctx.setStrokeStyle('#1677ff');
-      ctx.setLineWidth(2);
-      ctx.beginPath();
-      
-      painData.forEach((value, index) => {
-        if (value > 0) {
-          const x = padding + (chartWidth / (painData.length - 1)) * index;
-          const y = padding + chartHeight - (value / 10) * chartHeight;
-          
-          if (index === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
+  // 使用Canvas 2D API绘制（更好的安卓兼容性）
+  drawChart2D: function () {
+    const query = wx.createSelectorQuery();
+    query.select('#profilePainChart')
+      .fields({ node: true, size: true })
+      .exec((res) => {
+        if (!res || !res[0]) {
+          console.log('Canvas节点获取失败，使用备用图表');
+          return;
         }
-      });
-      ctx.stroke();
-      
-      // 绘制数据点
-      ctx.setFillStyle('#1677ff');
-      painData.forEach((value, index) => {
-        if (value > 0) {
-          const x = padding + (chartWidth / (painData.length - 1)) * index;
-          const y = padding + chartHeight - (value / 10) * chartHeight;
-          
+
+        const canvas = res[0].node;
+        const ctx = canvas.getContext('2d');
+        const painData = this.data.painTrendData;
+        
+        if (!painData || painData.length === 0) return;
+
+        const dpr = wx.getSystemInfoSync().pixelRatio;
+        canvas.width = res[0].width * dpr;
+        canvas.height = res[0].height * dpr;
+        ctx.scale(dpr, dpr);
+
+        const canvasWidth = res[0].width;
+        const canvasHeight = res[0].height;
+        const padding = 40;
+        const chartWidth = canvasWidth - padding * 2;
+        const chartHeight = canvasHeight - padding * 2;
+
+        // 清除画布
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // 绘制背景
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        // 绘制网格线和Y轴标签
+        ctx.strokeStyle = '#f0f0f0';
+        ctx.lineWidth = 1;
+        ctx.fillStyle = '#999999';
+        ctx.font = '10px sans-serif';
+
+        for (let i = 0; i <= 10; i += 2) {
+          const y = padding + chartHeight - (i / 10) * chartHeight;
           ctx.beginPath();
-          ctx.arc(x, y, 3, 0, 2 * Math.PI);
-          ctx.fill();
+          ctx.moveTo(padding, y);
+          ctx.lineTo(canvasWidth - padding, y);
+          ctx.stroke();
+          
+          // Y轴标签
+          ctx.fillText(i.toString(), padding - 20, y + 4);
         }
+
+        // 绘制数据线
+        const validData = painData.filter(val => val > 0);
+        if (validData.length > 0) {
+          // 绘制渐变背景区域
+          const gradient = ctx.createLinearGradient(0, padding, 0, canvasHeight - padding);
+          gradient.addColorStop(0, 'rgba(22, 119, 255, 0.2)');
+          gradient.addColorStop(1, 'rgba(22, 119, 255, 0.05)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.moveTo(padding, canvasHeight - padding);
+          
+          painData.forEach((value, index) => {
+            const x = padding + (chartWidth / (painData.length - 1)) * index;
+            const y = value > 0 ? padding + chartHeight - (value / 10) * chartHeight : canvasHeight - padding;
+            ctx.lineTo(x, y);
+          });
+          
+          ctx.lineTo(canvasWidth - padding, canvasHeight - padding);
+          ctx.closePath();
+          ctx.fill();
+
+          // 绘制线条
+          ctx.strokeStyle = '#1677ff';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+
+          let firstPoint = true;
+          painData.forEach((value, index) => {
+            if (value > 0) {
+              const x = padding + (chartWidth / (painData.length - 1)) * index;
+              const y = padding + chartHeight - (value / 10) * chartHeight;
+
+              if (firstPoint) {
+                ctx.moveTo(x, y);
+                firstPoint = false;
+              } else {
+                ctx.lineTo(x, y);
+              }
+            }
+          });
+          ctx.stroke();
+
+          // 绘制数据点
+          ctx.fillStyle = '#1677ff';
+          painData.forEach((value, index) => {
+            if (value > 0) {
+              const x = padding + (chartWidth / (painData.length - 1)) * index;
+              const y = padding + chartHeight - (value / 10) * chartHeight;
+
+              // 外圈
+              ctx.beginPath();
+              ctx.arc(x, y, 5, 0, 2 * Math.PI);
+              ctx.fill();
+              
+              // 内圈白色
+              ctx.fillStyle = '#ffffff';
+              ctx.beginPath();
+              ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
+              ctx.fill();
+              ctx.fillStyle = '#1677ff';
+            }
+          });
+        }
+
+        // 绘制X轴标签
+        ctx.fillStyle = '#999999';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        const labels = this.data.xAxisLabels || [];
+        labels.forEach((label, index) => {
+          const x = padding + (chartWidth / (painData.length - 1)) * index;
+          ctx.fillText(label, x, canvasHeight - padding + 20);
+        });
+
+        console.log('Canvas 2D绘制成功');
+        // 绘制成功，可以显示Canvas
+        this.setData({
+          canvasSupported: true
+        });
       });
-    }
-    
-    ctx.draw();
   },
 
   // 图表触摸事件

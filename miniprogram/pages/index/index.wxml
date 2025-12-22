@@ -20,7 +20,7 @@
   <!-- 内容区域 -->
   <view class="content-wrapper">
     <!-- 欢迎区域 -->
-    <view class="welcome-section">
+    <view class="welcome-section" style="position: relative; left: -1rpx; top: 0rpx">
       <view class="welcome-header">
         <text class="welcome-title">您好，{{userName}}</text>
         <text class="welcome-date">{{currentDate}}</text>
