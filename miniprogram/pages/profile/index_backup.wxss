@@ -545,15 +545,12 @@
   background: rgba(0, 0, 0, 0.05);
   border: 1rpx solid rgba(0, 0, 0, 0.1);
 }
-  gap: 20rpx;
-}
 
-.achievement-item {
+/* 成就列表容器 - 修复后 */
+.achievements-grid {
   display: flex;
-  align-items: center;
-  padding: 24rpx;
-  border-radius: 16rpx;
-  transition: all 0.3s ease;
+  flex-direction: column;
+  gap: 20rpx;
 }
 
 .achievement-item.unlocked {
