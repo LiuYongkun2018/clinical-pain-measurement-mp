@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "评估"
+  "navigationBarTitleText": "健康评估",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "scale-questionnaire": "/components/scale-questionnaire/index"
+  }
 }

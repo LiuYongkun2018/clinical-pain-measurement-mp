@@ -1,0 +1,162 @@
+<!-- components/scale-questionnaire/index.wxml -->
+<!-- 通用量表测评组件 -->
+
+<view class="questionnaire-container">
+  <!-- 结果展示页面 -->
+  <view class="result-page" wx:if="{{showResult && result}}">
+    <view class="result-card">
+      <view class="result-header">
+        <view class="result-icon {{result.levelClass}}">
+          <text wx:if="{{result.levelClass === 'normal'}}">✓</text>
+          <text wx:elif="{{result.levelClass === 'mild'}}">!</text>
+          <text wx:elif="{{result.levelClass === 'moderate'}}">!!</text>
+          <text wx:else>!!!</text>
+        </view>
+        <text class="result-title">测评完成</text>
+      </view>
+
+      <view class="score-section">
+        <view class="score-main">
+          <text class="score-number {{result.levelClass}}">{{result.standardScore}}</text>
+          <text class="score-unit">分</text>
+        </view>
+        <text class="score-label">标准分</text>
+      </view>
+
+      <view class="level-badge {{result.levelClass}}">
+        <text class="level-text">{{result.level}}</text>
+      </view>
+
+      <view class="suggestion-section">
+        <text class="suggestion-title">评估建议</text>
+        <text class="suggestion-content">{{result.suggestion}}</text>
+      </view>
+
+      <view class="score-details">
+        <view class="detail-item">
+          <text class="detail-label">量表类型</text>
+          <text class="detail-value">{{scaleType === 'SAS' ? '焦虑自评量表' : '抑郁自评量表'}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">原始分</text>
+          <text class="detail-value">{{result.rawScore}}分</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">题目数量</text>
+          <text class="detail-value">{{result.totalQuestions}}题</text>
+        </view>
+      </view>
+
+      <view class="result-actions">
+        <button class="action-btn save-btn" bindtap="saveResult">
+          <text class="btn-icon">💾</text>
+          <text class="btn-text">保存结果</text>
+        </button>
+        <button class="action-btn restart-btn" bindtap="restart">
+          <text class="btn-icon">🔄</text>
+          <text class="btn-text">重新测评</text>
+        </button>
+      </view>
+
+      <view class="disclaimer">
+        <text class="disclaimer-text">⚠️ 本测评仅供参考，不能作为临床诊断依据。如有需要，请咨询专业医疗人员。</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 答题页面 -->
+  <view class="question-page" wx:else>
+    <!-- 进度条 -->
+    <view class="progress-section">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progress}}%"></view>
+      </view>
+      <view class="progress-info">
+        <text class="progress-text">{{currentIndex + 1}} / {{questions.length}}</text>
+        <text class="progress-percent">{{progress}}%</text>
+      </view>
+    </view>
+
+    <!-- 题目导航点 -->
+    <scroll-view class="question-dots" scroll-x enable-flex>
+      <view 
+        class="dot {{index === currentIndex ? 'active' : ''}} {{answers[index] !== null ? 'answered' : ''}}"
+        wx:for="{{questions}}"
+        wx:key="index"
+        bindtap="goToQuestion"
+        data-index="{{index}}"
+      >
+        {{index + 1}}
+      </view>
+    </scroll-view>
+
+    <!-- 当前题目 -->
+    <view class="question-card {{animating ? 'animating' : ''}}">
+      <view class="question-number">
+        <text class="number-badge">第 {{currentIndex + 1}} 题</text>
+        <text class="reverse-badge" wx:if="{{reverseItems.includes(currentIndex + 1)}}">反向计分</text>
+      </view>
+      
+      <view class="question-content">
+        <text class="question-text">{{questions[currentIndex].text}}</text>
+        <text class="question-dimension" wx:if="{{questions[currentIndex].dimension}}">
+          （{{questions[currentIndex].dimension}}）
+        </text>
+      </view>
+
+      <view class="options-list">
+        <view 
+          class="option-item {{answers[currentIndex] === item.value ? 'selected' : ''}}"
+          wx:for="{{options}}"
+          wx:key="value"
+          bindtap="selectAnswer"
+          data-value="{{item.value}}"
+        >
+          <view class="option-radio {{answers[currentIndex] === item.value ? 'checked' : ''}}">
+            <view class="radio-inner" wx:if="{{answers[currentIndex] === item.value}}"></view>
+          </view>
+          <view class="option-content">
+            <text class="option-score">{{item.value}}分</text>
+            <text class="option-label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 导航按钮 -->
+    <view class="navigation-buttons">
+      <button 
+        class="nav-btn prev-btn {{currentIndex === 0 ? 'disabled' : ''}}" 
+        bindtap="prevQuestion"
+        disabled="{{currentIndex === 0}}"
+      >
+        <text class="nav-icon">←</text>
+        <text class="nav-text">上一题</text>
+      </button>
+      
+      <button 
+        class="nav-btn next-btn {{currentIndex === questions.length - 1 ? 'hidden' : ''}}" 
+        bindtap="nextQuestion"
+        wx:if="{{currentIndex < questions.length - 1}}"
+      >
+        <text class="nav-text">下一题</text>
+        <text class="nav-icon">→</text>
+      </button>
+
+      <button 
+        class="nav-btn submit-btn {{!isCompleted ? 'disabled' : ''}}" 
+        bindtap="calculateResult"
+        wx:if="{{currentIndex === questions.length - 1}}"
+        disabled="{{!isCompleted}}"
+      >
+        <text class="nav-text">{{isCompleted ? '查看结果' : '请完成所有题目'}}</text>
+        <text class="nav-icon" wx:if="{{isCompleted}}">✓</text>
+      </button>
+    </view>
+
+    <!-- 未答题提示 -->
+    <view class="unanswered-hint" wx:if="{{!isCompleted && currentIndex === questions.length - 1}}">
+      <text class="hint-text">还有 {{unansweredCount}} 题未完成</text>
+    </view>
+  </view>
+</view>

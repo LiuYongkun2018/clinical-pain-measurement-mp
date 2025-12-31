@@ -1,12 +1,20 @@
+// 引入量表配置
+const scaleConfig = require('../../utils/scaleConfig.js');
+
 Page({
   data: {
+    // 视图控制
+    currentView: 'home', // 'home', 'nrs', 'sas', 'sds'
+    showScaleIntro: true, // 是否显示量表介绍页
+    
+    // NRS评估相关数据
     painLevel: 0,
     painDescription: '无痛',
-    selectedArea: '', // 改为单个选择
+    painLevelClass: 'none', // 用于样式控制
+    selectedArea: '',
     selectedDuration: '',
-    selectedFactor: '', // 疼痛触发因素(单选)
-    selectedQuality: '', // 改为单个选择
-    selectedQualities: [], // 疼痛性质(多选)
+    selectedFactor: '',
+    selectedQualities: [],
     emotions: [
       { id: 'anxiety', name: '焦虑', value: 0 },
       { id: 'depression', name: '沮丧', value: 0 },
@@ -31,15 +39,15 @@ Page({
       { value: 'days', label: '几天' },
       { value: 'weeks', label: '几周' },
       { value: 'months', label: '几个月' },
-      { value: 'chronic', label: '长期慢性疼痛' }
+      { value: 'chronic', label: '慢性疼痛' }
     ],
     triggerFactors: [
-      { id: 'movement', name: '活动/运动', icon: '🏃' },
+      { id: 'movement', name: '活动运动', icon: '🏃' },
       { id: 'weather', name: '天气变化', icon: '🌤️' },
-      { id: 'stress', name: '压力/情绪', icon: '😰' },
+      { id: 'stress', name: '压力情绪', icon: '😰' },
       { id: 'sleep', name: '睡眠不足', icon: '😴' },
       { id: 'position', name: '姿势不当', icon: '🪑' },
-      { id: 'fatigue', name: '疲劳', icon: '😪' }
+      { id: 'fatigue', name: '身体疲劳', icon: '😪' }
     ],
     painQualities: [
       { id: 'sharp', name: '尖锐刺痛' },
@@ -47,110 +55,176 @@ Page({
       { id: 'burning', name: '灼热痛' },
       { id: 'throbbing', name: '跳痛' },
       { id: 'cramping', name: '痉挛痛' },
-      { id: 'tingling', name: '麻木刺痛' },
+      { id: 'tingling', name: '麻刺痛' },
       { id: 'aching', name: '酸痛' },
-      { id: 'shooting', name: '射痛' },
-      { id: 'stabbing', name: '刺痛' }
+      { id: 'shooting', name: '放射痛' }
     ],
     scaleRect: null,
     isDragging: false,
-    canSubmit: false
+    canSubmit: false,
+
+    // SAS/SDS量表配置
+    scaleConfig: null
   },
 
   onLoad: function (options) {
+    // 如果有传入评估类型，直接跳转
+    if (options && options.type) {
+      this.selectAssessment({ currentTarget: { dataset: { type: options.type } } });
+    }
     this.updatePainDescription();
     this.checkCanSubmit();
   },
 
   onReady: function () {
-    // 获取滑块区域的位置信息
+    // 延迟获取滑块区域位置信息
+    setTimeout(() => {
+      this.updateScaleRect();
+    }, 300);
+  },
+
+  // 获取滑块区域位置
+  updateScaleRect: function() {
     const query = wx.createSelectorQuery();
     query.select('.scale-track').boundingClientRect((rect) => {
-      this.setData({
-        scaleRect: rect
-      });
+      if (rect) {
+        this.setData({ scaleRect: rect });
+      }
     }).exec();
+  },
+
+  // ============ 视图切换相关 ============
+  
+  // 选择评估类型
+  selectAssessment: function(e) {
+    const type = e.currentTarget.dataset.type;
+    
+    if (type === 'nrs') {
+      this.setData({ currentView: 'nrs' });
+      // 延迟获取滑块位置
+      setTimeout(() => this.updateScaleRect(), 100);
+    } else if (type === 'sas') {
+      this.setData({
+        currentView: 'sas',
+        showScaleIntro: true,
+        scaleConfig: scaleConfig.SAS
+      });
+    } else if (type === 'sds') {
+      this.setData({
+        currentView: 'sds',
+        showScaleIntro: true,
+        scaleConfig: scaleConfig.SDS
+      });
+    }
+    
+    this.provideFeedback();
+  },
+
+  // 返回首页
+  goBack: function() {
+    this.setData({
+      currentView: 'home',
+      showScaleIntro: true
+    });
+    this.provideFeedback();
+  },
+
+  // 查看历史记录
+  viewHistory: function() {
+    wx.navigateTo({
+      url: '/pages/assessment-history/index'
+    });
+  },
+
+  // 开始量表测评
+  startScale: function() {
+    this.setData({ showScaleIntro: false });
+    this.provideFeedback();
+  },
+
+  // ============ NRS评估相关 ============
+
+  // 选择疼痛等级（点击数字）
+  selectPainLevel: function(e) {
+    const level = e.currentTarget.dataset.level;
+    this.setData({ painLevel: level });
+    this.updatePainDescription();
+    this.checkCanSubmit();
+    this.provideFeedback();
   },
 
   // VAS量表滑块操作
   onScaleStart: function (e) {
-    this.setData({
-      isDragging: true
-    });
+    this.updateScaleRect();
+    this.setData({ isDragging: true });
+    this.handleScaleTouch(e);
   },
 
   onScaleMove: function (e) {
-    if (!this.data.isDragging || !this.data.scaleRect) return;
+    if (!this.data.isDragging) return;
+    this.handleScaleTouch(e);
+  },
 
+  handleScaleTouch: function(e) {
+    if (!this.data.scaleRect) return;
+    
     const touch = e.touches[0];
     const rect = this.data.scaleRect;
     const x = touch.clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     const level = Math.round((percentage / 100) * 10);
 
-    this.setData({
-      painLevel: level
-    });
-    
+    this.setData({ painLevel: level });
     this.updatePainDescription();
     this.checkCanSubmit();
   },
 
   onScaleEnd: function (e) {
-    this.setData({
-      isDragging: false
-    });
+    this.setData({ isDragging: false });
   },
 
   // 更新疼痛描述
   updatePainDescription: function () {
     const level = this.data.painLevel;
     let description = '';
+    let levelClass = '';
     
     if (level === 0) {
       description = '无痛';
-    } else if (level <= 2) {
-      description = '轻微疼痛';
-    } else if (level <= 4) {
-      description = '中度疼痛';
+      levelClass = 'none';
+    } else if (level <= 3) {
+      description = '轻度疼痛';
+      levelClass = 'mild';
     } else if (level <= 6) {
-      description = '较重疼痛';
-    } else if (level <= 8) {
-      description = '重度疼痛';
+      description = '中度疼痛';
+      levelClass = 'moderate';
     } else {
-      description = '剧烈疼痛';
+      description = '重度疼痛';
+      levelClass = 'severe';
     }
     
     this.setData({
-      painDescription: description
+      painDescription: description,
+      painLevelClass: levelClass
     });
   },
 
-  // 选择身体部位（单选模式，支持取消选择）
+  // 选择身体部位
   selectArea: function (e) {
     const areaId = e.currentTarget.dataset.id;
-    
-    // 如果点击的是已选中的项，则取消选择；否则选择新项
     const newSelectedArea = this.data.selectedArea === areaId ? '' : areaId;
     
-    this.setData({
-      selectedArea: newSelectedArea
-    });
-    
+    this.setData({ selectedArea: newSelectedArea });
     this.checkCanSubmit();
     this.provideFeedback();
   },
 
-  // 选择疼痛持续时间（单选模式，支持取消选择）
+  // 选择疼痛持续时间
   selectDuration: function (e) {
     const duration = e.currentTarget.dataset.value;
-    
-    // 如果点击的是已选中的项，则取消选择；否则选择新项
     const newSelectedDuration = this.data.selectedDuration === duration ? '' : duration;
     
-    this.setData({
-      selectedDuration: newSelectedDuration
-    });
+    this.setData({ selectedDuration: newSelectedDuration });
     
     this.checkCanSubmit();
     this.provideFeedback();
@@ -237,77 +311,212 @@ Page({
     });
   },
 
-  // 提交评估(添加更完整的数据验证)
-  submitAssessment: function () {
+  // 提交NRS评估
+  submitNRS: function () {
     if (!this.data.canSubmit) {
       wx.showToast({
         title: '请完成必填项目',
-        icon: 'none',
-        duration: 2000
+        icon: 'none'
       });
       return;
     }
 
+    wx.showLoading({ title: '提交中...' });
+
     // 收集评估数据
     const assessmentData = {
+      type: 'NRS',
       painLevel: this.data.painLevel,
       painDescription: this.data.painDescription,
       area: this.data.selectedArea,
       duration: this.data.selectedDuration,
-      factor: this.data.selectedFactor || null, // 触发因素可选
-      quality: this.data.selectedQuality || null, // 疼痛性质可选（保持向下兼容）
-      qualities: this.data.selectedQualities || [], // 疼痛性质(多选)
+      factor: this.data.selectedFactor || null,
+      qualities: this.data.selectedQualities || [],
       emotions: this.data.emotions.reduce((obj, emotion) => {
         obj[emotion.id] = emotion.value;
         return obj;
       }, {}),
       timestamp: new Date().toISOString(),
-      date: new Date().toDateString()
+      date: new Date().toLocaleDateString('zh-CN')
     };
 
-    console.log('提交的评估数据:', assessmentData);
-
-    try {
-      // 保存到本地存储
+    // 调用云函数保存数据
+    wx.cloud.callFunction({
+      name: 'assessmentFunctions',
+      data: {
+        action: 'saveNRS',
+        data: assessmentData
+      }
+    }).then(res => {
+      wx.hideLoading();
+      
+      // 同时保存到本地
       let painRecords = wx.getStorageSync('painRecords') || [];
       painRecords.push(assessmentData);
       wx.setStorageSync('painRecords', painRecords);
 
-      // 更新今日任务状态
       this.updateTodayTasks();
-
-      // 显示成功提示
+      
       wx.showToast({
         title: '评估完成',
-        icon: 'success',
-        duration: 2000
+        icon: 'success'
       });
 
-      // 延迟跳转回首页
       setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/index/index'
-        });
-      }, 2000);
-    } catch (error) {
-      console.error('保存评估数据失败:', error);
+        this.setData({ currentView: 'home' });
+        this.resetNRSForm();
+      }, 1500);
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('保存NRS评估失败:', err);
+      
+      // 失败时仍然保存到本地
+      let painRecords = wx.getStorageSync('painRecords') || [];
+      painRecords.push(assessmentData);
+      wx.setStorageSync('painRecords', painRecords);
+
       wx.showToast({
-        title: '保存失败，请重试',
-        icon: 'none',
-        duration: 2000
+        title: '已保存到本地',
+        icon: 'success'
       });
+
+      setTimeout(() => {
+        this.setData({ currentView: 'home' });
+        this.resetNRSForm();
+      }, 1500);
+    });
+  },
+
+  // 重置NRS表单
+  resetNRSForm: function() {
+    this.setData({
+      painLevel: 0,
+      painDescription: '无痛',
+      painLevelClass: 'none',
+      selectedArea: '',
+      selectedDuration: '',
+      selectedFactor: '',
+      selectedQualities: [],
+      emotions: this.data.emotions.map(e => ({ ...e, value: 0 })),
+      canSubmit: false
+    });
+  },
+
+  // ============ SAS/SDS量表相关 ============
+
+  // 量表完成事件
+  onScaleComplete: function(e) {
+    const result = e.detail;
+    console.log('量表完成:', result);
+    
+    // 显示结果
+    this.showScaleResult(result);
+  },
+
+  // 量表保存事件
+  onScaleSave: function(e) {
+    const result = e.detail;
+    console.log('量表保存:', result);
+    
+    wx.showLoading({ title: '保存中...' });
+
+    const scaleType = this.data.currentView.toUpperCase();
+    
+    wx.cloud.callFunction({
+      name: 'assessmentFunctions',
+      data: {
+        action: scaleType === 'SAS' ? 'saveSAS' : 'saveSDS',
+        data: {
+          ...result,
+          timestamp: new Date().toISOString(),
+          date: new Date().toLocaleDateString('zh-CN')
+        }
+      }
+    }).then(res => {
+      wx.hideLoading();
+      
+      // 保存到本地
+      const storageKey = scaleType === 'SAS' ? 'sasRecords' : 'sdsRecords';
+      let records = wx.getStorageSync(storageKey) || [];
+      records.push(result);
+      wx.setStorageSync(storageKey, records);
+
+      wx.showToast({
+        title: '保存成功',
+        icon: 'success'
+      });
+
+      setTimeout(() => {
+        this.setData({ 
+          currentView: 'home',
+          showScaleIntro: true
+        });
+      }, 1500);
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('保存量表数据失败:', err);
+      
+      // 失败时保存到本地
+      const storageKey = scaleType === 'SAS' ? 'sasRecords' : 'sdsRecords';
+      let records = wx.getStorageSync(storageKey) || [];
+      records.push(result);
+      wx.setStorageSync(storageKey, records);
+
+      wx.showToast({
+        title: '已保存到本地',
+        icon: 'success'
+      });
+
+      setTimeout(() => {
+        this.setData({ 
+          currentView: 'home',
+          showScaleIntro: true
+        });
+      }, 1500);
+    });
+  },
+
+  // 显示量表结果
+  showScaleResult: function(result) {
+    const scaleType = this.data.currentView.toUpperCase();
+    const interpretation = this.getScoreInterpretation(scaleType, result.standardScore);
+    
+    wx.showModal({
+      title: `${scaleType}测评结果`,
+      content: `标准分: ${result.standardScore}\n${interpretation.level}\n\n${interpretation.description}`,
+      showCancel: false,
+      confirmText: '我知道了'
+    });
+  },
+
+  // 获取分数解读
+  getScoreInterpretation: function(scaleType, score) {
+    const config = scaleType === 'SAS' ? scaleConfig.SAS : scaleConfig.SDS;
+    const interpretations = config.interpretation;
+    
+    for (let item of interpretations) {
+      if (score >= item.min && score <= item.max) {
+        return item;
+      }
     }
+    
+    return { level: '未知', description: '请咨询专业人士' };
   },
 
   // 更新今日任务状态
   updateTodayTasks: function () {
     let todayTasks = wx.getStorageSync('todayTasks') || [];
-    const taskIndex = todayTasks.findIndex(task => task.id === 1); // 疼痛记录任务
+    const taskIndex = todayTasks.findIndex(task => task.id === 1);
     
     if (taskIndex > -1) {
       todayTasks[taskIndex].completed = true;
       wx.setStorageSync('todayTasks', todayTasks);
     }
+  },
+
+  // 提供触觉反馈
+  provideFeedback: function () {
+    wx.vibrateShort({ type: 'light' });
   },
 
   // 分享功能

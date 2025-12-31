@@ -1,146 +1,228 @@
-<view class="assessment-container">
-  <!-- 疼痛度评估 VAS量表 -->
-  <view class="assessment-section">
-    <view class="section-header">
-      <text class="section-title">NRS评估量表</text>
-      <text class="section-subtitle">请滑动选择您当前的疼痛程度</text>
+<!-- 评估模块主页面 -->
+<view class="assessment-page">
+  <!-- 评估类型选择 (首页状态) -->
+  <view class="type-selection" wx:if="{{currentView === 'home'}}">
+    <view class="page-header">
+      <text class="page-title">健康评估</text>
+      <text class="page-subtitle">选择评估类型，了解您的健康状况</text>
     </view>
-    
-    <view class="vas-scale">
-      <view class="scale-container">
-        <view class="scale-track">
-          <view class="scale-handle" style="left: {{painLevel * 10}}%" bindtouchstart="onScaleStart" bindtouchmove="onScaleMove" bindtouchend="onScaleEnd"></view>
-          <view class="scale-fill" style="width: {{painLevel * 10}}%"></view>
+
+    <view class="assessment-cards">
+      <!-- NRS疼痛评估卡片 -->
+      <view class="assessment-card pain-card" bindtap="selectAssessment" data-type="nrs">
+        <view class="card-icon-wrapper pain-icon">
+          <text class="card-icon">🩺</text>
         </view>
-        <view class="scale-labels">
-          <text class="scale-label">0</text>
-          <text class="scale-label">1</text>
-          <text class="scale-label">2</text>
-          <text class="scale-label">3</text>
-          <text class="scale-label">4</text>
-          <text class="scale-label">5</text>
-          <text class="scale-label">6</text>
-          <text class="scale-label">7</text>
-          <text class="scale-label">8</text>
-          <text class="scale-label">9</text>
-          <text class="scale-label">10</text>
+        <view class="card-content">
+          <text class="card-title">疼痛评估</text>
+          <text class="card-subtitle">NRS数字评定量表</text>
+          <text class="card-desc">评估当前疼痛程度、部位、性质等</text>
         </view>
-        <view class="scale-descriptions">
-          <text class="scale-desc">无痛</text>
-          <text class="scale-desc">剧烈疼痛</text>
-        </view>
+        <view class="card-badge">常用</view>
+        <view class="card-arrow">→</view>
       </view>
-      
-      <view class="pain-level-display">
-        <text class="pain-number">{{painLevel}}</text>
-        <text class="pain-description">{{painDescription}}</text>
+
+      <!-- SAS焦虑评估卡片 -->
+      <view class="assessment-card anxiety-card" bindtap="selectAssessment" data-type="sas">
+        <view class="card-icon-wrapper anxiety-icon">
+          <text class="card-icon">😰</text>
+        </view>
+        <view class="card-content">
+          <text class="card-title">焦虑自评</text>
+          <text class="card-subtitle">SAS焦虑自评量表</text>
+          <text class="card-desc">20道题目，约5-10分钟完成</text>
+        </view>
+        <view class="card-time">~8分钟</view>
+        <view class="card-arrow">→</view>
       </view>
+
+      <!-- SDS抑郁评估卡片 -->
+      <view class="assessment-card depression-card" bindtap="selectAssessment" data-type="sds">
+        <view class="card-icon-wrapper depression-icon">
+          <text class="card-icon">😔</text>
+        </view>
+        <view class="card-content">
+          <text class="card-title">抑郁自评</text>
+          <text class="card-subtitle">SDS抑郁自评量表</text>
+          <text class="card-desc">20道题目，约5-10分钟完成</text>
+        </view>
+        <view class="card-time">~8分钟</view>
+        <view class="card-arrow">→</view>
+      </view>
+    </view>
+
+    <!-- 历史记录入口 -->
+    <view class="history-entry" bindtap="viewHistory">
+      <text class="history-icon">📊</text>
+      <text class="history-text">查看评估历史记录</text>
+      <text class="history-arrow">→</text>
     </view>
   </view>
 
-  <!-- 疼痛部位选择 -->
-  <view class="assessment-section">
-    <view class="section-header">
-      <text class="section-title">疼痛部位</text>
-      <text class="section-subtitle">请选择您感到疼痛的主要部位</text>
+  <!-- NRS疼痛评估页面 -->
+  <view class="nrs-assessment" wx:if="{{currentView === 'nrs'}}">
+    <!-- 返回按钮 -->
+    <view class="back-header" bindtap="goBack">
+      <text class="back-icon">←</text>
+      <text class="back-text">疼痛评估</text>
     </view>
-    
-    <view class="body-map">
-      <view class="body-areas">
-        <view class="body-area {{selectedArea === item.id ? 'selected' : ''}}" 
-              wx:for="{{bodyAreas}}" wx:key="id"
-              bindtap="selectArea" data-id="{{item.id}}">
-          <view class="area-icon">{{item.icon}}</view>
-          <text class="area-name">{{item.name}}</text>
+
+    <scroll-view class="nrs-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <!-- NRS评分区域 - 优化紧凑版 -->
+      <view class="nrs-section">
+        <view class="section-title-row">
+          <text class="section-title">疼痛程度</text>
+          <view class="pain-badge {{painLevelClass}}">
+            <text class="badge-score">{{painLevel}}</text>
+            <text class="badge-text">{{painDescription}}</text>
+          </view>
+        </view>
+        
+        <view class="nrs-scale-compact">
+          <view class="scale-track-wrapper">
+            <view class="scale-track" bindtouchstart="onScaleStart" bindtouchmove="onScaleMove" bindtouchend="onScaleEnd">
+              <view class="scale-fill" style="width: {{painLevel * 10}}%"></view>
+              <view class="scale-handle" style="left: {{painLevel * 10}}%"></view>
+            </view>
+          </view>
+          <view class="scale-numbers">
+            <text class="scale-num {{painLevel === index ? 'active' : ''}}" 
+                  wx:for="{{[0,1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this"
+                  bindtap="selectPainLevel" data-level="{{index}}">{{item}}</text>
+          </view>
+          <view class="scale-hints">
+            <text class="hint-text">无痛</text>
+            <text class="hint-text">剧痛</text>
+          </view>
         </view>
       </view>
-    </view>
-  </view>
 
-  <!-- 疼痛持续时间 -->
-  <view class="assessment-section">
-    <view class="section-header">
-      <text class="section-title">疼痛持续时间</text>
-      <text class="section-subtitle">请选择疼痛持续的时间</text>
-    </view>
-    
-    <view class="duration-grid">
-      <view class="duration-item {{selectedDuration === item.value ? 'selected' : ''}}"
-            wx:for="{{durationOptions}}" wx:key="value"
-            bindtap="selectDuration" data-value="{{item.value}}">
-        <text class="duration-text">{{item.label}}</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 疼痛触发因素 -->
-  <view class="assessment-section">
-    <view class="section-header">
-      <text class="section-title">疼痛触发因素</text>
-      <text class="section-subtitle">请选择最主要的疼痛触发因素</text>
-    </view>
-    
-    <view class="trigger-factors">
-      <view class="factor-item {{selectedFactor === item.id ? 'selected' : ''}}"
-            wx:for="{{triggerFactors}}" wx:key="id"
-            bindtap="selectFactor" data-id="{{item.id}}">
-        <view class="factor-icon">{{item.icon}}</view>
-        <text class="factor-text">{{item.name}}</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 疼痛性质 -->
-  <view class="assessment-section">
-    <view class="section-header">
-      <view class="section-title-row">
-        <text class="section-title">疼痛性质</text>
-        <text class="clear-selection" bindtap="clearQualities" wx:if="{{selectedQualities.length > 0}}">清空选择</text>
-      </view>
-      <text class="section-subtitle">请选择所有符合您疼痛感受的描述（可多选）</text>
-    </view>
-    
-    <view class="pain-qualities">
-      <view class="quality-item {{selectedQualities.includes(item.id) ? 'selected' : ''}}"
-            wx:for="{{painQualities}}" wx:key="id"
-            bindtap="toggleQuality" data-id="{{item.id}}">
-        <text class="quality-text">{{item.name}}</text>
-        <view class="quality-checkbox {{selectedQualities.includes(item.id) ? 'checked' : ''}}">
-          <text class="checkmark" wx:if="{{selectedQualities.includes(item.id)}}">✓</text>
+      <!-- 疼痛部位 - 紧凑网格 -->
+      <view class="nrs-section">
+        <text class="section-title">疼痛部位</text>
+        <view class="body-areas-grid">
+          <view class="area-item {{selectedArea === item.id ? 'selected' : ''}}" 
+                wx:for="{{bodyAreas}}" wx:key="id"
+                bindtap="selectArea" data-id="{{item.id}}">
+            <text class="area-icon">{{item.icon}}</text>
+            <text class="area-name">{{item.name}}</text>
+          </view>
         </view>
       </view>
-    </view>
-  </view>
 
-  <!-- 情绪状态 -->
-  <view class="assessment-section">
-    <view class="section-header">
-      <text class="section-title">情绪状态</text>
-      <text class="section-subtitle">疼痛如何影响您的情绪？</text>
-    </view>
-    
-    <view class="emotion-scale">
-      <view class="emotion-item" wx:for="{{emotions}}" wx:key="id">
-        <text class="emotion-label">{{item.name}}</text>
-        <view class="emotion-slider">
-          <slider value="{{item.value}}" 
-                  min="0" max="10" 
-                  block-color="#1677ff"
-                  activeColor="#1677ff"
-                  backgroundColor="#f0f0f0"
-                  bindchange="onEmotionChange"
-                  data-emotion="{{item.id}}" />
-          <text class="emotion-value">{{item.value}}</text>
+      <!-- 持续时间 - 紧凑布局 -->
+      <view class="nrs-section">
+        <text class="section-title">持续时间</text>
+        <view class="duration-grid">
+          <view class="duration-item {{selectedDuration === item.value ? 'selected' : ''}}"
+                wx:for="{{durationOptions}}" wx:key="value"
+                bindtap="selectDuration" data-value="{{item.value}}">
+            <text class="duration-text">{{item.label}}</text>
+          </view>
         </view>
       </view>
-    </view>
+
+      <!-- 触发因素 - 紧凑布局 -->
+      <view class="nrs-section">
+        <text class="section-title">触发因素 <text class="optional-tag">选填</text></text>
+        <view class="factors-grid">
+          <view class="factor-item {{selectedFactor === item.id ? 'selected' : ''}}"
+                wx:for="{{triggerFactors}}" wx:key="id"
+                bindtap="selectFactor" data-id="{{item.id}}">
+            <text class="factor-icon">{{item.icon}}</text>
+            <text class="factor-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 疼痛性质 - 紧凑多选 -->
+      <view class="nrs-section">
+        <view class="section-title-row">
+          <text class="section-title">疼痛性质 <text class="optional-tag">选填·可多选</text></text>
+          <text class="clear-btn" wx:if="{{selectedQualities.length > 0}}" bindtap="clearQualities">清空</text>
+        </view>
+        <view class="qualities-grid">
+          <view class="quality-item {{selectedQualities.includes(item.id) ? 'selected' : ''}}"
+                wx:for="{{painQualities}}" wx:key="id"
+                bindtap="toggleQuality" data-id="{{item.id}}">
+            <text class="quality-text">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 情绪影响 - 紧凑滑块 -->
+      <view class="nrs-section">
+        <text class="section-title">情绪影响 <text class="optional-tag">选填</text></text>
+        <view class="emotions-compact">
+          <view class="emotion-row" wx:for="{{emotions}}" wx:key="id">
+            <text class="emotion-label">{{item.name}}</text>
+            <slider class="emotion-slider" 
+                    value="{{item.value}}" min="0" max="10"
+                    block-size="20" block-color="#1677ff"
+                    activeColor="#1677ff" backgroundColor="#e8e8e8"
+                    bindchange="onEmotionChange" data-emotion="{{item.id}}"/>
+            <text class="emotion-value">{{item.value}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 提交按钮 -->
+      <view class="submit-area">
+        <button class="submit-btn {{canSubmit ? 'active' : 'disabled'}}" 
+                bindtap="submitNRS" disabled="{{!canSubmit}}">
+          提交评估
+        </button>
+        <text class="submit-hint" wx:if="{{!canSubmit}}">请至少选择疼痛程度、部位和持续时间</text>
+      </view>
+    </scroll-view>
   </view>
 
-  <!-- 提交按钮 -->
-  <view class="submit-section">
-    <button class="submit-btn" bindtap="submitAssessment" disabled="{{!canSubmit}}">
-      提交评估
-    </button>
-    <!-- <text class="submit-note" wx:if="{{!canSubmit}}">请完成必填项目</text> -->
+  <!-- SAS/SDS量表评估页面 -->
+  <view class="scale-assessment" wx:if="{{currentView === 'sas' || currentView === 'sds'}}">
+    <!-- 返回按钮 -->
+    <view class="back-header" bindtap="goBack">
+      <text class="back-icon">←</text>
+      <text class="back-text">{{currentView === 'sas' ? '焦虑自评' : '抑郁自评'}}</text>
+    </view>
+
+    <!-- 量表说明（首次显示） -->
+    <view class="scale-intro" wx:if="{{showScaleIntro}}">
+      <view class="intro-card">
+        <view class="intro-icon">{{currentView === 'sas' ? '😰' : '😔'}}</view>
+        <text class="intro-title">{{scaleConfig.title}}</text>
+        <text class="intro-subtitle">{{scaleConfig.subtitle}}</text>
+        <text class="intro-desc">{{scaleConfig.description}}</text>
+        
+        <view class="intro-tips">
+          <view class="tip-item">
+            <text class="tip-icon">📝</text>
+            <text class="tip-text">共{{scaleConfig.questions.length}}道题目</text>
+          </view>
+          <view class="tip-item">
+            <text class="tip-icon">⏱️</text>
+            <text class="tip-text">约需5-10分钟</text>
+          </view>
+          <view class="tip-item">
+            <text class="tip-icon">📅</text>
+            <text class="tip-text">评定过去一周感受</text>
+          </view>
+        </view>
+
+        <button class="start-btn" bindtap="startScale">开始测评</button>
+      </view>
+    </view>
+
+    <!-- 量表答题组件 -->
+    <scale-questionnaire 
+      wx:if="{{!showScaleIntro}}"
+      scaleType="{{currentView === 'sas' ? 'SAS' : 'SDS'}}"
+      title="{{scaleConfig.title}}"
+      description="{{scaleConfig.description}}"
+      questions="{{scaleConfig.questions}}"
+      options="{{scaleConfig.options}}"
+      reverseItems="{{scaleConfig.reverseItems}}"
+      bind:complete="onScaleComplete"
+      bind:save="onScaleSave"
+    />
   </view>
 </view>
