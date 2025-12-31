@@ -1,94 +1,167 @@
-<!--pages/profile/index.wxml-->
-<view class="container">
-  <!-- <view class="profile-header">
-    <text class="header-title">个人中心</text>
-    <text class="header-subtitle">管理您的个人信息和使用记录</text>
-  </view> -->
-
-  <!-- 未登录状态 -->
-  <view class="login-section" wx:if="{{!isLoggedIn}}">
-    <view class="login-card">
-      <view class="login-icon">👤</view>
-      <text class="login-title">欢迎使用CCBT疼痛疗法</text>
-      <text class="login-desc">登录后可享受个性化服务和数据同步</text>
-      <button 
-        class="login-btn {{loginLoading ? 'loading' : ''}}" 
-        bindtap="getUserProfile"
-        disabled="{{loginLoading}}"
-      >
-        <text class="login-btn-text">{{loginLoading ? '登录中...' : '微信登录'}}</text>
-      </button>
-    </view>
-  </view>
-
-  <!-- 已登录状态 -->
-  <view class="profile-content" wx:if="{{isLoggedIn}}">
-    <!-- 用户信息卡片 -->
-    <view class="user-card">
+<view class="profile-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <!-- 用户基本信息 -->
+    <view class="user-header">
       <view class="user-avatar">
-        <image 
-          src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" 
-          class="avatar-img"
-          mode="aspectFill"
-        />
+        <image class="avatar-image" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill"></image>
       </view>
       <view class="user-info">
-        <text class="user-name">{{userInfo.nickName || '微信用户'}}</text>
-        <text class="user-id">OpenID: {{openid}}</text>
-        <!-- <view class="copy-btn" bindtap="copyOpenId">
-          <text class="copy-text">复制</text>
-        </view> -->
+        <text class="user-name">{{userInfo.nickName || 'zhangxiao'}}</text>
+        <text class="user-level">疼痛管理 {{userLevel}} </text>
       </view>
+      <!-- <view class="edit-button" bindtap="editProfile">
+        <text class="edit-text">编辑</text>
+      </view> -->
     </view>
-
-    <!-- 功能菜单 -->
-    <view class="menu-section">
-      <text class="section-title">功能菜单</text>
-      <view class="menu-list">
-        <view class="menu-item" bindtap="viewMyRecords">
-          <view class="menu-icon">📝</view>
-          <view class="menu-content">
-            <text class="menu-title">我的记录</text>
-            <text class="menu-desc">查看历史评估记录</text>
-          </view>
-          <view class="menu-arrow">›</view>
-        </view>
-        
-        <view class="menu-item" bindtap="showAbout">
-          <view class="menu-icon">ℹ️</view>
-          <view class="menu-content">
-            <text class="menu-title">关于我们</text>
-            <text class="menu-desc">了解CCBT疼痛疗法</text>
-          </view>
-          <view class="menu-arrow">›</view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 使用统计 -->
-    <view class="stats-section">
-      <text class="section-title">使用统计</text>
+    
+    <!-- 数据统计 -->
+    <view class="user-stats">
       <view class="stats-grid">
         <view class="stat-item">
-          <text class="stat-number">0</text>
+          <text class="stat-number">{{userStats.totalDays}}</text>
+          <text class="stat-label">使用天数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.assessments}}</text>
           <text class="stat-label">评估次数</text>
         </view>
         <view class="stat-item">
-          <text class="stat-number">0</text>
-          <text class="stat-label">学习天数</text>
+          <text class="stat-number">{{userStats.completedCourses}}</text>
+          <text class="stat-label">完成课程</text>
         </view>
         <view class="stat-item">
-          <text class="stat-number">0</text>
-          <text class="stat-label">观看视频</text>
+          <text class="stat-number">{{userStats.mindfulnessMinutes}}</text>
+          <text class="stat-label">正念时长(分)</text>
         </view>
       </view>
     </view>
+  </view>
 
-    <!-- 退出登录 -->
-    <view class="logout-section">
-      <button class="logout-btn" bindtap="logout">
-        <text class="logout-text">退出登录</text>
-      </button>
+  <!-- 疼痛趋势图表 -->
+  <view class="chart-section">
+    <view class="chart-header">
+      <text class="chart-title">疼痛趋势</text>
+      <view class="chart-tabs">
+        <text class="chart-tab {{chartPeriod === '7d' ? 'active' : ''}}" bindtap="switchChartPeriod" data-period="7d">7天</text>
+        <text class="chart-tab {{chartPeriod === '30d' ? 'active' : ''}}" bindtap="switchChartPeriod" data-period="30d">30天</text>
+      </view>
+    </view>
+    <view class="chart-container">
+      <!-- Canvas 2D图表（优先显示） -->
+      <canvas 
+        wx:if="{{canvasSupported}}"
+        class="chart-canvas" 
+        type="2d"
+        id="profilePainChart"
+      ></canvas>
+      
+      <!-- 备用的可视化图表（安卓兼容方案） -->
+      <view class="visual-chart" wx:else>
+        <view class="chart-grid">
+          <view class="grid-line" wx:for="{{[10,8,6,4,2,0]}}" wx:key="*this">
+            <text class="grid-label">{{item}}</text>
+            <view class="grid-line-bar"></view>
+          </view>
+        </view>
+        <view class="chart-data">
+          <view 
+            class="data-bar" 
+            wx:for="{{painTrendData}}" 
+            wx:key="index"
+            style="height: {{item * 10}}%; opacity: {{item > 0 ? 1 : 0.3}}"
+            data-value="{{item}}"
+            data-day="{{index + 1}}"
+          >
+            <view class="bar-value" wx:if="{{item > 0}}">{{item}}</view>
+          </view>
+        </view>
+        <view class="chart-x-axis">
+          <text class="x-label" wx:for="{{xAxisLabels}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+      
+      <view class="chart-summary" wx:if="{{painTrendData && painTrendData.length > 0}}">
+        <view class="summary-item">
+          <text class="summary-label">平均疼痛度</text>
+          <text class="summary-value">{{averagePain}}</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-label">{{chartPeriod === '7d' ? '7天' : '30天'}}变化</text>
+          <text class="summary-value {{painTrend > 0 ? 'trend-up' : (painTrend < 0 ? 'trend-down' : 'trend-stable')}}">
+            {{painTrend > 0 ? '+' : ''}}{{painTrend.toFixed(1)}}
+          </text>
+        </view>
+      </view>
+      <view class="chart-placeholder" wx:else>
+        <view class="placeholder-icon">📊</view>
+        <text class="placeholder-text">暂无疼痛数据</text>
+        <text class="placeholder-desc">开始记录疼痛以查看趋势</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成就系统 -->
+  <view class="achievements-section">
+    <view class="section-title">我的成就</view>
+    <view class="achievements-grid">
+      <view 
+        class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}"
+        wx:for="{{achievements}}"
+        wx:key="id"
+      >
+        <view class="achievement-icon">{{item.icon}}</view>
+        <view class="achievement-info">
+          <text class="achievement-name">{{item.name}}</text>
+          <text class="achievement-desc">{{item.description}}</text>
+        </view>
+        <view class="achievement-status">
+          <text class="status-text">{{item.unlocked ? '已获得' : '未获得'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置选项 -->
+  <view class="settings-section">
+    <view class="section-title">设置</view>
+    <view class="settings-list">
+      <view class="setting-item" bindtap="exportData">
+        <view class="setting-icon">📥</view>
+        <text class="setting-text">数据导出</text>
+        <view class="setting-arrow">></view>
+      </view>
+      
+      <view class="setting-item" bindtap="remindSettings">
+        <view class="setting-icon">🔔</view>
+        <text class="setting-text">提醒设置</text>
+        <view class="setting-arrow">></view>
+      </view>
+      
+      <view class="setting-item" bindtap="privacySettings">
+        <view class="setting-icon">🔒</view>
+        <text class="setting-text">隐私设置</text>
+        <view class="setting-arrow">></view>
+      </view>
+      
+      <view class="setting-item" bindtap="aboutApp">
+        <view class="setting-icon">ℹ️</view>
+        <text class="setting-text">关于应用</text>
+        <view class="setting-arrow">></view>
+      </view>
+      
+      <view class="setting-item" bindtap="feedback">
+        <view class="setting-icon">💬</view>
+        <text class="setting-text">意见反馈</text>
+        <view class="setting-arrow">></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <view class="logout-button" bindtap="logout">
+      <text class="logout-text">退出登录</text>
     </view>
   </view>
 </view>

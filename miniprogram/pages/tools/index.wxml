@@ -1,0 +1,111 @@
+<view class="tools-container">
+  <!-- 工具分类标签 -->
+  <view class="category-tabs">
+    <view class="tab-item {{activeTab === 'mindfulness' ? 'active' : ''}}" 
+          bindtap="switchTab" data-tab="mindfulness">
+      <text class="tab-text">正念训练</text>
+    </view>
+    <view class="tab-item {{activeTab === 'emotion' ? 'active' : ''}}" 
+          bindtap="switchTab" data-tab="emotion">
+      <text class="tab-text">情绪日志</text>
+    </view>
+    <view class="tab-item {{activeTab === 'relaxation' ? 'active' : ''}}" 
+          bindtap="switchTab" data-tab="relaxation">
+      <text class="tab-text">放松练习</text>
+    </view>
+  </view>
+
+  <!-- 正念训练 -->
+  <view class="tool-content" wx:if="{{activeTab === 'mindfulness'}}">
+    <view class="section-header">
+      <text class="section-title">正念音频训练</text>
+      <text class="section-subtitle">通过引导式冥想缓解疼痛和压力</text>
+    </view>
+
+    <view class="audio-list">
+      <view class="audio-card" wx:for="{{mindfulnessAudios}}" wx:key="id"
+            bindtap="playAudio" data-audio="{{item}}">
+        <view class="audio-cover">
+          <image class="cover-image" src="{{item.cover}}" mode="aspectFill"></image>
+          <view class="play-button">
+            <text class="play-icon">{{currentAudio && currentAudio.id === item.id && isPlaying ? '⏸️' : '▶️'}}</text>
+          </view>
+        </view>
+        <view class="audio-info">
+          <text class="audio-title">{{item.title}}</text>
+          <text class="audio-description">{{item.description}}</text>
+          <text class="audio-duration">{{item.duration}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 情绪日志 -->
+  <view class="tool-content" wx:if="{{activeTab === 'emotion'}}">
+    <view class="section-header">
+      <text class="section-title">情绪日志</text>
+      <text class="section-subtitle">记录和追踪您的情绪变化</text>
+    </view>
+
+    <!-- 添加新日志 -->
+    <view class="add-log-card" bindtap="addEmotionLog">
+      <view class="add-icon">➕</view>
+      <text class="add-text">添加今日情绪记录</text>
+    </view>
+
+    <!-- 情绪记录列表 -->
+    <view class="emotion-logs">
+      <view class="log-card" wx:for="{{emotionLogs}}" wx:key="id">
+        <view class="log-header">
+          <text class="log-date">{{item.date}}</text>
+          <view class="emotion-indicator {{item.mood}}"></view>
+        </view>
+        <view class="log-content">
+          <text class="log-mood">情绪：{{item.moodText}}</text>
+          <text class="log-note">{{item.note}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 放松练习 -->
+  <view class="tool-content" wx:if="{{activeTab === 'relaxation'}}">
+    <view class="section-header">
+      <text class="section-title">放松练习</text>
+      <text class="section-subtitle">多种放松技巧帮您缓解疼痛</text>
+    </view>
+
+    <view class="relaxation-techniques">
+      <view class="technique-card" wx:for="{{relaxationTechniques}}" wx:key="id"
+            bindtap="startTechnique" data-technique="{{item}}">
+        <view class="technique-icon">{{item.icon}}</view>
+        <view class="technique-info">
+          <text class="technique-title">{{item.title}}</text>
+          <text class="technique-description">{{item.description}}</text>
+          <text class="technique-duration">{{item.duration}}</text>
+        </view>
+        <view class="technique-arrow">→</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 音频播放器 -->
+<view class="audio-player {{showPlayer ? 'show' : ''}}" wx:if="{{currentAudio}}">
+  <view class="player-content">
+    <view class="player-info">
+      <text class="player-title">{{currentAudio.title}}</text>
+      <text class="player-time">{{currentTime}} / {{currentAudio.duration}}</text>
+    </view>
+    <view class="player-controls">
+      <button class="control-btn" bindtap="togglePlay">
+        {{isPlaying ? '⏸️' : '▶️'}}
+      </button>
+    </view>
+  </view>
+  <view class="player-progress">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{playProgress}}%"></view>
+    </view>
+  </view>
+</view>

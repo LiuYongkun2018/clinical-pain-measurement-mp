@@ -1,0 +1,9 @@
+<view class="login-modal" wx:if="{{showModal}}">
+  <view class="modal-mask"></view>
+  <view class="modal-content">
+    <view class="modal-header">请登录</view>
+    <view class="modal-body">
+      <button class="login-button" bindtap="handleLogin">微信一键登录</button>
+    </view>
+  </view>
+</view>

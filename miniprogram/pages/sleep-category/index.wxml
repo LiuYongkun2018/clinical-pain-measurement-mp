@@ -11,7 +11,7 @@
   </view>
 
   <!-- 音频列表 -->
-  <scroll-view scroll-y class="audio-list">
+  <scroll-view scroll-y show-scrollbar="{{false}}" class="audio-list">
     <view 
       class="audio-item {{item.id === currentPlayingId ? 'playing' : ''}}" 
       wx:for="{{audioList}}" 

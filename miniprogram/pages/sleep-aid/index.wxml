@@ -11,7 +11,13 @@
     <text class="intro-text">精选自然音与助眠曲，帮助你缓解压力，营造舒适睡眠环境</text>
   </view>
 
-  <scroll-view scroll-y class="content-area">
+  <scroll-view 
+    scroll-y 
+    class="content-area" 
+    show-scrollbar="{{false}}"
+    enhanced="{{true}}"
+    bounces="{{false}}"
+  >
     <!-- 自然音模块 -->
     <view class="section">
       <view class="section-header">
