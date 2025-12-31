@@ -66,16 +66,23 @@
 
   <!-- 答题页面 -->
   <view class="question-page" wx:else>
-    <!-- 进度条 -->
-    <view class="progress-section">
-      <view class="progress-bar">
-        <view class="progress-fill" style="width: {{progress}}%"></view>
-      </view>
-      <view class="progress-info">
-        <text class="progress-text">{{currentIndex + 1}} / {{questions.length}}</text>
-        <text class="progress-percent">{{progress}}%</text>
-      </view>
+    <!-- 加载提示 -->
+    <view class="loading-hint" wx:if="{{!questions || questions.length === 0}}">
+      <text class="loading-text">正在加载题目...</text>
     </view>
+
+    <!-- 题目内容 -->
+    <view wx:else>
+      <!-- 进度条 -->
+      <view class="progress-section">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{progress}}%"></view>
+        </view>
+        <view class="progress-info">
+          <text class="progress-text">{{currentIndex + 1}} / {{questions.length}}</text>
+          <text class="progress-percent">{{progress}}%</text>
+        </view>
+      </view>
 
     <!-- 题目导航点 -->
     <scroll-view class="question-dots" scroll-x enable-flex>
@@ -91,7 +98,7 @@
     </scroll-view>
 
     <!-- 当前题目 -->
-    <view class="question-card {{animating ? 'animating' : ''}}">
+    <view class="question-card {{animating ? 'animating' : ''}}" wx:if="{{questions.length > 0 && questions[currentIndex]}}">
       <view class="question-number">
         <text class="number-badge">第 {{currentIndex + 1}} 题</text>
         <text class="reverse-badge" wx:if="{{reverseItems.includes(currentIndex + 1)}}">反向计分</text>
@@ -157,6 +164,7 @@
     <!-- 未答题提示 -->
     <view class="unanswered-hint" wx:if="{{!isCompleted && currentIndex === questions.length - 1}}">
       <text class="hint-text">还有 {{unansweredCount}} 题未完成</text>
+    </view>
     </view>
   </view>
 </view>

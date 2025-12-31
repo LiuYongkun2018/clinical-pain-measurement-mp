@@ -61,11 +61,12 @@
 
   <!-- NRS疼痛评估页面 -->
   <view class="nrs-assessment" wx:if="{{currentView === 'nrs'}}">
-    <!-- 返回按钮 -->
-    <view class="back-header" bindtap="goBack">
-      <text class="back-icon">←</text>
-      <text class="back-text">疼痛评估</text>
-    </view>
+    <!-- 使用自定义导航栏 -->
+    <custom-navbar 
+      title="疼痛评估" 
+      showBackButton="{{true}}"
+      bind:back="goBack"
+    />
 
     <scroll-view class="nrs-scroll" scroll-y enhanced show-scrollbar="{{false}}">
       <!-- NRS评分区域 - 优化紧凑版 -->
@@ -179,11 +180,12 @@
 
   <!-- SAS/SDS量表评估页面 -->
   <view class="scale-assessment" wx:if="{{currentView === 'sas' || currentView === 'sds'}}">
-    <!-- 返回按钮 -->
-    <view class="back-header" bindtap="goBack">
-      <text class="back-icon">←</text>
-      <text class="back-text">{{currentView === 'sas' ? '焦虑自评' : '抑郁自评'}}</text>
-    </view>
+    <!-- 使用自定义导航栏 -->
+    <custom-navbar 
+      title="{{currentView === 'sas' ? '焦虑自评' : '抑郁自评'}}" 
+      showBackButton="{{true}}"
+      bind:back="goBack"
+    />
 
     <!-- 量表说明（首次显示） -->
     <view class="scale-intro" wx:if="{{showScaleIntro}}">

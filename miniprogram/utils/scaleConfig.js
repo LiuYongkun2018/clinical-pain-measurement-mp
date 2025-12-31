@@ -40,12 +40,12 @@ const SAS_CONFIG = {
     { id: 20, text: '我做恶梦', dimension: '恶梦' }
   ],
   // 结果解释
-  interpretation: {
-    normal: { min: 0, max: 49, label: '正常', description: '您的焦虑水平在正常范围内' },
-    mild: { min: 50, max: 59, label: '轻度焦虑', description: '存在轻度焦虑症状' },
-    moderate: { min: 60, max: 69, label: '中度焦虑', description: '存在中度焦虑症状' },
-    severe: { min: 70, max: 100, label: '重度焦虑', description: '存在重度焦虑症状' }
-  }
+  interpretation: [
+    { min: 0, max: 49, level: '正常', levelClass: 'normal', description: '您的焦虑水平在正常范围内', suggestion: '继续保持良好的心理状态，注意日常压力管理。' },
+    { min: 50, max: 59, level: '轻度焦虑', levelClass: 'mild', description: '存在轻度焦虑症状', suggestion: '建议适当放松，调整生活节奏，必要时寻求心理咨询。' },
+    { min: 60, max: 69, level: '中度焦虑', levelClass: 'moderate', description: '存在中度焦虑症状', suggestion: '建议及时咨询心理医生，进行专业的心理评估和干预。' },
+    { min: 70, max: 100, level: '重度焦虑', levelClass: 'severe', description: '存在重度焦虑症状', suggestion: '建议尽快就医，寻求专业的心理治疗和药物干预。' }
+  ]
 };
 
 // SDS 抑郁自评量表配置
@@ -87,15 +87,18 @@ const SDS_CONFIG = {
     { id: 20, text: '平常感兴趣的事我仍然照样感兴趣', dimension: '兴趣丧失' }
   ],
   // 结果解释
-  interpretation: {
-    normal: { min: 0, max: 52, label: '正常', description: '您的抑郁水平在正常范围内' },
-    mild: { min: 53, max: 62, label: '轻度抑郁', description: '存在轻度抑郁症状' },
-    moderate: { min: 63, max: 72, label: '中度抑郁', description: '存在中度抑郁症状' },
-    severe: { min: 73, max: 100, label: '重度抑郁', description: '存在重度抑郁症状' }
-  }
+  interpretation: [
+    { min: 0, max: 52, level: '正常', levelClass: 'normal', description: '您的抑郁水平在正常范围内', suggestion: '继续保持良好的心理状态，保持积极的生活态度。' },
+    { min: 53, max: 62, level: '轻度抑郁', levelClass: 'mild', description: '存在轻度抑郁症状', suggestion: '建议增加社交活动，培养兴趣爱好，必要时寻求心理咨询。' },
+    { min: 63, max: 72, level: '中度抑郁', levelClass: 'moderate', description: '存在中度抑郁症状', suggestion: '建议及时咨询心理医生，进行专业的心理评估和治疗。' },
+    { min: 73, max: 100, level: '重度抑郁', levelClass: 'severe', description: '存在重度抑郁症状', suggestion: '建议立即就医，寻求专业的心理治疗和药物治疗，避免独处。' }
+  ]
 };
 
 module.exports = {
+  SAS: SAS_CONFIG,
+  SDS: SDS_CONFIG,
+  // 保持向后兼容
   SAS_CONFIG,
   SDS_CONFIG
 };

@@ -53,12 +53,14 @@ Component({
 
   lifetimes: {
     attached() {
+      console.log('scale-questionnaire attached');
       this.initAnswers();
     }
   },
 
   observers: {
     'questions': function(questions) {
+      console.log('questions changed:', questions ? questions.length : 0);
       if (questions && questions.length > 0) {
         this.initAnswers();
       }
@@ -68,6 +70,7 @@ Component({
   methods: {
     // 初始化答案对象
     initAnswers() {
+      console.log('initAnswers called, questions length:', this.data.questions.length);
       const answers = {};
       this.data.questions.forEach((_, index) => {
         answers[index] = null;
@@ -78,8 +81,10 @@ Component({
         isCompleted: false,
         showResult: false,
         result: null,
-        progress: 0
+        progress: 0,
+        unansweredCount: this.data.questions.length
       });
+      console.log('initAnswers completed, answers:', answers);
     },
 
     // 选择答案
@@ -91,13 +96,17 @@ Component({
       const newAnswers = { ...answers };
       newAnswers[currentIndex] = value;
       
-      // 计算进度
+      // 计算进度和未完成题数
       const answeredCount = Object.values(newAnswers).filter(v => v !== null).length;
       const progress = Math.round((answeredCount / questions.length) * 100);
+      const unansweredCount = questions.length - answeredCount;
+      const isCompleted = answeredCount === questions.length;
       
       this.setData({
         answers: newAnswers,
         progress,
+        unansweredCount,
+        isCompleted,
         animating: true
       });
 
@@ -109,9 +118,6 @@ Component({
         this.setData({ animating: false });
         if (currentIndex < questions.length - 1) {
           this.nextQuestion();
-        } else {
-          // 检查是否全部完成
-          this.checkCompletion();
         }
       }, 300);
     },

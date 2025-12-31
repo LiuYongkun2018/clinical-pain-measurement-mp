@@ -153,32 +153,12 @@
   margin-left: 8rpx;
 }
 
-/* ============ 返回头部 ============ */
-.back-header {
-  display: flex;
-  align-items: center;
-  padding: 24rpx 32rpx;
-  background: #fff;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.back-icon {
-  font-size: 36rpx;
-  color: #333;
-  margin-right: 16rpx;
-}
-
-.back-text {
-  font-size: 34rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
 /* ============ NRS评估 - 紧凑版 ============ */
 .nrs-assessment {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: linear-gradient(180deg, #f0f4ff 0%, #e8f0fe 100%);
 }
 
 .nrs-scroll {
@@ -534,6 +514,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: linear-gradient(180deg, #f0f4ff 0%, #e8f0fe 100%);
 }
 
 .scale-intro {
