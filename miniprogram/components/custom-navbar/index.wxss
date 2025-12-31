@@ -6,7 +6,6 @@
   right: 0;
   z-index: 1000;
   box-sizing: border-box;
-  min-height: 88rpx;
   transition: background-color 0.3s ease;
 }
 
@@ -26,7 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 88rpx;
+  /* height 由 WXML 中的 style 动态设置 */
   padding: 0 32rpx;
 }
 

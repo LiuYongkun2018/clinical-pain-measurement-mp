@@ -4,6 +4,7 @@
 .questionnaire-container {
   min-height: 100vh;
   padding: 24rpx;
+  padding-top: 100rpx; /* 导航栏高度：状态栏(~88rpx) + 内容(88rpx) */
   box-sizing: border-box;
 }
 

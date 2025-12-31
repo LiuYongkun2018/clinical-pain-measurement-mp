@@ -157,13 +157,14 @@
 .nrs-assessment {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(180deg, #f0f4ff 0%, #e8f0fe 100%);
 }
 
 .nrs-scroll {
   flex: 1;
   padding: 24rpx;
+  padding-top: 100rpx; /* 导航栏高度：状态栏(~88rpx) + 内容(88rpx) = ~176rpx，留100rpx安全 */
 }
 
 .nrs-section {
@@ -513,7 +514,7 @@
 .scale-assessment {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(180deg, #f0f4ff 0%, #e8f0fe 100%);
 }
 
@@ -523,6 +524,7 @@
   align-items: center;
   justify-content: center;
   padding: 40rpx;
+  padding-top: 140rpx; /* 导航栏 + 额外间距 */
 }
 
 .intro-card {

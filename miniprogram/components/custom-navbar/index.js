@@ -39,7 +39,7 @@ Component({
 
   data: {
     statusBarHeight: 20,
-    navBarHeight: 88
+    navBarHeight: 44  // 导航栏内容高度（不包含状态栏）
   },
 
   lifetimes: {
@@ -52,29 +52,35 @@ Component({
     // 获取设备信息
     getSystemInfo() {
       const systemInfo = wx.getSystemInfoSync();
-      const { statusBarHeight, safeArea, screenHeight, windowHeight } = systemInfo;
+      const { statusBarHeight, screenWidth } = systemInfo;
       
-      // 计算真实的状态栏高度，处理不同设备的差异
-      const realStatusBarHeight = statusBarHeight || 20;
-      const safeAreaTop = safeArea ? safeArea.top : realStatusBarHeight;
+      // 状态栏高度（px）
+      const statusBarHeightPx = statusBarHeight || 20;
       
-      // 导航栏高度 = 状态栏高度 + 导航内容高度(44) + 额外安全距离(8)
-      const navBarHeight = realStatusBarHeight + 44 + 8;
+      // 计算屏幕宽度的缩放比例，将px转换为rpx
+      // rpx是相对于设计稿宽度750的单位
+      const ratio = 750 / screenWidth;
+      const statusBarHeightRpx = Math.ceil(statusBarHeightPx * ratio);
+      
+      // 导航栏内容高度固定为 44px
+      const navBarHeightPx = 44;
+      const navBarHeightRpx = Math.ceil(navBarHeightPx * ratio);
       
       console.log('navbar组件设备信息:', {
-        statusBarHeight: realStatusBarHeight,
-        safeAreaTop,
-        navBarHeight,
-        screenHeight,
-        windowHeight,
+        screenWidth,
+        ratio,
+        statusBarHeightPx,
+        statusBarHeightRpx,
+        navBarHeightPx,
+        navBarHeightRpx,
+        totalHeightRpx: statusBarHeightRpx + navBarHeightRpx,
         model: systemInfo.model,
         system: systemInfo.system
       });
       
       this.setData({
-        statusBarHeight: realStatusBarHeight,
-        safeAreaTop: safeAreaTop,
-        navBarHeight: navBarHeight
+        statusBarHeight: statusBarHeightRpx,
+        navBarHeight: navBarHeightRpx
       });
     },
 

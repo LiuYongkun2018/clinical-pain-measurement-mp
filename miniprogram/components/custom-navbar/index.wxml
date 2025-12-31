@@ -1,7 +1,7 @@
 <!-- 通用顶部状态栏组件 -->
-<view class="custom-navbar" style="height: {{navBarHeight + statusBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx; background-color: {{backgroundColor}};">
+<view class="custom-navbar" style="height: {{navBarHeight + statusBarHeight}}rpx; padding-top: {{statusBarHeight}}rpx; background-color: {{backgroundColor}}; {{backgroundColor !== 'transparent' ? 'border-bottom: 1rpx solid rgba(0,0,0,0.05); box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);' : ''}}">
   <view class="navbar-overlay" wx:if="{{showOverlay}}"></view>
-  <view class="navbar-content">
+  <view class="navbar-content" style="height: {{navBarHeight}}rpx;">
     <!-- 左侧内容 -->
     <view class="navbar-left">
       <view class="back-button" bindtap="goBack" wx:if="{{showBackButton}}">
